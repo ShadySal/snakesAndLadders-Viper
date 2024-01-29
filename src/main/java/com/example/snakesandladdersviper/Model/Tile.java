@@ -1,9 +1,6 @@
-package com.example.snakesandladdersviper;
+package com.example.snakesandladdersviper.Model;
 import com.example.snakesandladders.Enums.TileType;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
-import javafx.scene.control.Label;
-
 
 
 public class Tile extends StackPane {

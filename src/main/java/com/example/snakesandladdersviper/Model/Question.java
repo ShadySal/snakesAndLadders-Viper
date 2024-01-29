@@ -1,4 +1,4 @@
-package com.example.snakesandladdersviper;
+package com.example.snakesandladdersviper.Model;
 import java.util.HashMap;
 /**
  * A class representing a question for the KnightMove game.

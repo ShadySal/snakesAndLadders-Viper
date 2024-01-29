@@ -1,4 +1,6 @@
-package com.example.snakesandladdersviper;
+package com.example.snakesandladdersviper.Model;
+
+import com.example.snakesandladdersviper.Model.Player;
 
 public class Snake {
     private int startPosition;

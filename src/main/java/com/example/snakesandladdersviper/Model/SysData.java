@@ -1,4 +1,4 @@
-package com.example.snakesandladdersviper;
+package com.example.snakesandladdersviper.Model;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * Manages questions and history.

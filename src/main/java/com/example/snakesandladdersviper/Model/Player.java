@@ -1,4 +1,4 @@
-package com.example.snakesandladdersviper;
+package com.example.snakesandladdersviper.Model;
 
 public class Player {
     private String name;
