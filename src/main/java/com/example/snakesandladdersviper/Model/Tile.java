@@ -1,5 +1,5 @@
 package com.example.snakesandladdersviper.Model;
-import com.example.snakesandladders.Enums.TileType;
+import com.example.snakesandladdersviper.Enums.TileType;
 import javafx.scene.layout.StackPane;
 
 

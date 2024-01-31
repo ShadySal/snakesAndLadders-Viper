@@ -64,7 +64,7 @@ public class InitializeGame {
             Player player = new Player("Player " + currentPlayerNumber );
             player.setPlayerNumber(currentPlayerNumber);
             players.add(player);
-
+            playerSelectionController.setDifficulty(SelectDifficulty.getValue());
             // Pass the player number and player instance to the controller
             playerSelectionController.setPlayerData(currentPlayerNumber, player, currentPlayerNumber, numberOfPlayers);
 

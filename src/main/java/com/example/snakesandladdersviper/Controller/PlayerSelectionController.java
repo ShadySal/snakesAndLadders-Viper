@@ -39,6 +39,10 @@ public class PlayerSelectionController {
         players = new ArrayList<>();
     }
 
+    public void setDifficulty(Difficulty diff){
+        this.difficulty = diff;
+    }
+
     public void setPlayerData(int playerNumber, Player player, int currentPlayerNumber, int totalPlayers) {
         this.currentPlayerNumber = currentPlayerNumber;
         this.totalPlayers = totalPlayers;
@@ -113,8 +117,5 @@ public class PlayerSelectionController {
         }
     }
 
-    public void adjustDifficulty(Difficulty value) {
-        this.difficulty = value;
-        // You might need additional logic here if the difficulty can be adjusted dynamically
-    }
+
 }

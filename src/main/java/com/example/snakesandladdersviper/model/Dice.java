@@ -1,4 +1,4 @@
-package com.example.snakesandladdersviper.model;
+package com.example.snakesandladdersviper.Model;
 
 public class Dice {
     public Dice() {

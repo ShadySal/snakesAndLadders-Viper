@@ -1,4 +1,4 @@
-package com.example.snakesandladders.Enums;
+package com.example.snakesandladdersviper.Enums;
 
 public enum TileType {
 
