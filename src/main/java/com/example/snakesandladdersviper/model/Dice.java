@@ -20,5 +20,5 @@ public class Dice {
     public boolean shouldAskQuestion() {
         // Determine if a question should be asked based on probability
         return random.nextDouble() < questionProbability;
-}
+    }
 }
