@@ -35,6 +35,8 @@ public class InitializeGame {
 
     private List<Player> players;
     private int currentPlayerNumber;
+
+    private Difficulty difficulty;
     public void initialize() {
         PlayersNum.getItems().clear();
         for (int i = 2; i <= 6; i++) {
@@ -49,7 +51,7 @@ public class InitializeGame {
     @FXML
     void SubmitChoices(ActionEvent event) {
         int numberOfPlayers = PlayersNum.getValue();
-
+        difficulty = SelectDifficulty.getValue();
 
         // Load the player selection scene for each player
 
@@ -64,7 +66,7 @@ public class InitializeGame {
             Player player = new Player("Player " + currentPlayerNumber );
             player.setPlayerNumber(currentPlayerNumber);
             players.add(player);
-            playerSelectionController.setDifficulty(SelectDifficulty.getValue());
+            playerSelectionController.setDifficulty(difficulty);
             // Pass the player number and player instance to the controller
             playerSelectionController.setPlayerData(currentPlayerNumber, player, currentPlayerNumber, numberOfPlayers);
 
