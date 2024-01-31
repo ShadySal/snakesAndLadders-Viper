@@ -12,13 +12,23 @@ public class Dice {
         this.questionProbability = questionProbability;
     }
 
-    public int roll() {
-        // Roll a number between 0 and maxRoll (inclusive)
-        return random.nextInt(maxRoll + 1);
+    // calculates the next random
+    public RollResult roll() {
+        int rollValue = random.nextInt(maxRoll + 1);
+
+        // Determine if a question should be asked
+        boolean isQuestion = random.nextDouble() < questionProbability;
+
+        return new RollResult(rollValue, isQuestion);
     }
 
-    public boolean shouldAskQuestion() {
-        // Determine if a question should be asked based on probability
-        return random.nextDouble() < questionProbability;
-    }
+    // inner class
+    public static class RollResult {
+        public final int value;
+        public final boolean isQuestion;
+
+        public RollResult(int value, boolean isQuestion) {
+            this.value = value;
+            this.isQuestion = isQuestion;}
+}
 }
