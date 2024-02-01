@@ -1,5 +1,7 @@
 package com.example.snakesandladdersviper.Controller;
 
+import com.example.snakesandladdersviper.Model.Dice;
+import com.example.snakesandladdersviper.Model.GameBoard;
 import com.example.snakesandladdersviper.Model.Player;
 import com.example.snakesandladdersviper.Model.Tile;
 import com.example.snakesandladdersviper.Enums.Difficulty;
@@ -39,6 +41,13 @@ public class GameBoardController {
 
     private Timeline timeline;
     private long startTime;
+    // Example values for probabilities
+    final double EASY_GAME_QUESTION_PROBABILITY = 0.1; // 10% chance for a question
+    final double MEDIUM_GAME_QUESTION_PROBABILITY = EASY_GAME_QUESTION_PROBABILITY * 2; // 20% chance
+
+    private GameBoard gameBoard;
+
+
 
 
     public void initialize() {
@@ -60,8 +69,25 @@ public class GameBoardController {
     }
 
 
-    public void initializeBoard(Difficulty difficulty) {
+    public void initializeBoard(Difficulty difficulty, List<Player> players) {
         int size = determineBoardSize(difficulty);
+
+        gameBoard = new GameBoard(size,size);
+        if(size == 7){
+            Dice easyGameDice = new Dice(6, EASY_GAME_QUESTION_PROBABILITY);
+            gameBoard.setDice(easyGameDice);
+        }
+        if(size == 10){
+            Dice mediumGameDice = new Dice(9, MEDIUM_GAME_QUESTION_PROBABILITY); // 0-6 for movement, 7-9 for questions
+            gameBoard.setDice(mediumGameDice);
+        }
+        if(size == 13){
+            // TO DO
+        }
+        gameBoard.initializePlayerPositions(players);
+
+        System.out.println(players);
+
         setupGridConstraints(size); // Set up grid constraints
         LevelLabel.setText("Level: "+ difficulty);
         BoardGrid.getChildren().clear(); // Clear existing content
@@ -101,11 +127,17 @@ public class GameBoardController {
     }
 
 
+
+    // Create a dice instance for a medium game
+
     private int determineBoardSize(Difficulty difficulty) {
         switch (difficulty) {
             case EASY:
+                // Create a dice instance for an easy game
+                Dice easyGameDice = new Dice(6, EASY_GAME_QUESTION_PROBABILITY);
                 return 7;
             case MEDIUM:
+                Dice mediumGameDice = new Dice(9, MEDIUM_GAME_QUESTION_PROBABILITY); // 0-6 for movement, 7-9 for questions
                 return 10;
             case HARD:
                 return 13;

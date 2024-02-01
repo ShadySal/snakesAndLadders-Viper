@@ -1,5 +1,7 @@
 package com.example.snakesandladdersviper.Controller;
 import com.example.snakesandladdersviper.Enums.Difficulty;
+import com.example.snakesandladdersviper.Model.Dice;
+import com.example.snakesandladdersviper.Model.GameBoard;
 import com.example.snakesandladdersviper.Model.Player;
 import com.example.snakesandladdersviper.Controller.GameBoardController;
 import javafx.collections.FXCollections;
@@ -33,10 +35,17 @@ public class PlayerSelectionController {
     private List<Player> players;
 
     private Difficulty difficulty;
+    final double EASY_GAME_QUESTION_PROBABILITY = 0.1; // 10% chance for a question
+    final double MEDIUM_GAME_QUESTION_PROBABILITY = EASY_GAME_QUESTION_PROBABILITY * 2; // 20% chance
+    private GameBoard gameBoard;
+
 
     public void initialize() {
         ObjectSelect.getItems().addAll("Object 1", "Object 2", "Object 3", "Object 4", "Object 5", "Object 6");
         players = new ArrayList<>();
+        currentPlayerNumber = 1;
+        PlayerSelectionTurn.setText("Player " + currentPlayerNumber);
+
     }
 
     public void setDifficulty(Difficulty diff){
@@ -47,25 +56,14 @@ public class PlayerSelectionController {
         this.currentPlayerNumber = currentPlayerNumber;
         this.totalPlayers = totalPlayers;
         players.add(player);
-
-        // If all players have made selections, start the game or perform any other action.
-        if (currentPlayerNumber == totalPlayers) {
-         /* TOD0!!!
-             startGame();
-          */
-
-        } else {
-            // Update the UI for the next player.
-            updateUIForNextPlayer();
-        }
     }
 
     private void updateUIForNextPlayer() {
         // Clear previous player's selections
-        PlayerName.clear();
-        ObjectSelect.getSelectionModel().clearSelection();
-        PlayerSelectionTurn.setText("Player " + currentPlayerNumber);
 
+            PlayerName.clear();
+            ObjectSelect.getSelectionModel().clearSelection();
+            PlayerSelectionTurn.setText("Player " + currentPlayerNumber);
 
         /* TO DO!!!!
           Name Check if it has been chosen or not
@@ -80,7 +78,7 @@ public class PlayerSelectionController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/Gameboard.fxml"));
             Parent gameBoardRoot = loader.load();
             GameBoardController gameBoardController = loader.getController();
-            gameBoardController.initializeBoard(difficulty);
+            gameBoardController.initializeBoard(difficulty, players);
 
             // Replace contentPane content with the game board
             contentPane.getChildren().setAll(gameBoardRoot);
@@ -97,23 +95,36 @@ public class PlayerSelectionController {
     private void savePlayerSelection() {
         String playerName = PlayerName.getText();
         String selectedObject = ObjectSelect.getValue();
-        if(currentPlayerNumber > 1){
-            Player p = new Player(playerName, currentPlayerNumber);
-            players.add(p);
-        }
-        // Set the player's name and selected object in the player instance
-        Player currentPlayer = players.get(currentPlayerNumber - 1);
-        currentPlayer.setName(playerName);
-        currentPlayer.setSelectedObject(selectedObject);
-        ObjectSelect.getItems().remove(selectedObject);
-        System.out.println(currentPlayer);
 
-        // Proceed to the next player or start the game
-        if (currentPlayerNumber < totalPlayers) {
+        if (currentPlayerNumber <= totalPlayers) {
+            Player player = new Player(playerName, currentPlayerNumber);
+            players.add(player);
+
+            player.setName(playerName);
+            player.setSelectedObject(selectedObject);
+            ObjectSelect.getItems().remove(selectedObject);
+
+            System.out.println(player);
+
             currentPlayerNumber++;
-            updateUIForNextPlayer();
-        } else {
-            startGame();
+            if (currentPlayerNumber <= totalPlayers) {
+                updateUIForNextPlayer();
+            } else {
+                startGame();
+            }
+        }
+    }
+
+    public int getBoardDifficulty(Difficulty diff){
+        switch (difficulty) {
+            case EASY:
+                return 7;
+            case MEDIUM:
+                return 10;
+            case HARD:
+                return 13;
+            default:
+                throw new IllegalArgumentException("Unrecognized difficulty level");
         }
     }
 
