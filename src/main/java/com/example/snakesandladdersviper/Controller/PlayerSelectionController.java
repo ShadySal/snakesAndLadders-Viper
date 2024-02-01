@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
+import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
 public class PlayerSelectionController {
@@ -41,7 +42,7 @@ public class PlayerSelectionController {
 
 
     public void initialize() {
-        ObjectSelect.getItems().addAll("Object 1", "Object 2", "Object 3", "Object 4", "Object 5", "Object 6");
+        ObjectSelect.getItems().addAll("Red", "Blue", "Green", "Yellow", "Orange", "White");
         players = new ArrayList<>();
         currentPlayerNumber = 1;
         PlayerSelectionTurn.setText("Player " + currentPlayerNumber);
@@ -94,26 +95,57 @@ public class PlayerSelectionController {
     @FXML
     private void savePlayerSelection() {
         String playerName = PlayerName.getText();
-        String selectedObject = ObjectSelect.getValue();
+        String selectedColorName = ObjectSelect.getValue();
+        Color color = getColorFromString(selectedColorName);
 
-        if (currentPlayerNumber <= totalPlayers) {
-            Player player = new Player(playerName, currentPlayerNumber);
+        Player player;
+        if (currentPlayerNumber <= players.size()) {
+            // Update existing player
+            player = players.get(currentPlayerNumber - 1); // -1 because list is 0-indexed
+        } else {
+            // Create a new player if not already existent
+            player = new Player(playerName, currentPlayerNumber);
             players.add(player);
+        }
 
-            player.setName(playerName);
-            player.setSelectedObject(selectedObject);
-            ObjectSelect.getItems().remove(selectedObject);
+        // Set or update the player's name, selected color, and object
+        player.setName(playerName);
+        player.setPlayerColor(color);
+        player.setSelectedObject(selectedColorName);
+        ObjectSelect.getItems().remove(selectedColorName);
 
-            System.out.println(player);
+        System.out.println(player);
 
-            currentPlayerNumber++;
-            if (currentPlayerNumber <= totalPlayers) {
-                updateUIForNextPlayer();
-            } else {
-                startGame();
-            }
+        currentPlayerNumber++;
+        if (currentPlayerNumber <= totalPlayers) {
+            updateUIForNextPlayer();
+        } else {
+            startGame();
         }
     }
+
+
+
+
+    //gets color of the player
+        private Color getColorFromString(String colorName) {
+            switch (colorName.toLowerCase()) {
+                case "red":
+                    return Color.RED;
+                case "blue":
+                    return Color.BLUE;
+                case "green":
+                    return Color.GREEN;
+                case "yellow":
+                    return Color.YELLOW;
+                case "orange":
+                    return Color.ORANGE;
+                case "white":
+                    return Color.WHITE;
+                default:
+                    return Color.BLACK; // Default color or throw an exception
+            }
+        }
 
     public int getBoardDifficulty(Difficulty diff){
         switch (difficulty) {

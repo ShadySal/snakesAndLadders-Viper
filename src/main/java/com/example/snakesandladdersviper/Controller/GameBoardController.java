@@ -14,8 +14,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.shape.Circle;
 import javafx.util.Duration;
-
+import javafx.scene.paint.Color;
 import java.util.List;
 
 
@@ -108,6 +109,9 @@ public class GameBoardController {
                 BoardGrid.add(tile, col, size - row - 1); // Place tile in the grid
             }
         }
+
+        displayPlayers(players);
+
     }
 
     private void setupGridConstraints(int size) {
@@ -165,6 +169,26 @@ public class GameBoardController {
         // Locate the start tile on the board and place the player token
         // This could be done by updating the UI of the Tile, adding a marker, etc.
     }
+
+    //dispplay players on gameboard
+    public void displayPlayers(List<Player> players) {
+        for (Player player : players) {
+            Circle playerCircle = new Circle(10); // Radius of 10, adjust as needed
+            playerCircle.setFill(player.getPlayerColor());
+
+            // Get the starting position for the player
+            // Pane tile = getTileForPlayer(player);
+
+            // Add the circle to the tile
+            // tile.getChildren().add(playerCircle);
+        }
+    }
+
+//    private Pane getTileForPlayer(Player player) {
+//        //TO DO
+//        return Pane;
+//    }
+
 
     // Other methods...
 }
