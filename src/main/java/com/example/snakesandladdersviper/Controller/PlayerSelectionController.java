@@ -46,7 +46,6 @@ public class PlayerSelectionController {
         players = new ArrayList<>();
         currentPlayerNumber = 1;
         PlayerSelectionTurn.setText("Player " + currentPlayerNumber);
-
     }
 
     public void setDifficulty(Difficulty diff){

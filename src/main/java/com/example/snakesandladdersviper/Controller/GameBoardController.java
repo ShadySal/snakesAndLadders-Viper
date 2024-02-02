@@ -49,8 +49,6 @@ public class GameBoardController {
     private GameBoard gameBoard;
 
 
-
-
     public void initialize() {
         startTime = System.currentTimeMillis();
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> updateClock()));
@@ -151,24 +149,14 @@ public class GameBoardController {
     }
 
     public void startGame(List<Player> players) {
+        // Initialize game logic here
 
-        for (Player player : players) {
-            // For each player, perform necessary setup
-            // This could include placing player tokens on the board,
-            // setting player scores, etc.
+        // Display players on the board
+        displayPlayers(players);
 
-            // Example: Initialize player position on the board
-            initializePlayerPosition(player);
-        }
-
+        // Other game start logic...
     }
-    private void initializePlayerPosition(Player player) {
-        // Example implementation - adjust as per your game logic
-        // Place the player at the start position (e.g., tile number 1)
-        int startPosition = 1; // Define the start position for your game
-        // Locate the start tile on the board and place the player token
-        // This could be done by updating the UI of the Tile, adding a marker, etc.
-    }
+
 
     //display players on Gameboard
     public void displayPlayers(List<Player> players) {
