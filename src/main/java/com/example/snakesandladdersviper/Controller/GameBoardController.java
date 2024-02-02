@@ -177,7 +177,7 @@ public class GameBoardController {
             playerCircle.setFill(player.getPlayerColor());
 
             // Get the starting position for the player
-            // Pane tile = getTileForPlayer(player);
+            // Pane tile  = getTileForPlayer(player);
 
             // Add the circle to the tile
             // tile.getChildren().add(playerCircle);
