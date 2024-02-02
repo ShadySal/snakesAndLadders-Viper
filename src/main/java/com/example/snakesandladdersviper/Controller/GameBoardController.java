@@ -137,7 +137,7 @@ public class GameBoardController {
     private int determineBoardSize(Difficulty difficulty) {
         switch (difficulty) {
             case EASY:
-                // Create a dice instance for an easy game
+                // Create a die instance for an easy game
                 Dice easyGameDice = new Dice(6, EASY_GAME_QUESTION_PROBABILITY);
                 return 7;
             case MEDIUM:
@@ -170,7 +170,7 @@ public class GameBoardController {
         // This could be done by updating the UI of the Tile, adding a marker, etc.
     }
 
-    //dispplay players on gameboard
+    //display players on Gameboard
     public void displayPlayers(List<Player> players) {
         for (Player player : players) {
             Circle playerCircle = new Circle(10); // Radius of 10, adjust as needed
