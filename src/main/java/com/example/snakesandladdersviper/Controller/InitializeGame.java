@@ -13,6 +13,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Parent;
@@ -31,6 +33,8 @@ public class InitializeGame {
     @FXML
     private Button NextButton;
     @FXML
+    private Button BackButton;
+    @FXML
     private TextField PlayerName;
 
 
@@ -38,6 +42,7 @@ public class InitializeGame {
     private int currentPlayerNumber;
 
     private Difficulty difficulty;
+
     public void initialize() {
         PlayersNum.getItems().clear();
         for (int i = 2; i <= 6; i++) {
@@ -49,6 +54,22 @@ public class InitializeGame {
         players = new ArrayList<>();
         currentPlayerNumber = 1;
     }
+
+    //doesnt work
+    @FXML
+    void BackButton(ActionEvent event) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/hello-view.fxml"));
+            Parent root = loader.load();
+            Scene nextScene = new Scene(root);
+// Get the current stage and set the new scene
+            Stage currentStage = (Stage) BackButton.getScene().getWindow();
+            currentStage.setScene(nextScene);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @FXML
     void SubmitChoices(ActionEvent event) {
         int numberOfPlayers = PlayersNum.getValue();
@@ -64,7 +85,7 @@ public class InitializeGame {
             PlayerSelectionController playerSelectionController = loader.getController();
 
             // Create a new Player instance for this player
-            Player player = new Player("Player " + currentPlayerNumber );
+            Player player = new Player("Player " + currentPlayerNumber);
             player.setPlayerNumber(currentPlayerNumber);
             players.add(player);
             playerSelectionController.setDifficulty(difficulty);

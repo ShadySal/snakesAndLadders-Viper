@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.Pane?>
 
-<Pane fx:id="MainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.MainController">
+<Pane fx:id="MainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: #a9cce3;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.MainController">
    <children>
-      <Button fx:id="StartGameBtn" layoutX="268.0" layoutY="298.0" mnemonicParsing="false" onAction="#StartGame" text="Start Game" />
-      <Button fx:id="GameHistoryBtn" layoutX="261.0" layoutY="371.0" mnemonicParsing="false" text="Game History" />
-      <Button fx:id="QuestionManagementBtn" layoutX="215.0" layoutY="455.0" mnemonicParsing="false" text="Question management wizard." />
-      <Label fx:id="Title" layoutX="251.0" layoutY="75.0" text="Snakes And Ladders" />
+      <Button fx:id="StartGameBtn" layoutX="261.0" layoutY="186.0" mnemonicParsing="false" onAction="#StartGame" prefHeight="68.0" prefWidth="133.0" style="-fx-background-color: #e67e22;" text="Start Game" />
+      <Button fx:id="GameHistoryBtn" layoutX="261.0" layoutY="303.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="133.0" style="-fx-background-color: #e67e22;" text="Game History" />
+      <Button fx:id="QuestionManagementBtn" layoutX="215.0" layoutY="418.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="233.0" style="-fx-background-color: #e67e22;" text="Question management wizard." />
+      <Label fx:id="Title" layoutX="251.0" layoutY="75.0" prefHeight="80.0" prefWidth="233.0" text="Snakes And Ladders" textAlignment="CENTER" textFill="#120e0e">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
    </children>
 </Pane>
