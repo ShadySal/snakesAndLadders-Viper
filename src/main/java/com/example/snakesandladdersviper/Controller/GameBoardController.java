@@ -9,6 +9,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -47,7 +48,7 @@ public class GameBoardController {
     final double MEDIUM_GAME_QUESTION_PROBABILITY = EASY_GAME_QUESTION_PROBABILITY * 2; // 20% chance
 
     private GameBoard gameBoard;
-
+    private Difficulty difficulty;
 
     public void initialize() {
         startTime = System.currentTimeMillis();
@@ -74,14 +75,19 @@ public class GameBoardController {
         gameBoard = new GameBoard(size,size);
         if(size == 7){
             Dice easyGameDice = new Dice(6, EASY_GAME_QUESTION_PROBABILITY);
+            this.difficulty=difficulty;
             gameBoard.setDice(easyGameDice);
+
         }
         if(size == 10){
             Dice mediumGameDice = new Dice(9, MEDIUM_GAME_QUESTION_PROBABILITY); // 0-6 for movement, 7-9 for questions
             gameBoard.setDice(mediumGameDice);
+            this.difficulty=difficulty;
         }
         if(size == 13){
             // TO DO
+            this.difficulty=difficulty;
+
         }
         gameBoard.initializePlayerPositions(players);
 
@@ -164,19 +170,34 @@ public class GameBoardController {
             Circle playerCircle = new Circle(10); // Radius of 10, adjust as needed
             playerCircle.setFill(player.getPlayerColor());
 
-            // Get the starting position for the player
-            // Pane tile  = getTileForPlayer(player);
+            // Get the tile for the player
+            Pane tile = getTileForPlayer(player);
 
-            // Add the circle to the tile
-            // tile.getChildren().add(playerCircle);
-        }
+            // Check if the tile is valid
+            if (tile != null) {
+                // Add the circle to the tile
+                tile.getChildren().add(playerCircle);
+ }}
     }
 
-//    private Pane getTileForPlayer(Player player) {
-//        //TO DO
-//        return Pane;
-//    }
+
+    private Pane getTileForPlayer(Player player) {
+        // Retrieve the player's position on the board
+        int position = gameBoard.getPlayerPosition(player) - 1; // Adjust if your positions start at 1
+
+        // Calculate the row and column from the position
+        int size = determineBoardSize(difficulty);
+        int row = position / size;
+        int column = position % size;
+
+        // Find the corresponding tile Pane
+        for (Node node : BoardGrid.getChildren()) {
+            if (GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column) {
+                return (Pane) node; // Cast to Pane, assuming each tile is a Pane
+            }
+        }
+        return null; // Tile not found or invalid position
+    }
 
 
-    // Other methods...
 }

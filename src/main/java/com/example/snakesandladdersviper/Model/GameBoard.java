@@ -167,4 +167,9 @@ public class GameBoard {
         playerPositions.put(player,position);
 
     }
+
+
+    public int getPlayerPosition(Player player) {
+        return playerPositions.getOrDefault(player, 0); // Default to position 0 if not found
+}
 }
