@@ -1,9 +1,14 @@
 package com.example.snakesandladdersviper.Model;
 
+
+import javafx.scene.paint.Color;
+
 public class Player {
     private String name;
     private int position;
     private int PlayerNumber;
+    private Color playerColor= Color.BLACK;
+
     public Player(String name, int PlayerNumber) {
         this.name = name;
         this.PlayerNumber = PlayerNumber;
@@ -66,8 +71,14 @@ public class Player {
     }
 
 
-    public void setSelectedObject(String selectedObject) {
+    public void setPlayerColor(Color playerColor) {
+        this.playerColor = playerColor;
     }
+
+    public Color getPlayerColor() {
+        return playerColor;
+    }
+
 
     @Override
     public String toString() {
@@ -76,6 +87,10 @@ public class Player {
                 ", position=" + position +
                 ", PlayerNumber=" + PlayerNumber +
                 '}';
+    }
+
+    public void setSelectedObject(String selectedObject) {
+
     }
 }
 

@@ -1,6 +1,7 @@
 package com.example.snakesandladdersviper.Controller;
 
 import com.example.snakesandladdersviper.Enums.Difficulty;
+import com.example.snakesandladdersviper.Model.GameBoard;
 import com.example.snakesandladdersviper.Model.Player;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -68,7 +69,7 @@ public class InitializeGame {
             players.add(player);
             playerSelectionController.setDifficulty(difficulty);
             // Pass the player number and player instance to the controller
-            playerSelectionController.setPlayerData(currentPlayerNumber, player, currentPlayerNumber, numberOfPlayers);
+            playerSelectionController.setPlayerData(currentPlayerNumber, player, 1, numberOfPlayers);
 
             // Create a new scene and set it on a new stage for each player
             MainPane.getChildren().clear();

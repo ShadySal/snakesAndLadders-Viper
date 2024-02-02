@@ -1,5 +1,7 @@
 package com.example.snakesandladdersviper.Controller;
 import com.example.snakesandladdersviper.Enums.Difficulty;
+import com.example.snakesandladdersviper.Model.Dice;
+import com.example.snakesandladdersviper.Model.GameBoard;
 import com.example.snakesandladdersviper.Model.Player;
 import com.example.snakesandladdersviper.Controller.GameBoardController;
 import javafx.collections.FXCollections;
@@ -12,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
+import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
 public class PlayerSelectionController {
@@ -33,10 +36,17 @@ public class PlayerSelectionController {
     private List<Player> players;
 
     private Difficulty difficulty;
+    final double EASY_GAME_QUESTION_PROBABILITY = 0.1; // 10% chance for a question
+    final double MEDIUM_GAME_QUESTION_PROBABILITY = EASY_GAME_QUESTION_PROBABILITY * 2; // 20% chance
+    private GameBoard gameBoard;
+
 
     public void initialize() {
-        ObjectSelect.getItems().addAll("Object 1", "Object 2", "Object 3", "Object 4", "Object 5", "Object 6");
+        ObjectSelect.getItems().addAll("Red", "Blue", "Green", "Yellow", "Orange", "White");
         players = new ArrayList<>();
+        currentPlayerNumber = 1;
+        PlayerSelectionTurn.setText("Player " + currentPlayerNumber);
+
     }
 
     public void setDifficulty(Difficulty diff){
@@ -47,25 +57,14 @@ public class PlayerSelectionController {
         this.currentPlayerNumber = currentPlayerNumber;
         this.totalPlayers = totalPlayers;
         players.add(player);
-
-        // If all players have made selections, start the game or perform any other action.
-        if (currentPlayerNumber == totalPlayers) {
-         /* TOD0!!!
-             startGame();
-          */
-
-        } else {
-            // Update the UI for the next player.
-            updateUIForNextPlayer();
-        }
     }
 
     private void updateUIForNextPlayer() {
         // Clear previous player's selections
-        PlayerName.clear();
-        ObjectSelect.getSelectionModel().clearSelection();
-        PlayerSelectionTurn.setText("Player " + currentPlayerNumber);
 
+            PlayerName.clear();
+            ObjectSelect.getSelectionModel().clearSelection();
+            PlayerSelectionTurn.setText("Player " + currentPlayerNumber);
 
         /* TO DO!!!!
           Name Check if it has been chosen or not
@@ -80,7 +79,7 @@ public class PlayerSelectionController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/Gameboard.fxml"));
             Parent gameBoardRoot = loader.load();
             GameBoardController gameBoardController = loader.getController();
-            gameBoardController.initializeBoard(difficulty);
+            gameBoardController.initializeBoard(difficulty, players);
 
             // Replace contentPane content with the game board
             contentPane.getChildren().setAll(gameBoardRoot);
@@ -96,24 +95,68 @@ public class PlayerSelectionController {
     @FXML
     private void savePlayerSelection() {
         String playerName = PlayerName.getText();
-        String selectedObject = ObjectSelect.getValue();
-        if(currentPlayerNumber > 1){
-            Player p = new Player(playerName, currentPlayerNumber);
-            players.add(p);
-        }
-        // Set the player's name and selected object in the player instance
-        Player currentPlayer = players.get(currentPlayerNumber - 1);
-        currentPlayer.setName(playerName);
-        currentPlayer.setSelectedObject(selectedObject);
-        ObjectSelect.getItems().remove(selectedObject);
-        System.out.println(currentPlayer);
+        String selectedColorName = ObjectSelect.getValue();
+        Color color = getColorFromString(selectedColorName);
 
-        // Proceed to the next player or start the game
-        if (currentPlayerNumber < totalPlayers) {
-            currentPlayerNumber++;
+        Player player;
+        if (currentPlayerNumber <= players.size()) {
+            // Update existing player
+            player = players.get(currentPlayerNumber - 1); // -1 because list is 0-indexed
+        } else {
+            // Create a new player if not already existent
+            player = new Player(playerName, currentPlayerNumber);
+            players.add(player);
+        }
+
+        // Set or update the player's name, selected color, and object
+        player.setName(playerName);
+        player.setPlayerColor(color);
+        player.setSelectedObject(selectedColorName);
+        ObjectSelect.getItems().remove(selectedColorName);
+
+        System.out.println(player);
+
+        currentPlayerNumber++;
+        if (currentPlayerNumber <= totalPlayers) {
             updateUIForNextPlayer();
         } else {
             startGame();
+        }
+    }
+
+
+
+
+    //gets color of the player
+        private Color getColorFromString(String colorName) {
+            switch (colorName.toLowerCase()) {
+                case "red":
+                    return Color.RED;
+                case "blue":
+                    return Color.BLUE;
+                case "green":
+                    return Color.GREEN;
+                case "yellow":
+                    return Color.YELLOW;
+                case "orange":
+                    return Color.ORANGE;
+                case "white":
+                    return Color.WHITE;
+                default:
+                    return Color.BLACK; // Default color or throw an exception
+            }
+        }
+
+    public int getBoardDifficulty(Difficulty diff){
+        switch (difficulty) {
+            case EASY:
+                return 7;
+            case MEDIUM:
+                return 10;
+            case HARD:
+                return 13;
+            default:
+                throw new IllegalArgumentException("Unrecognized difficulty level");
         }
     }
 
