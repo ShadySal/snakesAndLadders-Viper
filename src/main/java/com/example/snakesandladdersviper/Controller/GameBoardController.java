@@ -8,7 +8,9 @@ import com.example.snakesandladdersviper.Enums.Difficulty;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -68,54 +70,68 @@ public class GameBoardController {
         timeLabel.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
     }
 
-
     public void initializeBoard(Difficulty difficulty, List<Player> players) {
         int size = determineBoardSize(difficulty);
 
-        gameBoard = new GameBoard(size,size);
-        if(size == 7){
+        gameBoard = new GameBoard(size, size);
+        if (size == 7) {
             Dice easyGameDice = new Dice(6, EASY_GAME_QUESTION_PROBABILITY);
-            this.difficulty=difficulty;
+            this.difficulty = difficulty;
+
             gameBoard.setDice(easyGameDice);
 
-        }
-        if(size == 10){
+        } else if (size == 10) {
             Dice mediumGameDice = new Dice(9, MEDIUM_GAME_QUESTION_PROBABILITY); // 0-6 for movement, 7-9 for questions
             gameBoard.setDice(mediumGameDice);
-            this.difficulty=difficulty;
-        }
-        if(size == 13){
+            this.difficulty = difficulty;
+        } else if (size == 13) {
             // TO DO
-            this.difficulty=difficulty;
+            this.difficulty = difficulty;
 
         }
+
         gameBoard.initializePlayerPositions(players);
 
         System.out.println(players);
 
         setupGridConstraints(size); // Set up grid constraints
-        LevelLabel.setText("Level: "+ difficulty);
+        LevelLabel.setText("Level: " + difficulty);
         BoardGrid.getChildren().clear(); // Clear existing content
 
         BoardGrid.prefWidthProperty().bind(gamepane.widthProperty());
         BoardGrid.prefHeightProperty().bind(gamepane.heightProperty());
         gamepane.setPadding(new Insets(0, 0, 0, 0)); // Remove padding if not needed
         GridPane.setMargin(BoardGrid, new Insets(0)); // Remove margin if not needed
-
-
-        for (int row = 0; row < size; row++) {
+        for (int row = size - 1; row >= 0; row--) {
             for (int col = 0; col < size; col++) {
                 // Calculate tile number starting from bottom left
-                int number = (size * (size - row)) - col;
+                int number = (size * row) + col + 1;  // Adjusted calculation
                 Tile tile = new Tile(col, size - row - 1);
+
+                // Alternate between two colors (e.g., green and white)
+                String backgroundColor;
+                if ((row + col) % 2 == 0) {
+                    backgroundColor = "-fx-background-color: green";
+                } else {
+                    backgroundColor = "-fx-background-color: white";
+                }
+
                 // Customize the tile...
-                tile.setStyle("-fx-background-color: green" + "; -fx-border-color: black;");
-                BoardGrid.add(tile, col, size - row - 1); // Place tile in the grid
+                tile.setStyle(backgroundColor + "; -fx-border-color: black;");
+
+                // Create a label to display the number
+                Label label = new Label(Integer.toString(number));
+                label.setStyle("-fx-text-fill: black; -fx-font-size: 12;");  // Adjust font color and size
+
+                // Add the label to the upper left corner of the tile
+                tile.getChildren().add(label);
+                GridPane.setValignment(label, VPos.TOP);
+                GridPane.setHalignment(label, HPos.LEFT);
+
+                BoardGrid.add(tile, col, size - row - 1);
             }
         }
-
         displayPlayers(players);
-
     }
 
     private void setupGridConstraints(int size) {
@@ -133,6 +149,152 @@ public class GameBoardController {
             BoardGrid.getRowConstraints().add(rowConst);
         }
     }
+//
+//    public void initializeBoard(Difficulty difficulty, List<Player> players) {
+//        int size = determineBoardSize(difficulty);
+//
+//        gameBoard = new GameBoard(size, size);
+//        if (size == 7) {
+//            Dice easyGameDice = new Dice(6, EASY_GAME_QUESTION_PROBABILITY);
+//            this.difficulty = difficulty;
+//
+//            gameBoard.setDice(easyGameDice);
+//
+//        } else if (size == 10) {
+//            Dice mediumGameDice = new Dice(9, MEDIUM_GAME_QUESTION_PROBABILITY); // 0-6 for movement, 7-9 for questions
+//            gameBoard.setDice(mediumGameDice);
+//            this.difficulty = difficulty;
+//        } else if (size == 13) {
+//            // TO DO
+//            this.difficulty = difficulty;
+//
+//        }
+//
+//        gameBoard.initializePlayerPositions(players);
+//
+//        System.out.println(players);
+//
+//        setupGridConstraints(size); // Set up grid constraints
+//        LevelLabel.setText("Level: " + difficulty);
+//        BoardGrid.getChildren().clear(); // Clear existing content
+//
+//        BoardGrid.prefWidthProperty().bind(gamepane.widthProperty());
+//        BoardGrid.prefHeightProperty().bind(gamepane.heightProperty());
+//        gamepane.setPadding(new Insets(0, 0, 0, 0)); // Remove padding if not needed
+//        GridPane.setMargin(BoardGrid, new Insets(0)); // Remove margin if not needed
+//        for (int row = size - 1; row >= 0; row--) {
+//            for (int col = 0; col < size; col++) {
+//                // Calculate tile number starting from bottom left
+//                int number = (size * row) + col + 1;  // Adjusted calculation
+//                Tile tile = new Tile(col, size - row - 1);
+//
+//                // Alternate between two colors (e.g., green and white)
+//                String backgroundColor;
+//                if ((row + col) % 2 == 0) {
+//                    backgroundColor = "-fx-background-color: green";
+//                } else {
+//                    backgroundColor = "-fx-background-color: white";
+//                }
+//
+//                // Customize the tile...
+//                tile.setStyle(backgroundColor + "; -fx-border-color: black;");
+//
+//                // Create a label to display the number
+//                Label label = new Label(Integer.toString(number));
+//                label.setStyle("-fx-text-fill: black; -fx-font-size: 12;");  // Adjust font color and size
+//
+//                // Add the label to the tile
+//                tile.getChildren().add(label);
+//
+//                BoardGrid.add(tile, col, size - row - 1);
+//            }
+//        }
+//        displayPlayers(players);
+//    }
+
+
+
+//    private void setupGridConstraints(int size) {
+//        BoardGrid.getColumnConstraints().clear();
+//        BoardGrid.getRowConstraints().clear();
+//
+//        // Define percentage-based constraints to make the grid cells fill the pane
+//        for (int i = 0; i < size; i++) {
+//            ColumnConstraints colConst = new ColumnConstraints();
+//            colConst.setPercentWidth(100.0 / size); // Each column takes an equal share
+//            BoardGrid.getColumnConstraints().add(colConst);
+//
+//            RowConstraints rowConst = new RowConstraints();
+//            rowConst.setPercentHeight(100.0 / size); // Each row takes an equal share
+//            BoardGrid.getRowConstraints().add(rowConst);
+//        }
+//    }
+//    public void initializeBoard(Difficulty difficulty, List<Player> players) {
+//        int size = determineBoardSize(difficulty);
+//
+//        gameBoard = new GameBoard(size,size);
+//        if(size == 7){
+//            Dice easyGameDice = new Dice(6, EASY_GAME_QUESTION_PROBABILITY);
+//            this.difficulty=difficulty;
+//
+//            gameBoard.setDice(easyGameDice);
+//
+//        }
+//        if(size == 10){
+//            Dice mediumGameDice = new Dice(9, MEDIUM_GAME_QUESTION_PROBABILITY); // 0-6 for movement, 7-9 for questions
+//            gameBoard.setDice(mediumGameDice);
+//            this.difficulty=difficulty;
+//        }
+//        if(size == 13){
+//            // TO DO
+//            this.difficulty=difficulty;
+//
+//        }
+//        gameBoard.initializePlayerPositions(players);
+//
+//        System.out.println(players);
+//
+//        setupGridConstraints(size); // Set up grid constraints
+//        LevelLabel.setText("Level: "+ difficulty);
+//        BoardGrid.getChildren().clear(); // Clear existing content
+//
+//        BoardGrid.prefWidthProperty().bind(gamepane.widthProperty());
+//        BoardGrid.prefHeightProperty().bind(gamepane.heightProperty());
+//        gamepane.setPadding(new Insets(0, 0, 0, 0)); // Remove padding if not needed
+//        GridPane.setMargin(BoardGrid, new Insets(0)); // Remove margin if not needed
+//        for (int row = 0; row < size; row++) {
+//            for (int col = 0; col < size; col++) {
+//                // Calculate tile number starting from bottom left
+//                int number = (size * (size - row)) - col;
+//                Tile tile = new Tile(col, size - row - 1);
+//
+//                // Alternate between two colors (e.g., green and white)
+//                String backgroundColor;
+//                if ((row + col) % 2 == 0) {
+//                    backgroundColor = "-fx-background-color: green";
+//                } else {
+//                    backgroundColor = "-fx-background-color: white";
+//                }
+//
+//                // Customize the tile...
+//                tile.setStyle(backgroundColor + "; -fx-border-color: black;");
+//                BoardGrid.add(tile, col, size - row - 1); // Place tile in the grid
+//            }
+//        }
+//        displayPlayers(players);
+//
+//    }
+//        for (int row = 0; row < size; row++) {
+//            for (int col = 0; col < size; col++) {
+//                // Calculate tile number starting from bottom left
+//                int number = (size * (size - row)) - col;
+//                Tile tile = new Tile(col, size - row - 1);
+//                // Customize the tile...
+//                tile.setStyle("-fx-background-color: green" + "; -fx-border-color: black;");
+//                BoardGrid.add(tile, col, size - row - 1); // Place tile in the grid
+//            }
+//        }
+
 
 
 
