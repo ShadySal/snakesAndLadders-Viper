@@ -1,7 +1,5 @@
 package com.example.snakesandladdersviper.Controller;
 
-import com.example.snakesandladdersviper.Main;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

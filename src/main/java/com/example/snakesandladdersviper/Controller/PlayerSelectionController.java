@@ -1,25 +1,19 @@
 package com.example.snakesandladdersviper.Controller;
 import com.example.snakesandladdersviper.Enums.Difficulty;
-import com.example.snakesandladdersviper.Model.Dice;
 import com.example.snakesandladdersviper.Model.GameBoard;
 import com.example.snakesandladdersviper.Model.Player;
-import com.example.snakesandladdersviper.Controller.GameBoardController;
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 public class PlayerSelectionController {
@@ -114,8 +108,22 @@ public class PlayerSelectionController {
     private void savePlayerSelection() {
         String playerName = PlayerName.getText();
         String selectedColorName = ObjectSelect.getValue();
-        Color color = getColorFromString(selectedColorName);
 
+        // Check if playerName or selectedColorName is empty
+        if (playerName.isEmpty() || selectedColorName == null) {
+            showAlert("Error", "Please enter a username and select a color.");
+            return; // Stop further execution
+        }
+
+        // Check if playerName is already used by another player
+        for (Player existingPlayer : players) {
+            if (existingPlayer.getName().equalsIgnoreCase(playerName) && existingPlayer.getPlayerNumber() != currentPlayerNumber) {
+                showAlert("Error", "This username is already taken. Please choose another one.");
+                return; // Stop further execution
+            }
+        }
+
+        Color color = getColorFromString(selectedColorName);
         Player player;
         if (currentPlayerNumber <= players.size()) {
             // Update existing player
@@ -143,7 +151,13 @@ public class PlayerSelectionController {
     }
 
 
-
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 
     //gets color of the player
         private Color getColorFromString(String colorName) {
