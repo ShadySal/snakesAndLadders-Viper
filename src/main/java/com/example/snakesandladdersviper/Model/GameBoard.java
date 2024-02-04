@@ -2,6 +2,8 @@ package com.example.snakesandladdersviper.Model;
 
 
 
+import com.example.snakesandladdersviper.Enums.Difficulty;
+
 import java.util.*;
 
 public class GameBoard {
@@ -16,6 +18,7 @@ public class GameBoard {
 
 
     private Dice dice;
+    private Difficulty difficulty;
 
 
     public GameBoard(int rows, int columns) {
@@ -172,4 +175,11 @@ public class GameBoard {
     public int getPlayerPosition(Player player) {
         return playerPositions.getOrDefault(player, 0); // Default to position 0 if not found
 }
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
 }

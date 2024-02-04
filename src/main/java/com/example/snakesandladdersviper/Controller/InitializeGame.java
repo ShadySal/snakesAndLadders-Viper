@@ -71,7 +71,7 @@ public class InitializeGame {
     }
 
     @FXML
-    void SubmitChoices(ActionEvent event) {
+    public void SubmitChoices(ActionEvent event) {
         int numberOfPlayers = PlayersNum.getValue();
         difficulty = SelectDifficulty.getValue();
 
@@ -103,5 +103,12 @@ public class InitializeGame {
 
     public ComboBox<Integer> getPlayersNum() {
         return PlayersNum;
+    }
+
+    public ComboBox<Difficulty> getSelectDifficulty() {
+        return SelectDifficulty;
+    }
+    public List<Player> getPlayers() {
+        return players;
     }
 }
