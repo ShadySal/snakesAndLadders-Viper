@@ -41,6 +41,22 @@ public class PlayerSelectionController {
     private GameBoard gameBoard;
 
 
+    public List<Player> getPlayers() {
+        return players;
+    }
+    public TextField getPlayerName() {
+        // Implement the logic to return the player name TextField
+        return PlayerName;
+    }
+    public ComboBox<String> getObjectSelect() {
+        // Implement the logic to return the ObjectSelect ComboBox
+        return ObjectSelect;
+    }
+    public Text getPlayerSelectionTurn() {
+        // Implement the logic to return the PlayerSelectionTurn Text
+        return PlayerSelectionTurn;
+    }
+
     public void initialize() {
         ObjectSelect.getItems().addAll("Red", "Blue", "Green", "Yellow", "Orange", "White");
         players = new ArrayList<>();
@@ -105,7 +121,7 @@ public class PlayerSelectionController {
     }
 
     @FXML
-    private void savePlayerSelection() {
+    public void savePlayerSelection() {
         String playerName = PlayerName.getText();
         String selectedColorName = ObjectSelect.getValue();
 
