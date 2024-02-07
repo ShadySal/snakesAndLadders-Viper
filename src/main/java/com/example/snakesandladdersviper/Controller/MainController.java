@@ -1,7 +1,9 @@
 package com.example.snakesandladdersviper.Controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -25,5 +27,18 @@ public class MainController {
         Parent root = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/InitializeGame.fxml"));
         currentStage.setTitle("Game Initialization");
         currentStage.setScene(new Scene(root, 800, 800));
+    }
+
+    @FXML
+    private void onQuestionManagementBtnClicked(ActionEvent event) throws IOException {
+        // Load QuestionsPage.fxml
+        Parent questionsPage = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/QuestionsPage.fxml"));
+        // Get the stage from the event source
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        // Set the new scene on the stage
+        stage.setScene(new Scene(questionsPage));
+
+        // Show the stage
+        stage.show();
     }
 }

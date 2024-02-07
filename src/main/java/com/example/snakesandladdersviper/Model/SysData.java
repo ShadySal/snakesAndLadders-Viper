@@ -134,23 +134,20 @@ public class SysData {
         for (int i = 0; i < answersJsonArray.length(); i++) {
             answers.put(i + 1, answersJsonArray.getString(i));
         }
-        return new Question(
-                questionText,
-                answers,
-                questionJson.getInt("correct_ans"),
-                questionJson.getInt("level"),
-                questionJson.getString("team")
-        );
+        int correctAns = questionJson.getInt("correct_ans");
+        int difficulty = questionJson.getInt("difficulty");
+        return new Question(questionText, answers, correctAns, difficulty);
     }
+
 
     private JSONObject createQuestionJson(Question question) {
         JSONObject questionJson = new JSONObject();
-        questionJson.put("question", question.getQuestionID());
-        questionJson.put("level", question.getLevel());
-        JSONArray answersArray = new JSONArray(question.getAnswers().values());
+        questionJson.put("question", question.getQuestionText());
+        questionJson.put("correct_ans", question.getCorrectAns());
+        questionJson.put("difficulty", question.getDifficulty());
+        JSONArray answersArray = new JSONArray();
+        question.getAnswers().values().forEach(answersArray::put);
         questionJson.put("answers", answersArray);
-        questionJson.put("team", question.getTeam());
-        questionJson.put("correct_ans", question.getCorrect_ans());
         return questionJson;
     }
 
@@ -186,7 +183,7 @@ public class SysData {
 
         if (indexToRemove >= 0) {
             questionsArray.remove(indexToRemove);
-            questionList.removeIf(q -> q.getQuestionID().equals(questionText));
+            questionList.removeIf(q -> q.getQuestionText().equals(questionText)); // Use getQuestionText() instead of getQuestionID()
             saveJsonToFile(jsonObject, QUESTIONS_FILE);
         }
     }
