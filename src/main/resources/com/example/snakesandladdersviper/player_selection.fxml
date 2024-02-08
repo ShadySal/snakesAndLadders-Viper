@@ -13,11 +13,11 @@
 <Pane fx:id="contentPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: a9cce3;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.PlayerSelectionController">
    <children>
       <Text layoutX="83.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please Enter your name" />
-      <TextField fx:id="PlayerName" layoutX="275.0" layoutY="138.0" prefHeight="31.0" prefWidth="172.0" style="-fx-background-color: e67e22;" />
-      <ComboBox fx:id="ObjectSelect" layoutX="275.0" layoutY="194.0" prefHeight="45.0" prefWidth="172.0" style="-fx-background-color: e67e22;" />
+      <TextField fx:id="PlayerName" layoutX="275.0" layoutY="138.0" prefHeight="31.0" prefWidth="172.0" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" />
+      <ComboBox fx:id="ObjectSelect" layoutX="275.0" layoutY="194.0" prefHeight="45.0" prefWidth="172.0" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" />
       <Text layoutX="95.0" layoutY="222.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose your Object" />
-      <Button layoutX="271.0" layoutY="354.0" mnemonicParsing="false" onAction="#savePlayerSelection" prefHeight="53.0" prefWidth="85.0" style="-fx-background-color: e67e22;" text="Next" />
+      <Button layoutX="271.0" layoutY="354.0" mnemonicParsing="false" onAction="#savePlayerSelection" prefHeight="53.0" prefWidth="85.0" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" text="Next" />
       <Text fx:id="PlayerSelectionTurn" layoutX="271.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player X " />
-      <Button mnemonicParsing="false" onAction="#savePlayerSelection" prefHeight="39.0" prefWidth="112.0" style="-fx-background-color: e67e22;" text="Back" />
+      <Button mnemonicParsing="false" onAction="#savePlayerSelection" prefHeight="39.0" prefWidth="112.0" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" text="Back" />
    </children>
 </Pane>
