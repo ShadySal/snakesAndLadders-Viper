@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.QuestionsPageController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.QuestionsPageController">
    <children>
       <ListView fx:id="QuestionsView" layoutX="35.0" layoutY="131.0" prefHeight="500.0" prefWidth="400.0" />
       <ListView fx:id="answersView" layoutX="567.0" layoutY="131.0" prefHeight="500.0" prefWidth="400.0" />
-      <Text layoutX="452.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Questions Wizard" style="-fx-font-size: 25px" textAlignment="CENTER" />
-      <Button fx:id="editButton" layoutX="134.0" layoutY="657.0" mnemonicParsing="false" text="Edit" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" />
-      <Button fx:id="deleteButton" layoutX="223.0" layoutY="657.0" mnemonicParsing="false" text="Delete" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" />
+      <Text layoutX="452.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 25px" text="Questions Wizard" textAlignment="CENTER" />
+      <Button fx:id="editButton" layoutX="134.0" layoutY="657.0" mnemonicParsing="false" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" text="Edit" />
+      <Button fx:id="deleteButton" layoutX="223.0" layoutY="657.0" mnemonicParsing="false" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" text="Delete" />
       <Text layoutX="601.0" layoutY="707.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Question Difficulty" />
       <Text layoutX="601.0" layoutY="755.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Correct Answer" />
       <TextField fx:id="QuestionDifficulty" layoutX="740.0" layoutY="689.0" />
       <TextField fx:id="CorrectAnswer" layoutX="740.0" layoutY="737.0" />
+      <Button fx:id="BackButton" defaultButton="true" layoutY="8.0" mnemonicParsing="false" onAction="#BackButtonFunc" prefHeight="31.0" prefWidth="117.0" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-padding: 10px 20px; -fx-border-radius: 5px;" text="Back" textAlignment="CENTER">
+         <font>
+            <Font name="Arial Black" size="15.0" />
+         </font>
+      </Button>
    </children>
 </Pane>

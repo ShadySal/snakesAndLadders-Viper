@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane fx:id="MainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: #f0eee6; -fx-background-size: cover; -fx-background-position: center center;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.MainController">
+<children>
+      <!-- Updated button styles with gradients and shadows -->
+      <Button fx:id="StartGameBtn" layoutX="261.0" layoutY="186.0" mnemonicParsing="false" onAction="#StartGame" prefHeight="68.0" prefWidth="233.0" style="-fx-background-radius: 30; -fx-background-color: linear-gradient(#7ed56f, #28b485); -fx-text-fill: #ffffff; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);" text="Start Game">
+      </Button>
+      <Button fx:id="GameHistoryBtn" layoutX="261.0" layoutY="303.0" mnemonicParsing="false" prefHeight="68.0" prefWidth="233.0" style="-fx-background-radius: 30; -fx-background-color: linear-gradient(#7ed56f, #28b485); -fx-text-fill: #ffffff; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);" text="Game History">
+      </Button>
+      <Button fx:id="QuestionManagementBtn" layoutX="261.0" layoutY="420.0" mnemonicParsing="false" onAction="#onQuestionManagementBtnClicked" prefHeight="68.0" prefWidth="233.0" style="-fx-background-radius: 30; -fx-background-color: linear-gradient(#7ed56f, #28b485); -fx-text-fill: #ffffff; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);" text="Question Management Wizard">
+      </Button>
+      <!-- Updated label styles with larger font and shadow -->
+      <Label fx:id="Title" layoutX="229.0" layoutY="78.0" prefHeight="80.0" prefWidth="434.0" style="-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 15, 0, 0, 0);" text="Snakes And Ladders" textAlignment="CENTER" textFill="#120e0e">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Button fx:id="InstructionsBtn" layoutX="261.0" layoutY="537.0" mnemonicParsing="false" onAction="#InstructionsOfGame" text="Instructions" prefHeight="68.0" prefWidth="233.0" style="-fx-background-radius: 30; -fx-background-color: linear-gradient(#7ed56f, #28b485);-fx-text-fill: #ffffff; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);"/>
+   </children>
+</Pane>

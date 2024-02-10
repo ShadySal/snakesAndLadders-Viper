@@ -19,7 +19,7 @@ import java.util.HashMap;
  */
 public class SysData {
     private static SysData instance = null;
-    private ArrayList<Question> questionList;
+    private  static ArrayList<Question> questionList;
     private static final String QUESTIONS_FILE = "questions.json";
     private static final String HISTORY_FILE = "history.json";
 
@@ -42,7 +42,7 @@ public class SysData {
         importQuestions();
     }
 
-    public ArrayList<Question> getQuestions() {
+    public static ArrayList<Question> getQuestions() {
         return questionList;
     }
 
@@ -151,8 +151,8 @@ public class SysData {
         return questionJson;
     }
 
-    private JSONObject readJsonFile(String filename) {
-        try (InputStream stream = getClass().getClassLoader().getResourceAsStream(filename)) {
+    private static JSONObject readJsonFile(String filename) {
+        try (InputStream stream = SysData.class.getClassLoader().getResourceAsStream(filename)) {
             if (stream == null) {
                 throw new FileNotFoundException("Resource not found: " + filename);
             }
@@ -168,7 +168,7 @@ public class SysData {
      * Removes a question and updates the JSON file.
      * @param questionText The question to remove
      */
-    public void removeQuestion(String questionText) {
+    public static void removeQuestion(String questionText) {
         JSONObject jsonObject = readJsonFile(QUESTIONS_FILE);
         JSONArray questionsArray = jsonObject.getJSONArray("questions");
         int indexToRemove = -1;
@@ -193,7 +193,7 @@ public class SysData {
      * @param jsonObject The JSON object to save
      * @param filename The filename to save to
      */
-    private void saveJsonToFile(JSONObject jsonObject, String filename) {
+    private static void saveJsonToFile(JSONObject jsonObject, String filename) {
         try (FileWriter file = new FileWriter(filename)) {
             file.write(jsonObject.toString(4)); // Indentation for readability
         } catch (IOException e) {
