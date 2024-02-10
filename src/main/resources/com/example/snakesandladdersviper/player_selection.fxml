@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="contentPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: a9cce3;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.PlayerSelectionController">
+<Pane fx:id="contentPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" style="-fx-background-color:white;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.PlayerSelectionController">
    <children>
       <Text layoutX="83.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please Enter your name" />
       <TextField fx:id="PlayerName" layoutX="275.0" layoutY="138.0" prefHeight="31.0" prefWidth="172.0" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" />

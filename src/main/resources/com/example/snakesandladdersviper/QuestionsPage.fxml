@@ -11,9 +11,9 @@
    <children>
       <ListView fx:id="QuestionsView" layoutX="35.0" layoutY="131.0" prefHeight="500.0" prefWidth="400.0" />
       <ListView fx:id="answersView" layoutX="567.0" layoutY="131.0" prefHeight="500.0" prefWidth="400.0" />
-      <Text layoutX="452.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Questions Wizard" />
-      <Button fx:id="editButton" layoutX="134.0" layoutY="657.0" mnemonicParsing="false" text="Edit" />
-      <Button fx:id="deleteButton" layoutX="223.0" layoutY="657.0" mnemonicParsing="false" text="Delete" />
+      <Text layoutX="452.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Questions Wizard" style="-fx-font-size: 25px" textAlignment="CENTER" />
+      <Button fx:id="editButton" layoutX="134.0" layoutY="657.0" mnemonicParsing="false" text="Edit" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" />
+      <Button fx:id="deleteButton" layoutX="223.0" layoutY="657.0" mnemonicParsing="false" text="Delete" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" />
       <Text layoutX="601.0" layoutY="707.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Question Difficulty" />
       <Text layoutX="601.0" layoutY="755.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Correct Answer" />
       <TextField fx:id="QuestionDifficulty" layoutX="740.0" layoutY="689.0" />

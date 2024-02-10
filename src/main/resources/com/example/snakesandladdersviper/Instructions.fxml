@@ -6,6 +6,6 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.MainController">
    <children>
-       <Text layoutX="15.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size:22px" text="In this game..." />
+       <Text layoutX="15.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size:22px" textAlignment="CENTER" text="In this game..." />
    </children>
 </AnchorPane>
