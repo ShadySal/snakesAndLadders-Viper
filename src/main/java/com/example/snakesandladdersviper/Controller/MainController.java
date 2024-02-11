@@ -22,6 +22,9 @@ public class MainController {
     @FXML
     private Button StartGameBtn;
 
+    @FXML
+    private Button InstructionsBtn;
+
     public void StartGame() throws IOException {
         Stage currentStage = (Stage) StartGameBtn.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/InitializeGame.fxml"));
@@ -29,6 +32,12 @@ public class MainController {
         currentStage.setScene(new Scene(root, 800, 800));
     }
 
+    public void InstructionsOfGame(ActionEvent event) throws IOException {
+        Parent InstructionPage = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/Instructions.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(InstructionPage));
+        stage.show();
+    }
     @FXML
     private void onQuestionManagementBtnClicked(ActionEvent event) throws IOException {
         // Load QuestionsPage.fxml

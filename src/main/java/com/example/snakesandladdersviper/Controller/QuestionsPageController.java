@@ -6,9 +6,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+
+import javafx.scene.control.*;
+
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -23,6 +23,8 @@ public class QuestionsPageController {
 
     @FXML
     private Button editButton;
+    @FXML
+    private Button BackButton;
 
     @FXML
     private Button deleteButton;
@@ -34,8 +36,7 @@ public class QuestionsPageController {
     private TextField CorrectAnswer;
 
     private SysData sysData;
-    @FXML
-    private Button BackButton;
+
 
     @FXML
     private Button addButton;
@@ -74,7 +75,39 @@ public class QuestionsPageController {
             QuestionsView.getItems().add(question.getQuestionText());
         }
     }
+    @FXML
+    void BackButtonFunc(ActionEvent event) throws IOException {
+        // Create a confirmation alert
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Confirmation");
+        confirmationAlert.setHeaderText("Are you sure you want to Cancel Initializing the game and back to the Main Menu?");
+        confirmationAlert.setContentText("Any unsaved changes may be lost.");
 
+        // Add OK and Cancel buttons to the alert
+        confirmationAlert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+
+        // Show the alert and wait for user input
+        confirmationAlert.showAndWait().ifPresent(buttonType -> {
+            if (buttonType == ButtonType.OK) {
+                // User clicked OK, proceed with transferring to the main menu
+
+                try {
+                    // Back to the main menu
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/hello-view.fxml"));
+                    Parent root = loader.load();
+                    Scene nextScene = new Scene(root);
+
+                    // Get the current stage and set the new scene
+                    Stage currentStage = (Stage) BackButton.getScene().getWindow();
+                    currentStage.setScene(nextScene);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // User clicked Cancel, do nothing or handle accordingly
+            }
+        });
+    }
     private void displayAnswers(String selectedQuestion) {
         answersView.getItems().clear();
         Question selected = sysData.getQuestions().stream()
