@@ -6,6 +6,8 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.MainController">
    <children>
-       <Text layoutX="15.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size:22px" textAlignment="CENTER" text="In this game..." />
+       <Text layoutX="25.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size:22px" textAlignment="CENTER" text="In this game..." />
+       <Button fx:id="BackButton" defaultButton="true" mnemonicParsing="false" onAction="#BackButton" prefHeight="31.0" prefWidth="117.0" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-padding: 10px 20px; -fx-border-radius: 5px;" text="Back" textAlignment="CENTER">
+       </Button>
    </children>
 </AnchorPane>

@@ -25,6 +25,9 @@ public class MainController {
     @FXML
     private Button InstructionsBtn;
 
+    @FXML
+    private Button BackButton;
+
     public void StartGame() throws IOException {
         Stage currentStage = (Stage) StartGameBtn.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/InitializeGame.fxml"));
@@ -49,5 +52,18 @@ public class MainController {
 
         // Show the stage
         stage.show();
+    }
+    @FXML
+    void BackButton(ActionEvent event) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/hello-view.fxml"));
+            Parent root = loader.load();
+            Scene nextScene = new Scene(root);
+// Get the current stage and set the new scene
+            Stage currentStage = (Stage) BackButton.getScene().getWindow();
+            currentStage.setScene(nextScene);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
