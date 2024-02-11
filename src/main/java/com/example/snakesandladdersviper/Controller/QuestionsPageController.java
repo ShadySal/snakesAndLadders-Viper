@@ -43,19 +43,6 @@ public class QuestionsPageController {
     private Button addButton;
 
 
-    @FXML
-    void BackButton(ActionEvent event) throws IOException {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/hello-view.fxml"));
-            Parent root = loader.load();
-            Scene nextScene = new Scene(root);
-            Stage currentStage = (Stage) BackButton.getScene().getWindow();
-            currentStage.setScene(nextScene);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 
     public void initialize() {
         sysData = SysData.getInstance();
@@ -81,8 +68,8 @@ public class QuestionsPageController {
         // Create a confirmation alert
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setTitle("Confirmation");
-        confirmationAlert.setHeaderText("Are you sure you want to Cancel Initializing the game and back to the Main Menu?");
-        confirmationAlert.setContentText("Any unsaved changes may be lost.");
+        confirmationAlert.setHeaderText("Are you sure you want to back to the Main Menu?");
+        confirmationAlert.setContentText("");
 
         // Add OK and Cancel buttons to the alert
         confirmationAlert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
@@ -109,6 +96,8 @@ public class QuestionsPageController {
             }
         });
     }
+
+
     private void displayAnswers(String selectedQuestion) {
         answersView.getItems().clear();
         Question selected = sysData.getQuestions().stream()
@@ -163,14 +152,7 @@ public class QuestionsPageController {
     }
 
 
-    @FXML
-    void onDeleteButtonClicked(ActionEvent event) {
-        String selectedQuestionText = QuestionsView.getSelectionModel().getSelectedItem();
-        if (selectedQuestionText != null) {
-            sysData.removeQuestion(selectedQuestionText);
-            loadQuestions();
-        }
-    }
+
 
     @FXML
     void onAddButtonClicked(ActionEvent event) throws IOException{
@@ -187,5 +169,29 @@ public class QuestionsPageController {
         // Show the updated stage
         stage.show();
     }
+    @FXML
+    void onDeleteButtonClicked(ActionEvent event) {
+        String selectedQuestionText = QuestionsView.getSelectionModel().getSelectedItem();
+        if (selectedQuestionText != null) {
+            // Create a confirmation alert
+            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationAlert.setTitle("Confirmation");
+            confirmationAlert.setHeaderText("Are you sure you want to delete the selected question?");
+            confirmationAlert.setContentText("This action cannot be undone.");
+
+            // Add OK and Cancel buttons to the alert
+            confirmationAlert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+
+            // Show the alert and wait for user input
+            confirmationAlert.showAndWait().ifPresent(buttonType -> {
+                if (buttonType == ButtonType.OK) {
+                    // User confirmed, proceed with deleting the question
+                    sysData.removeQuestion(selectedQuestionText);
+                    loadQuestions();
+                }
+            });
+        }
+    }
+
 
 }

@@ -4,8 +4,13 @@ import com.example.snakesandladdersviper.Model.Question;
 import com.example.snakesandladdersviper.Model.SysData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class EditQuestionController {
@@ -38,6 +43,7 @@ public class EditQuestionController {
 
     @FXML
     private Button SubmitButton;
+
 
     @FXML
     private Button BackButton;
@@ -149,6 +155,19 @@ public class EditQuestionController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+    @FXML
+    void BackButton(ActionEvent event) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/QuestionsPage.fxml"));
+            Parent root = loader.load();
+            Scene nextScene = new Scene(root);
+            Stage currentStage = (Stage) BackButton.getScene().getWindow();
+            currentStage.setScene(nextScene);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

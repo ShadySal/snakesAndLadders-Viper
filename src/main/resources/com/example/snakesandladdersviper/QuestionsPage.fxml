@@ -10,16 +10,13 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
-
-
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.QuestionsPageController">
    <children>
       <ListView fx:id="QuestionsView" layoutX="35.0" layoutY="131.0" prefHeight="500.0" prefWidth="400.0" />
       <ListView fx:id="answersView" layoutX="567.0" layoutY="131.0" prefHeight="500.0" prefWidth="400.0" />
       <Text layoutX="452.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 25px" text="Questions Wizard" textAlignment="CENTER" />
-      <Button fx:id="editButton" layoutX="134.0" layoutY="657.0" mnemonicParsing="false" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" text="Edit" onAction="#onEditButtonClicked" />
-      <Button fx:id="deleteButton" layoutX="223.0" layoutY="657.0" mnemonicParsing="false" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" text="Delete" />
+      <Button fx:id="editButton" layoutX="187.0" layoutY="657.0" mnemonicParsing="false" onAction="#onEditButtonClicked" prefHeight="31.0" prefWidth="68.0" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" text="Edit" />
+      <Button fx:id="deleteButton" layoutX="307.0" layoutY="657.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="68.0" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" text="Delete" onAction="#onDeleteButtonClicked"/>
 
       <Text layoutX="601.0" layoutY="707.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Question Difficulty" />
       <Text layoutX="601.0" layoutY="755.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Correct Answer" />
@@ -27,7 +24,7 @@
       <TextField fx:id="CorrectAnswer" layoutX="740.0" layoutY="737.0" />
 
 
-      <Button fx:id="addButton" layoutX="100.0" layoutY="657.0" mnemonicParsing="false" text="Add" onAction="#onAddButtonClicked"/>
+      <Button fx:id="addButton" layoutX="76.0" layoutY="657.0" mnemonicParsing="false" onAction="#onAddButtonClicked" prefHeight="31.0" prefWidth="68.0" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" text="Add" />
 
       <Button fx:id="BackButton" defaultButton="true" layoutY="8.0" mnemonicParsing="false" onAction="#BackButtonFunc" prefHeight="31.0" prefWidth="117.0" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-padding: 10px 20px; -fx-border-radius: 5px;" text="Back" textAlignment="CENTER">
          <font>

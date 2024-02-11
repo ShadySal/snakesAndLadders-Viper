@@ -11,14 +11,14 @@
         "correct_ans": 2
     },
     {
-        "difficulty": 2,
-        "question": "q2",
+        "difficulty": 3,
+        "question": "q3",
         "answers": [
-            "answer1",
-            "answer2",
-            "answer3",
-            "answer4"
+            "ans1",
+            "ans2",
+            "ans3",
+            "ans4"
         ],
-        "correct_ans": 1
+        "correct_ans": 4
     }
 ]}
