@@ -18,8 +18,8 @@
         <Text text="Ladders will help players advance more quickly, while snakes will slow down their progress." wrappingWidth="700.0" />
         <Text text="Different types of ladders and snakes will be placed on the board, which affect the gameplay differently." wrappingWidth="700.0" />
         <HBox alignment="CENTER" spacing="15.0">
-            <Button text="Back" onAction="#handleBack" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-text-fill: white; -fx-font-weight: bold;" />
-            <Button text="Start Game" onAction="#handleStartGame" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-text-fill: white; -fx-font-weight: bold;" />
+            <Button text="Back" onAction="#BackButton" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-text-fill: white; -fx-font-weight: bold;" />
+            <Button text="Start Game" onAction="#StartGame" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-text-fill: white; -fx-font-weight: bold;" />
         </HBox>
     </children>
 </VBox>
