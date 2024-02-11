@@ -50,9 +50,10 @@ public class AddQuestionController {
 
     @FXML
     private ChoiceBox<String> LevelChoiceBox;
+
     private ToggleGroup answersToggleGroup;
 
-
+    @FXML
     public void initialize() {
         answersToggleGroup = new ToggleGroup();
         Answer1.setToggleGroup(answersToggleGroup);
@@ -60,12 +61,49 @@ public class AddQuestionController {
         Answer3.setToggleGroup(answersToggleGroup);
         Answer4.setToggleGroup(answersToggleGroup);
 
-        LevelChoiceBox.getItems().addAll("Easy","Medium","Hard"); // Assuming 3 difficulty levels
+        LevelChoiceBox.getItems().addAll("Easy", "Medium", "Hard"); // Assuming 3 difficulty levels
         LevelChoiceBox.setValue("Easy"); // Default value
     }
 
     @FXML
     private void onSubmitButtonClicked() {
+        if (validateInput()) {
+            RadioButton selectedAnswer = (RadioButton) answersToggleGroup.getSelectedToggle();
+            int correctAnswerIndex = getAnswerIndex(selectedAnswer);
+
+            HashMap<Integer, String> answers = new HashMap<>();
+            answers.put(1, Answer1TextField.getText());
+            answers.put(2, Answer2TextField.getText());
+            answers.put(3, Answer3TextField.getText());
+            answers.put(4, Answer4TextField.getText());
+
+            Question newQuestion = new Question(
+                    QuestionTextField.getText(),
+                    answers,
+                    correctAnswerIndex,
+                    QuestionLevelNum(LevelChoiceBox.getValue())
+            );
+
+            SysData.getInstance().addQuestion(newQuestion);
+            clearForm();
+
+            // Save the updated data to the JSON file
+            SysData.getInstance().saveQuestionsToJsonFile();
+            // Show confirmation message
+            showConfirmationMessage("Question added successfully!");
+        }
+    }
+    private void showConfirmationMessage(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+// ...
+
+
+    private boolean validateInput() {
         if (QuestionTextField.getText().isEmpty() ||
                 Answer1TextField.getText().isEmpty() ||
                 Answer2TextField.getText().isEmpty() ||
@@ -74,28 +112,9 @@ public class AddQuestionController {
                 answersToggleGroup.getSelectedToggle() == null) {
 
             showAlert("Error", "Please fill all fields and select the correct answer.");
-            return;
+            return false;
         }
-
-        RadioButton selectedAnswer = (RadioButton) answersToggleGroup.getSelectedToggle();
-        int correctAnswerIndex = getAnswerIndex(selectedAnswer);
-
-        HashMap<Integer, String> answers = new HashMap<>();
-        answers.put(1, Answer1TextField.getText());
-        answers.put(2, Answer2TextField.getText());
-        answers.put(3, Answer3TextField.getText());
-        answers.put(4, Answer4TextField.getText());
-
-        Question newQuestion = new Question(
-                QuestionTextField.getText(),
-                answers,
-                correctAnswerIndex,
-                QuestionLevelNum(LevelChoiceBox.getValue())
-        );
-
-        SysData.getInstance().addQuestion(newQuestion);
-        clearForm();
-
+        return true;
     }
 
     private int QuestionLevelNum(String value) {
@@ -120,12 +139,14 @@ public class AddQuestionController {
         answersToggleGroup.getSelectedToggle().setSelected(false);
         LevelChoiceBox.setValue("Easy");
     }
+
     private int getAnswerIndex(RadioButton selectedAnswer) {
         if (selectedAnswer == Answer1) return 1;
         if (selectedAnswer == Answer2) return 2;
         if (selectedAnswer == Answer3) return 3;
         return 4; // Default to Answer4
     }
+
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -133,19 +154,38 @@ public class AddQuestionController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
     @FXML
-    void BackButton(ActionEvent event) throws IOException {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/QuestionsPage.fxml"));
-            Parent root = loader.load();
-            Scene nextScene = new Scene(root);
-            Stage currentStage = (Stage) BackButton.getScene().getWindow();
-            currentStage.setScene(nextScene);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    void BackButtonFunc(ActionEvent event) throws IOException {
+        // Create a confirmation alert
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Confirmation");
+        confirmationAlert.setHeaderText("Are you sure you want to back to Managing Questions?");
+        confirmationAlert.setContentText("");
+
+        // Add OK and Cancel buttons to the alert
+        confirmationAlert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+
+        // Show the alert and wait for user input
+        confirmationAlert.showAndWait().ifPresent(buttonType -> {
+            if (buttonType == ButtonType.OK) {
+                // User clicked OK, proceed with transferring to the main menu
+
+                try {
+                    // Back to the main menu
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/QuestionsPage.fxml"));
+                    Parent root = loader.load();
+                    Scene nextScene = new Scene(root);
+
+                    // Get the current stage and set the new scene
+                    Stage currentStage = (Stage) BackButton.getScene().getWindow();
+                    currentStage.setScene(nextScene);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // User clicked Cancel, do nothing or handle accordingly
+            }
+        });
     }
-
-
-
 }

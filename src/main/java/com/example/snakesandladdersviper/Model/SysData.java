@@ -192,7 +192,7 @@ public class SysData {
             System.out.println("msh mlaqe");
         }
     }
-    private void saveQuestionsToJsonFile() {
+    public void saveQuestionsToJsonFile() {
         JSONObject jsonObject = new JSONObject();
         JSONArray questionsArray = new JSONArray();
         for (Question q : questionList) {

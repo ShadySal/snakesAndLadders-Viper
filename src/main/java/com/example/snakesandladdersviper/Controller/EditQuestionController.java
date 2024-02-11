@@ -56,6 +56,7 @@ public class EditQuestionController {
 
     @FXML
     private void initialize() {
+        LevelChoiceBox.getItems().addAll("Easy", "Medium", "Hard");
         answersToggleGroup = new ToggleGroup();
         Answer1.setToggleGroup(answersToggleGroup);
         Answer2.setToggleGroup(answersToggleGroup);
@@ -64,6 +65,7 @@ public class EditQuestionController {
     }
     public void setQuestionDetails(Question question) {
         QuestionTextField.setText(question.getQuestionText());
+
         // Set the corresponding radio button as selected
         int correctAnswer = question.getCorrectAns();
         RadioButton selectedRadioButton = (RadioButton) answersToggleGroup.getToggles().get(correctAnswer - 1);
@@ -86,6 +88,7 @@ public class EditQuestionController {
         }
         LevelChoiceBox.setValue(difficulty);
     }
+
 
 
 
@@ -156,16 +159,37 @@ public class EditQuestionController {
         alert.showAndWait();
     }
     @FXML
-    void BackButton(ActionEvent event) throws IOException {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/QuestionsPage.fxml"));
-            Parent root = loader.load();
-            Scene nextScene = new Scene(root);
-            Stage currentStage = (Stage) BackButton.getScene().getWindow();
-            currentStage.setScene(nextScene);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    void BackButtonFunc(ActionEvent event) throws IOException {
+        // Create a confirmation alert
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle("Confirmation");
+        confirmationAlert.setHeaderText("Are you sure you want to back to Managing Questions?");
+        confirmationAlert.setContentText("");
+
+        // Add OK and Cancel buttons to the alert
+        confirmationAlert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+
+        // Show the alert and wait for user input
+        confirmationAlert.showAndWait().ifPresent(buttonType -> {
+            if (buttonType == ButtonType.OK) {
+                // User clicked OK, proceed with transferring to the main menu
+
+                try {
+                    // Back to the main menu
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/QuestionsPage.fxml"));
+                    Parent root = loader.load();
+                    Scene nextScene = new Scene(root);
+
+                    // Get the current stage and set the new scene
+                    Stage currentStage = (Stage) BackButton.getScene().getWindow();
+                    currentStage.setScene(nextScene);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // User clicked Cancel, do nothing or handle accordingly
+            }
+        });
     }
 
 

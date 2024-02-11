@@ -1,6 +1,6 @@
 {"questions": [
     {
-        "difficulty": 1,
+        "difficulty": 2,
         "question": "q1",
         "answers": [
             "answer1",
@@ -18,6 +18,28 @@
             "ans2",
             "ans3",
             "ans4"
+        ],
+        "correct_ans": 4
+    },
+    {
+        "difficulty": 2,
+        "question": "q2",
+        "answers": [
+            "ans1",
+            "ans6",
+            "ans3",
+            "ans4"
+        ],
+        "correct_ans": 2
+    },
+    {
+        "difficulty": 3,
+        "question": "Q4",
+        "answers": [
+            "Answer1",
+            "Answer2",
+            "Answer3",
+            "Answer4"
         ],
         "correct_ans": 4
     }
