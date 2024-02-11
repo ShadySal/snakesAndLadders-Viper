@@ -27,7 +27,7 @@
       <TextField fx:id="CorrectAnswer" layoutX="740.0" layoutY="737.0" />
 
     
-      <Button fx:id="addButton" layoutX="100.0" layoutY="657.0" mnemonicParsing="false" text="Add" />
+      <Button fx:id="addButton" layoutX="50.0" layoutY="657.0" mnemonicParsing="false" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" text="Add" />
 
       <Button fx:id="BackButton" defaultButton="true" layoutY="8.0" mnemonicParsing="false" onAction="#BackButtonFunc" prefHeight="31.0" prefWidth="117.0" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-padding: 10px 20px; -fx-border-radius: 5px;" text="Back" textAlignment="CENTER">
          <font>
