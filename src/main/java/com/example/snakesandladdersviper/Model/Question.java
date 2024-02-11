@@ -13,12 +13,14 @@ public class Question {
     private HashMap<Integer, String> answers;
     private int correctAns;
     private int difficulty;
+    private String questionId;
 
     public Question(String questionText, HashMap<Integer, String> answers, int correctAns, int difficulty) {
         this.questionText = questionText;
         this.answers = answers;
         this.correctAns = correctAns;
         this.difficulty = difficulty;
+        this.questionId = questionText;
 
     }
 
@@ -54,6 +56,13 @@ public class Question {
         this.difficulty = difficulty;
     }
 
+    public String getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(String questionId) {
+        this.questionId = questionId;
+    }
 
 
 

@@ -19,7 +19,7 @@ import java.util.HashMap;
  */
 public class SysData {
     private static SysData instance = null;
-    private  static ArrayList<Question> questionList;
+    private ArrayList<Question> questionList;
     private static final String QUESTIONS_FILE = "questions.json";
     private static final String HISTORY_FILE = "history.json";
 
@@ -42,7 +42,7 @@ public class SysData {
         importQuestions();
     }
 
-    public static ArrayList<Question> getQuestions() {
+    public ArrayList<Question> getQuestions() {
         return questionList;
     }
 
@@ -66,7 +66,7 @@ public class SysData {
         questionsArray.put(newQuestionJson);
 
         questionList.add(question);
-        saveJsonToFile(jsonObject, QUESTIONS_FILE);
+        saveQuestionsToJsonFile();
     }
 
     /**
@@ -151,8 +151,8 @@ public class SysData {
         return questionJson;
     }
 
-    private static JSONObject readJsonFile(String filename) {
-        try (InputStream stream = SysData.class.getClassLoader().getResourceAsStream(filename)) {
+    private JSONObject readJsonFile(String filename) {
+        try (InputStream stream = getClass().getResourceAsStream("/" + filename)) {
             if (stream == null) {
                 throw new FileNotFoundException("Resource not found: " + filename);
             }
@@ -168,33 +168,57 @@ public class SysData {
      * Removes a question and updates the JSON file.
      * @param questionText The question to remove
      */
-    public static void removeQuestion(String questionText) {
-        JSONObject jsonObject = readJsonFile(QUESTIONS_FILE);
-        JSONArray questionsArray = jsonObject.getJSONArray("questions");
-        int indexToRemove = -1;
+    public void removeQuestion(String questionText) {
+        // Logic to remove the question
+        questionList.removeIf(q -> q.getQuestionText().equals(questionText));
+        // Save the updated list to JSON file
+        saveQuestionsToJsonFile();
+    }
 
-        for (int i = 0; i < questionsArray.length(); i++) {
-            JSONObject questionJson = questionsArray.getJSONObject(i);
-            if (questionJson.getString("question").equals(questionText)) {
-                indexToRemove = i;
+    public void updateQuestion(Question updatedQuestion) {
+        // Logic to update the question
+        boolean found = false;
+        for (int i = 0; i < questionList.size(); i++) {
+            if (questionList.get(i).getQuestionText().equals(updatedQuestion.getQuestionText())) {
+                questionList.set(i, updatedQuestion);
+                found = true;
                 break;
             }
         }
 
-        if (indexToRemove >= 0) {
-            questionsArray.remove(indexToRemove);
-            questionList.removeIf(q -> q.getQuestionText().equals(questionText)); // Use getQuestionText() instead of getQuestionID()
-            saveJsonToFile(jsonObject, QUESTIONS_FILE);
+        if (found) {
+            saveQuestionsToJsonFile();
+        } else {
+            System.out.println("msh mlaqe");
         }
     }
+    private void saveQuestionsToJsonFile() {
+        JSONObject jsonObject = new JSONObject();
+        JSONArray questionsArray = new JSONArray();
+        for (Question q : questionList) {
+            questionsArray.put(createQuestionJson(q));
+        }
+        jsonObject.put("questions", questionsArray);
+
+        // Save to file
+        String relativePath = "src/main/resources/" + QUESTIONS_FILE; // Adjust this path as needed
+        try (FileWriter file = new FileWriter(relativePath)) {
+            file.write(jsonObject.toString(4)); // Indentation for readability
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     /**
      * Saves a JSON object to a file.
      * @param jsonObject The JSON object to save
      * @param filename The filename to save to
      */
-    private static void saveJsonToFile(JSONObject jsonObject, String filename) {
-        try (FileWriter file = new FileWriter(filename)) {
+    private void saveJsonToFile(JSONObject jsonObject, String filename) {
+        String relativePath = "src/main/resources/" + filename; // Adjust this path as needed
+        try (FileWriter file = new FileWriter(relativePath)) {
             file.write(jsonObject.toString(4)); // Indentation for readability
         } catch (IOException e) {
             e.printStackTrace();

@@ -4,6 +4,7 @@ import com.example.snakesandladdersviper.Model.SysData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
@@ -126,9 +127,41 @@ public class QuestionsPageController {
 
 
     @FXML
-    void onEditButtonClicked(ActionEvent event) {
-        // TO-DO
+
+    private void onEditButtonClicked(ActionEvent event) throws IOException {
+        String selectedQuestionText = QuestionsView.getSelectionModel().getSelectedItem();
+        if (selectedQuestionText == null) {
+            showAlert("No Question Selected", "Please select a question to edit.");
+            return;
+        }
+        Question selectedQuestion = findQuestionByText(selectedQuestionText);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/editQuestion.fxml"));
+        Parent editQuestionRoot = loader.load();
+
+        EditQuestionController editQuestionController = loader.getController();
+        editQuestionController.setQuestionDetails(selectedQuestion);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(editQuestionRoot));
+        stage.show();
     }
+    private Question findQuestionByText(String questionText) {
+        for (Question q : SysData.getInstance().getQuestions()) {
+            if (q.getQuestionText().equals(questionText)) {
+                return q;
+            }
+        }
+        return null;
+    }
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
 
     @FXML
     void onDeleteButtonClicked(ActionEvent event) {
@@ -140,9 +173,19 @@ public class QuestionsPageController {
     }
 
     @FXML
-    void onAddButtonClicked(ActionEvent event) {
-    //To-Do
+    void onAddButtonClicked(ActionEvent event) throws IOException{
+        // Load addQuestion.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/addQuestion.fxml"));
+        Parent addQuestionParent = loader.load();
 
+        // Get the current stage using the event source
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Set the scene with addQuestion.fxml
+        stage.setScene(new Scene(addQuestionParent));
+
+        // Show the updated stage
+        stage.show();
     }
 
 }
