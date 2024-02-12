@@ -4,11 +4,11 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <VBox prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.AdminLoginController">
-
-    <Label text="Admin Login" />
+        <Label text="Admin Login" alignment="TOP_CENTER"/>
     <TextField fx:id="usernameField" promptText="Username" />
     <PasswordField fx:id="passwordField" promptText="Password" />
-    <Button onAction="#loginButtonClicked" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-border-radius: 5px;" textAlignment="CENTER" text="Login" />
+    <HBox alignment="CENTER">
+        <Button onAction="#loginButtonClicked" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-border-radius: 5px;" text="Login" />
+    </HBox>
 </VBox>
