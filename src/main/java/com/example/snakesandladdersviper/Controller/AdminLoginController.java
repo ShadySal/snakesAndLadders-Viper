@@ -1,11 +1,17 @@
 package com.example.snakesandladdersviper.Controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class AdminLoginController {
 
@@ -18,6 +24,9 @@ public class AdminLoginController {
     private static final String ADMIN_USERNAME = "admin";
     private static final String ADMIN_PASSWORD = "admin123";
     private boolean loggedIn = false;
+
+    @FXML
+    private Button BackButton;
 
     // Existing methods...
 
@@ -48,5 +57,18 @@ public class AdminLoginController {
     private void closeStage() {
         Stage stage = (Stage) usernameField.getScene().getWindow();
         stage.close();
+    }
+    @FXML
+    void BackButton(ActionEvent event) throws IOException {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/hello-view.fxml"));
+            Parent root = loader.load();
+            Scene nextScene = new Scene(root);
+// Get the current stage and set the new scene
+            Stage currentStage = (Stage) BackButton.getScene().getWindow();
+            currentStage.setScene(nextScene);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
