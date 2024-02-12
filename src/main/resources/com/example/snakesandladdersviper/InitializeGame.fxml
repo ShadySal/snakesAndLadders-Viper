@@ -11,6 +11,7 @@
 
 <Pane fx:id="MainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: white ;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.InitializeGame">
    <children>
+   <AnchorPane layoutY="-1.0" prefHeight="807.0" prefWidth="800.0" styleClass="root" stylesheets="@../src/CssStyles/HelloPageStyle.css">
       <Text layoutX="70.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 17px;" text="Choose the number of the players" />
       <ComboBox fx:id="PlayersNum" layoutX="350.0" layoutY="87.0" prefWidth="150.0" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" />
       <Text layoutX="70.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 17px;" text="Choose the Game's difficulty"  />
@@ -24,5 +25,6 @@
             <Font name="Arial Black" size="15.0" />
          </font>
       </Button>
+   </AnchorPane>
    </children>
 </Pane>
