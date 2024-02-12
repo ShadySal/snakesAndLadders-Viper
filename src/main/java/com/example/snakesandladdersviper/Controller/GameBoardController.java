@@ -72,6 +72,16 @@ public class GameBoardController {
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> updateClock()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+
+        dice = create3DDice();
+        dice.setOnMouseClicked(event -> onDiceRoll());
+
+        Group diceGroup = new Group(dice);
+        SubScene diceSubScene = create3DSubScene(diceGroup, 300, 300); // Adjust size as needed
+
+        // Add the SubScene to the gameDataPane and align it to the left
+        gameDataPane.getChildren().add(diceSubScene);
+        AnchorPane.setLeftAnchor(diceSubScene, 10.0); // Adjust the left anchor as needed
     }
 
     private void updateClock() {
@@ -299,12 +309,17 @@ public class GameBoardController {
         double size = 100.0; // Size of the dice
         Box dice = new Box(size, size, size);
 
-        PhongMaterial material = new PhongMaterial();
-        material.setDiffuseMap(new Image(getClass().getResourceAsStream("dice-twenty-faces-one.png")));
-        dice.setMaterial(material);
+        try {
+            PhongMaterial material = new PhongMaterial();
+            material.setDiffuseMap(new Image("src/main/java/com/example/snakesandladdersviper/dice-twenty-faces-one.png"));
+            dice.setMaterial(material);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return dice;
     }
+
 
     private void rollDice(Box dice) {
         RotateTransition rt = new RotateTransition(Duration.seconds(1), dice);
