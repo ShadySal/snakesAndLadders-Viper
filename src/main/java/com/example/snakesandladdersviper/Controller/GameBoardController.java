@@ -252,15 +252,15 @@ public class GameBoardController {
         int size = determineBoardSize(difficulty);
         int position = gameBoard.getPlayerPosition(player) - 1; // Adjust if your positions start at 1
 
-        int row, column;
-        if ((size - position / size - 1) % 2 == 0) {
-            // Even row (0-indexed): left to right numbering
-            row = size - 1 - (position / size);
-            column = position % size;
-        } else {
-            // Odd row: right to left numbering
-            row = size - 1 - (position / size);
+        int row = size - 1 - (position / size);
+        int column;
+
+        if (row % 2 == size % 2) {
+            // For even rows (if size is odd) or odd rows (if size is even), numbering goes from right to left
             column = size - 1 - (position % size);
+        } else {
+            // For odd rows (if size is odd) or even rows (if size is even), numbering goes from left to right
+            column = position % size;
         }
 
         // Find the corresponding tile Pane
