@@ -13,25 +13,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.paint.Color;
-import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
-import javafx.stage.Stage;
 
 
 import java.io.IOException;
@@ -149,24 +145,13 @@ public class GameBoardController {
             }
         }
 
-
-
         dice = create3DDice();
         dice.setOnMouseClicked(event -> onDiceRoll());
 
         Group diceGroup = new Group(dice);
         SubScene diceSubScene = create3DSubScene(diceGroup, 300, 300); // Adjust size as needed
 
-        // Create a container for the dice SubScene
-        StackPane diceContainer = new StackPane(diceSubScene);
-        diceContainer.setAlignment(Pos.CENTER);
-        diceContainer.setPrefSize(300, 300); // Adjust size as needed
-
-        // Position the dice container within the contentPane
-        diceContainer.setLayoutX((contentPane.getPrefWidth() - diceContainer.getPrefWidth()) / 2);
-        diceContainer.setLayoutY(50); // Adjust Y position as needed
-
-        contentPane.getChildren().add(diceContainer);
+        gameDataPane.getChildren().add(diceSubScene);
 
         displayPlayers(players);
     }
@@ -315,8 +300,7 @@ public class GameBoardController {
         Box dice = new Box(size, size, size);
 
         PhongMaterial material = new PhongMaterial();
-        material.setDiffuseColor(Color.WHITE); // Dice color
-        material.setSpecularColor(Color.LIGHTGRAY); // Specular color for a bit of shine
+        material.setDiffuseMap(new Image(getClass().getResourceAsStream("dice-twenty-faces-one.png")));
         dice.setMaterial(material);
 
         return dice;
@@ -324,7 +308,7 @@ public class GameBoardController {
 
     private void rollDice(Box dice) {
         RotateTransition rt = new RotateTransition(Duration.seconds(1), dice);
-        rt.setByAngle(360);
+        rt.setByAngle(360 * 3); // Rotate several times for effect
         rt.setCycleCount(1);
         rt.setAxis(Rotate.Y_AXIS);
 
