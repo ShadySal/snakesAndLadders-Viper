@@ -6,31 +6,37 @@ import com.example.snakesandladdersviper.Model.Player;
 import com.example.snakesandladdersviper.Model.Tile;
 import com.example.snakesandladdersviper.Enums.Difficulty;
 import javafx.animation.KeyFrame;
+import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.paint.Color;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Box;
+import javafx.scene.transform.Rotate;
+import javafx.stage.Stage;
+
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 
 public class GameBoardController {
@@ -60,7 +66,8 @@ public class GameBoardController {
     // Example values for probabilities
     final double EASY_GAME_QUESTION_PROBABILITY = 0.1; // 10% chance for a question
     final double MEDIUM_GAME_QUESTION_PROBABILITY = EASY_GAME_QUESTION_PROBABILITY * 2; // 20% chance
-
+    @FXML
+    private Box dice;
     private GameBoard gameBoard;
     private Difficulty difficulty;
 
@@ -141,8 +148,29 @@ public class GameBoardController {
 
             }
         }
+
+
+
+        dice = create3DDice();
+        dice.setOnMouseClicked(event -> onDiceRoll());
+
+        Group diceGroup = new Group(dice);
+        SubScene diceSubScene = create3DSubScene(diceGroup, 300, 300); // Adjust size as needed
+
+        // Create a container for the dice SubScene
+        StackPane diceContainer = new StackPane(diceSubScene);
+        diceContainer.setAlignment(Pos.CENTER);
+        diceContainer.setPrefSize(300, 300); // Adjust size as needed
+
+        // Position the dice container within the contentPane
+        diceContainer.setLayoutX((contentPane.getPrefWidth() - diceContainer.getPrefWidth()) / 2);
+        diceContainer.setLayoutY(50); // Adjust Y position as needed
+
+        contentPane.getChildren().add(diceContainer);
+
         displayPlayers(players);
     }
+
     private void createTile(int number, int col, int row, int size) {
         Tile tile = new Tile(col, size - row - 1);
         String backgroundColor = ((row + col) % 2 == 0) ? "-fx-background-color: green" : "-fx-background-color: white";
@@ -155,6 +183,15 @@ public class GameBoardController {
         GridPane.setHalignment(label, HPos.LEFT);
 
         BoardGrid.add(tile, col, size - row - 1);
+    }
+    private SubScene create3DSubScene(Group content, double width, double height) {
+        PerspectiveCamera camera = new PerspectiveCamera(true);
+        camera.setTranslateZ(-500); // Adjust the camera position
+
+        SubScene subScene = new SubScene( content, width, height, true, SceneAntialiasing.BALANCED);
+        subScene.setCamera(camera);
+
+        return subScene;
     }
 
     private void setupGridConstraints(int size) {
@@ -271,4 +308,88 @@ public class GameBoardController {
         }
         return null; // Tile not found or invalid position
     }
+
+    //create 3d dice
+    private Box create3DDice() {
+        double size = 100.0; // Size of the dice
+        Box dice = new Box(size, size, size);
+
+        PhongMaterial material = new PhongMaterial();
+        material.setDiffuseColor(Color.WHITE); // Dice color
+        material.setSpecularColor(Color.LIGHTGRAY); // Specular color for a bit of shine
+        dice.setMaterial(material);
+
+        return dice;
+    }
+
+    private void rollDice(Box dice) {
+        RotateTransition rt = new RotateTransition(Duration.seconds(1), dice);
+        rt.setByAngle(360);
+        rt.setCycleCount(1);
+        rt.setAxis(Rotate.Y_AXIS);
+
+        rt.setOnFinished(e -> {
+            String outcome = getDiceRollOutcome(difficulty);
+            processDiceOutcome(outcome);
+        });
+
+        rt.play();
+    }
+    private Label createClickToPlayLabel() {
+        Label label = new Label("CLICK");
+        label.setStyle("-fx-font-size: 24; -fx-text-fill: white;");
+        return label;
+    }
+    private String getDiceRollOutcome(Difficulty difficulty) {
+        Random random = new Random();
+        int maxRoll;
+        int rollResult;
+
+        switch (difficulty) {
+            case EASY:
+                maxRoll = 7; // 0-4 for numbers, 5 for easy question, 6 for medium question, 7 for hard question
+                rollResult = random.nextInt(maxRoll + 1);
+                if (rollResult >= 5) {
+                    if (rollResult == 5) return "EASY_QUESTION";
+                    if (rollResult == 6) return "MEDIUM_QUESTION";
+                    return "HARD_QUESTION";
+                }
+                break;
+            case MEDIUM:
+                maxRoll = 6; // Maximum roll for medium difficulty
+                rollResult = random.nextInt(maxRoll + 1);
+                break;
+            case HARD:
+                maxRoll = 10; // Maximum roll for hard difficulty
+                rollResult = random.nextInt(maxRoll + 1);
+                break;
+            default:
+                throw new IllegalArgumentException("Unrecognized difficulty level");
+        }
+
+        return String.valueOf(rollResult);
+    }
+
+
+    private void processDiceOutcome(String outcome) {
+        if (outcome.equals("EASY_QUESTION")) {
+            // Handle easy question
+        } else if (outcome.equals("MEDIUM_QUESTION")) {
+            // Handle medium question
+        } else if (outcome.equals("HARD_QUESTION")) {
+            // Handle hard question
+        } else {
+            int steps = Integer.parseInt(outcome);
+            // Move the player 'steps' number of tiles
+            movePlayer(steps);
+        }
+    }
+    private void movePlayer(int steps) {
+        // Logic to move the player 'steps' number of tiles
+    }
+    private void onDiceRoll() {
+        rollDice(dice);
+
+    }
+
 }

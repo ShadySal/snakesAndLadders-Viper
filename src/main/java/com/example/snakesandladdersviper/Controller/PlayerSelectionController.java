@@ -133,6 +133,8 @@ public class PlayerSelectionController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/Gameboard.fxml"));
             Parent gameBoardRoot = loader.load();
             GameBoardController gameBoardController = loader.getController();
+
+            // Assuming 'difficulty' and 'players' are already defined and initialized
             gameBoardController.initializeBoard(difficulty, players);
 
             // Replace contentPane content with the game board
