@@ -31,6 +31,7 @@ import javafx.scene.transform.Rotate;
 
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Random;
 
@@ -67,21 +68,64 @@ public class GameBoardController {
     private GameBoard gameBoard;
     private Difficulty difficulty;
 
+    @FXML
+    private Button diceRollButton;
+
+    private int diceRollValue = 0;
+    private Timeline diceRollAnimation;
+
     public void initialize() {
         startTime = System.currentTimeMillis();
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> updateClock()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+        setupDiceRollAnimation();
 
-        dice = create3DDice();
-        dice.setOnMouseClicked(event -> onDiceRoll());
+    }
+    //dice animation
+    private void setupDiceRollAnimation() {
+        diceRollAnimation = new Timeline(new KeyFrame(Duration.millis(100), e -> {
+            String diceOutcome = generateRandomNumber(difficulty);
 
-        Group diceGroup = new Group(dice);
-        SubScene diceSubScene = create3DSubScene(diceGroup, 300, 300); // Adjust size as needed
+            // Check if the outcome is a number or a question
+            try {
+                // If it's a number, parse it and update the button text
+                diceRollValue = Integer.parseInt(diceOutcome);
+                diceRollButton.setText(String.valueOf(diceRollValue));
+            } catch (NumberFormatException ex) {
+                // If it's not a number, it must be a question or another string outcome
+                // Update the button text with the string outcome (like "EASY_QUESTION")
+                diceRollButton.setText(diceOutcome);
+            }
+        }));
+        diceRollAnimation.setCycleCount(10); // Adjust the cycle count to control the speed of the animation
+    }
+    //number generation
+    private String generateRandomNumber(Difficulty difficulty) {
+        Random random = new Random();
+        int rollResult;
 
-        // Add the SubScene to the gameDataPane and align it to the left
-        gameDataPane.getChildren().add(diceSubScene);
-        AnchorPane.setLeftAnchor(diceSubScene, 10.0); // Adjust the left anchor as needed
+        if (difficulty == Difficulty.EASY) {
+            int maxRoll = 7; // 0-4 for numbers, 5 for easy question, 6 for medium question, 7 for hard question
+            rollResult = random.nextInt(maxRoll + 1);
+
+            switch (rollResult) {
+                case 5: return "EASY_QUESTION";
+                case 6: return "MEDIUM_QUESTION";
+                case 7: return "HARD_QUESTION";
+                default: return String.valueOf(rollResult);
+            }
+        } else if (difficulty == Difficulty.MEDIUM) {
+            // Logic for medium difficulty dice roll
+            // Adjust the logic as per your game rules
+        } else if (difficulty == Difficulty.HARD) {
+            // Logic for hard difficulty dice roll
+            // Adjust the logic as per your game rules
+        }
+
+        // Default return statement if none of the above conditions are met
+        return "Invalid difficulty";
+        // Other difficulty cases...
     }
 
     private void updateClock() {
@@ -149,19 +193,18 @@ public class GameBoardController {
                 }
 
                 createTile(number, col, row, size);
-
-
-
             }
         }
-
-        dice = create3DDice();
-        dice.setOnMouseClicked(event -> onDiceRoll());
-
-        Group diceGroup = new Group(dice);
-        SubScene diceSubScene = create3DSubScene(diceGroup, 300, 300); // Adjust size as needed
-
-        gameDataPane.getChildren().add(diceSubScene);
+//
+//        dice = create3DDice();
+//        dice.setOnMouseClicked(event -> onDiceRoll());
+//
+//        Group diceGroup = new Group(dice);
+//        SubScene diceSubScene = create3DSubScene(diceGroup, 300, 300); // Adjust size as needed
+//
+//        // Add the SubScene to the gameDataPane and align it to the left
+//        gameDataPane.getChildren().add(diceSubScene);
+//        AnchorPane.setLeftAnchor(diceSubScene, 10.0); // Adjust the left anchor as needed
 
         displayPlayers(players);
     }
@@ -179,15 +222,15 @@ public class GameBoardController {
 
         BoardGrid.add(tile, col, size - row - 1);
     }
-    private SubScene create3DSubScene(Group content, double width, double height) {
-        PerspectiveCamera camera = new PerspectiveCamera(true);
-        camera.setTranslateZ(-500); // Adjust the camera position
-
-        SubScene subScene = new SubScene( content, width, height, true, SceneAntialiasing.BALANCED);
-        subScene.setCamera(camera);
-
-        return subScene;
-    }
+//    private SubScene create3DSubScene(Group content, double width, double height) {
+//        PerspectiveCamera camera = new PerspectiveCamera(true);
+//        camera.setTranslateZ(-500); // Adjust the camera position
+//
+//        SubScene subScene = new SubScene( content, width, height, true, SceneAntialiasing.BALANCED);
+//        subScene.setCamera(camera);
+//
+//        return subScene;
+//    }
 
     private void setupGridConstraints(int size) {
         BoardGrid.getColumnConstraints().clear();
@@ -305,20 +348,21 @@ public class GameBoardController {
     }
 
     //create 3d dice
-    private Box create3DDice() {
-        double size = 100.0; // Size of the dice
-        Box dice = new Box(size, size, size);
-
-        try {
-            PhongMaterial material = new PhongMaterial();
-            material.setDiffuseMap(new Image("src/main/java/com/example/snakesandladdersviper/dice-twenty-faces-one.png"));
-            dice.setMaterial(material);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return dice;
-    }
+//    private Box create3DDice() {
+//        double size = 100.0;
+//        Box dice = new Box(size, size, size);
+//
+//        InputStream imageStream = getClass().getResourceAsStream("/dice-twenty-faces-one.png");
+//        if (imageStream != null) {
+//            PhongMaterial material = new PhongMaterial();
+//            material.setDiffuseMap(new Image(imageStream));
+//            dice.setMaterial(material);
+//        } else {
+//            System.out.println("Image file not found");
+//        }
+//
+//        return dice;
+//    }
 
 
     private void rollDice(Box dice) {
@@ -334,11 +378,11 @@ public class GameBoardController {
 
         rt.play();
     }
-    private Label createClickToPlayLabel() {
-        Label label = new Label("CLICK");
-        label.setStyle("-fx-font-size: 24; -fx-text-fill: white;");
-        return label;
-    }
+//    private Label createClickToPlayLabel() {
+//        Label label = new Label("CLICK");
+//        label.setStyle("-fx-font-size: 24; -fx-text-fill: white;");
+//        return label;
+//    }
     private String getDiceRollOutcome(Difficulty difficulty) {
         Random random = new Random();
         int maxRoll;
@@ -383,12 +427,34 @@ public class GameBoardController {
             movePlayer(steps);
         }
     }
+
+    @FXML
+    private void onDiceRoll() {
+        setupDiceRollAnimation();
+
+        // Start the dice roll animation
+        diceRollAnimation.play();
+
+        // Handle the completion of the dice roll
+        diceRollAnimation.setOnFinished(e -> {
+            String finalOutcome = diceRollButton.getText();
+
+            // Check if the final outcome is a number or a question
+            try {
+                // If it's a number, parse it and handle it as a dice number
+                int finalNumber = Integer.parseInt(finalOutcome);
+                // Handle the number outcome (e.g., move the player)
+                movePlayer(finalNumber);
+            } catch (NumberFormatException ex) {
+                // If it's not a number, it must be a question or another string outcome
+                // Handle the string outcome (like "EASY_QUESTION")
+                processDiceOutcome(finalOutcome);
+            }
+        });
+    }
+
     private void movePlayer(int steps) {
         // Logic to move the player 'steps' number of tiles
-    }
-    private void onDiceRoll() {
-        rollDice(dice);
-
     }
 
 }

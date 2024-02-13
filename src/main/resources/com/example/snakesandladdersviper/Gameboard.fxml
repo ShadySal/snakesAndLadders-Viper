@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Box?>
+<?import javafx.scene.text.Font?>
 
-<Pane fx:id="contentPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.GameBoardController">
+<Pane fx:id="contentPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.GameBoardController">
    <children>
       <Pane fx:id="gamepane" layoutX="177.0" layoutY="-1.0" prefHeight="800.0" prefWidth="622.0">
          <children>
@@ -47,6 +45,8 @@
                </font>
             </Button>
             <Box fx:id="dice" height="150.0" layoutX="93.0" layoutY="534.0" width="150.0" />
+             <Button fx:id="diceRollButton" layoutX="43.0" layoutY="337.0" mnemonicParsing="false" onAction="#onDiceRoll" prefHeight="73.0" prefWidth="101.0" text="Roll Dice" />
+
          </children></Pane>
    </children>
 </Pane>
