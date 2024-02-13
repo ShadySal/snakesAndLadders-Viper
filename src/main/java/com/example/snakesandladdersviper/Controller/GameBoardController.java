@@ -73,6 +73,11 @@ public class GameBoardController {
 
     private int diceRollValue = 0;
     private Timeline diceRollAnimation;
+    @FXML
+    private Label currentPlayerLabel;
+
+    private int currentPlayerIndex = 0;
+    private List<Player> players;
 
     public void initialize() {
         startTime = System.currentTimeMillis();
@@ -81,7 +86,10 @@ public class GameBoardController {
         timeline.play();
         setupDiceRollAnimation();
 
+
     }
+
+
     //dice animation
     private void setupDiceRollAnimation() {
         diceRollAnimation = new Timeline(new KeyFrame(Duration.millis(100), e -> {
@@ -202,7 +210,7 @@ public class GameBoardController {
 //        Group diceGroup = new Group(dice);
 //        SubScene diceSubScene = create3DSubScene(diceGroup, 300, 300); // Adjust size as needed
 //
-//        // Add the SubScene to the gameDataPane and align it to the left
+//        // To Add the SubScene to the gameDataPane and align it to the left
 //        gameDataPane.getChildren().add(diceSubScene);
 //        AnchorPane.setLeftAnchor(diceSubScene, 10.0); // Adjust the left anchor as needed
 
@@ -266,9 +274,10 @@ public class GameBoardController {
 
     public void startGame(List<Player> players) {
         // Initialize game logic here
-
+        setPlayers(players);
         // Display players on the board
         displayPlayers(players);
+        updatePlayerTurn();
 
         // Other game start logic...
     }
@@ -347,42 +356,7 @@ public class GameBoardController {
         return null; // Tile not found or invalid position
     }
 
-    //create 3d dice
-//    private Box create3DDice() {
-//        double size = 100.0;
-//        Box dice = new Box(size, size, size);
-//
-//        InputStream imageStream = getClass().getResourceAsStream("/dice-twenty-faces-one.png");
-//        if (imageStream != null) {
-//            PhongMaterial material = new PhongMaterial();
-//            material.setDiffuseMap(new Image(imageStream));
-//            dice.setMaterial(material);
-//        } else {
-//            System.out.println("Image file not found");
-//        }
-//
-//        return dice;
-//    }
 
-
-    private void rollDice(Box dice) {
-        RotateTransition rt = new RotateTransition(Duration.seconds(1), dice);
-        rt.setByAngle(360 * 3); // Rotate several times for effect
-        rt.setCycleCount(1);
-        rt.setAxis(Rotate.Y_AXIS);
-
-        rt.setOnFinished(e -> {
-            String outcome = getDiceRollOutcome(difficulty);
-            processDiceOutcome(outcome);
-        });
-
-        rt.play();
-    }
-//    private Label createClickToPlayLabel() {
-//        Label label = new Label("CLICK");
-//        label.setStyle("-fx-font-size: 24; -fx-text-fill: white;");
-//        return label;
-//    }
     private String getDiceRollOutcome(Difficulty difficulty) {
         Random random = new Random();
         int maxRoll;
@@ -440,21 +414,95 @@ public class GameBoardController {
             String finalOutcome = diceRollButton.getText();
 
             // Check if the final outcome is a number or a question
-            try {
+            if (isNumeric(finalOutcome)) {
                 // If it's a number, parse it and handle it as a dice number
                 int finalNumber = Integer.parseInt(finalOutcome);
                 // Handle the number outcome (e.g., move the player)
                 movePlayer(finalNumber);
-            } catch (NumberFormatException ex) {
+            } else {
                 // If it's not a number, it must be a question or another string outcome
                 // Handle the string outcome (like "EASY_QUESTION")
                 processDiceOutcome(finalOutcome);
             }
+
+            // Update the player turn for the next move
+            updatePlayerTurn();
         });
+    }
+
+    private boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch(NumberFormatException e) {
+            return false;
+        }
     }
 
     private void movePlayer(int steps) {
         // Logic to move the player 'steps' number of tiles
+        // Example: movePlayerOnBoard(currentPlayer, steps);
     }
 
+    private void updatePlayerTurn() {
+        if (players == null || players.isEmpty()) {
+            System.out.println("Player list is empty or not initialized.");
+            return;
+        }
+
+        // Increment the currentPlayerIndex and wrap around if it exceeds the size of the players list
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+
+        // Get the current player based on the updated index
+        Player currentPlayer = players.get(currentPlayerIndex);
+
+        // Update the currentPlayerLabel with the current player's name
+        if (currentPlayer != null) {
+            currentPlayerLabel.setText("Player " + currentPlayer.getName() + "'s Turn");
+        } else {
+            System.out.println("Current player is null.");
+        }
+    }
+
+    public void setPlayers(List<Player> players){
+        this.players = players;
+    }
+
+
+    //create 3d dice
+//    private Box create3DDice() {
+//        double size = 100.0;
+//        Box dice = new Box(size, size, size);
+//
+//        InputStream imageStream = getClass().getResourceAsStream("/dice-twenty-faces-one.png");
+//        if (imageStream != null) {
+//            PhongMaterial material = new PhongMaterial();
+//            material.setDiffuseMap(new Image(imageStream));
+//            dice.setMaterial(material);
+//        } else {
+//            System.out.println("Image file not found");
+//        }
+//
+//        return dice;
+//    }
+
+
+//    private void rollDice(Box dice) {
+//        RotateTransition rt = new RotateTransition(Duration.seconds(1), dice);
+//        rt.setByAngle(360 * 3); // Rotate several times for effect
+//        rt.setCycleCount(1);
+//        rt.setAxis(Rotate.Y_AXIS);
+//
+//        rt.setOnFinished(e -> {
+//            String outcome = getDiceRollOutcome(difficulty);
+//            processDiceOutcome(outcome);
+//        });
+//
+//        rt.play();
+//    }
+//    private Label createClickToPlayLabel() {
+//        Label label = new Label("CLICK");
+//        label.setStyle("-fx-font-size: 24; -fx-text-fill: white;");
+//        return label;
+//    }
 }
