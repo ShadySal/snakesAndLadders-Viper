@@ -2,6 +2,7 @@
 //    requires javafx.controls;
 //    requires javafx.fxml;
 //    requires javafx.web;
+//    requires javafx.media;
 //
 //
 //    opens com.example.snakesandladdersviper.Controller to javafx.fxml;
