@@ -57,13 +57,10 @@ public class GameBoard {
 //    }
 
     public void initializePlayerPositions(List<Player> players) {
-        for (int i = 0; i < players.size(); i++) {
-            Player player = players.get(i);
-            int position = i; // If players are placed in different rows in the first column
-            playerPositions.put(player, position);
+        for (Player player : players) {
+            playerPositions.put(player, 1); // Starting position is 1
         }
-        this.players = (ArrayList<Player>) players;
-        System.out.println(this.players);
+        this.players = new ArrayList<>(players);
     }
 
 
@@ -207,4 +204,31 @@ public class GameBoard {
     public Difficulty getDifficulty() {
         return difficulty;
     }
+    public void setPlayerPosition(Player player, int newPosition) {
+        // Logic to set player's position
+        playerPositions.put(player, newPosition);
+    }
+    public int adjustPosition(int newPosition) {
+        // Check if newPosition exceeds the board size
+        int maxPosition = rows * columns; // Assuming 'rows' and 'columns' define the board size
+        if (newPosition > maxPosition) {
+            // Handle the case when a player's move exceeds the board size.
+            // You can either set the position to maxPosition or handle it based on your game rules
+            newPosition = maxPosition;
+        }
+
+        // Check for ladders and snakes
+        if (ladders.containsKey(newPosition)) {
+            // Move up the ladder
+            newPosition = ladders.get(newPosition);
+        } else if (snakes.containsKey(newPosition)) {
+            // Move down the snake
+            newPosition = snakes.get(newPosition);
+        }
+
+        // Additional rules can be implemented here (e.g., special tiles)
+
+        return newPosition;
+    }
+
 }

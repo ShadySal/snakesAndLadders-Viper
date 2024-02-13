@@ -234,7 +234,15 @@ public class GameBoardController {
 
         BoardGrid.add(tile, col, size - row - 1);
     }
-
+//    private SubScene create3DSubScene(Group content, double width, double height) {
+//        PerspectiveCamera camera = new PerspectiveCamera(true);
+//        camera.setTranslateZ(-500); // Adjust the camera position
+//
+//        SubScene subScene = new SubScene( content, width, height, true, SceneAntialiasing.BALANCED);
+//        subScene.setCamera(camera);
+//
+//        return subScene;
+//    }
 
     private void setupGridConstraints(int size) {
         BoardGrid.getColumnConstraints().clear();
@@ -444,44 +452,41 @@ public class GameBoardController {
 
     private void movePlayer(int steps) {
         Player currentPlayer = players.get(currentPlayerIndex);
-        int oldPosition = gameBoard.getPlayerPosition(currentPlayer); // Get old position before moving
 
         // Update the player's position on the game board
         gameBoard.movePlayer(currentPlayer, steps);
 
-        int newPosition = gameBoard.getPlayerPosition(currentPlayer); // Get new position after moving
-
         // Update the UI to reflect the new position
-        updatePlayerPositionOnBoard(currentPlayer, oldPosition, newPosition);
+        updatePlayerPositionOnBoard(currentPlayer);
     }
-    private void updatePlayerPositionOnBoard(Player player, int oldPosition, int newPosition) {
+    private void updatePlayerPositionOnBoard(Player player) {
+        // Get the player's new position
+        int newPosition = gameBoard.getPlayerPosition(player);
+
+        // Convert this position to row and column on the grid
         int size = determineBoardSize(difficulty);
-        int oldRow = size - 1 - (oldPosition / size);
-        int oldColumn = (oldRow % 2 == size % 2) ? size - 1 - (oldPosition % size) : oldPosition % size;
-        int newRow = size - 1 - (newPosition / size);
-        int newColumn = (newRow % 2 == size % 2) ? size - 1 - (newPosition % size) : newPosition % size;
-
-        // Find the corresponding tile Panes
-        Pane oldTile = getTileForPosition(oldRow, oldColumn);
-        Pane newTile = getTileForPosition(newRow, newColumn);
-
-        // Move the player's visual representation from the old tile to the new tile
-        Circle playerCircle = getPlayerCircle(player);
-        if (oldTile != null && newTile != null) {
-            oldTile.getChildren().remove(playerCircle);
-            newTile.getChildren().add(playerCircle);
+        int row = size - 1 - (newPosition / size);
+        int column;
+        if (row % 2 == size % 2) {
+            column = size - 1 - (newPosition % size);
+        } else {
+            column = newPosition % size;
         }
-    }
 
-    private Pane getTileForPosition(int row, int column) {
-        for (Node node : BoardGrid.getChildren()) {
-            if (GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column) {
-                return (Pane) node;
+        // Get the tile Pane for the new position
+        Pane newTile = getTileForPlayer(player);
+
+        // Move the player's visual representation to the new tile
+        if (newTile != null) {
+            Circle playerCircle = getPlayerCircle(player);
+
+            // Check if the circle is already on the tile
+            if (!newTile.getChildren().contains(playerCircle)) {
+                // If not, add it to the tile
+                newTile.getChildren().add(playerCircle);
             }
         }
-        return null; // Tile not found or invalid position
     }
-
     private Circle getPlayerCircle(Player player) {
         return playerCircles.get(player);
     }
@@ -546,14 +551,5 @@ public class GameBoardController {
 //        Label label = new Label("CLICK");
 //        label.setStyle("-fx-font-size: 24; -fx-text-fill: white;");
 //        return label;
-//    }
-    //    private SubScene create3DSubScene(Group content, double width, double height) {
-//        PerspectiveCamera camera = new PerspectiveCamera(true);
-//        camera.setTranslateZ(-500); // Adjust the camera position
-//
-//        SubScene subScene = new SubScene( content, width, height, true, SceneAntialiasing.BALANCED);
-//        subScene.setCamera(camera);
-//
-//        return subScene;
 //    }
 }
