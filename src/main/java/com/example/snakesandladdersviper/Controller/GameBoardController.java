@@ -32,7 +32,9 @@ import javafx.scene.transform.Rotate;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 
@@ -78,17 +80,19 @@ public class GameBoardController {
 
     private int currentPlayerIndex = 0;
     private List<Player> players;
+    private Map<Player, Circle> playerCircles;
 
     public void initialize() {
         startTime = System.currentTimeMillis();
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> updateClock()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+        playerCircles = new HashMap<>();
+
         setupDiceRollAnimation();
 
 
     }
-
 
     //dice animation
     private void setupDiceRollAnimation() {
@@ -230,15 +234,7 @@ public class GameBoardController {
 
         BoardGrid.add(tile, col, size - row - 1);
     }
-//    private SubScene create3DSubScene(Group content, double width, double height) {
-//        PerspectiveCamera camera = new PerspectiveCamera(true);
-//        camera.setTranslateZ(-500); // Adjust the camera position
-//
-//        SubScene subScene = new SubScene( content, width, height, true, SceneAntialiasing.BALANCED);
-//        subScene.setCamera(camera);
-//
-//        return subScene;
-//    }
+
 
     private void setupGridConstraints(int size) {
         BoardGrid.getColumnConstraints().clear();
@@ -275,6 +271,13 @@ public class GameBoardController {
     public void startGame(List<Player> players) {
         // Initialize game logic here
         setPlayers(players);
+        playerCircles = new HashMap<>();
+        for (Player player : players) {
+            Circle playerCircle = new Circle(10); // adjust radius as needed
+            playerCircle.setFill(player.getPlayerColor());
+            playerCircles.put(player, playerCircle);
+            // other game start logic...
+        }
         // Display players on the board
         displayPlayers(players);
         updatePlayerTurn();
@@ -440,8 +443,47 @@ public class GameBoardController {
     }
 
     private void movePlayer(int steps) {
-        // Logic to move the player 'steps' number of tiles
-        // Example: movePlayerOnBoard(currentPlayer, steps);
+        Player currentPlayer = players.get(currentPlayerIndex);
+        int oldPosition = gameBoard.getPlayerPosition(currentPlayer); // Get old position before moving
+
+        // Update the player's position on the game board
+        gameBoard.movePlayer(currentPlayer, steps);
+
+        int newPosition = gameBoard.getPlayerPosition(currentPlayer); // Get new position after moving
+
+        // Update the UI to reflect the new position
+        updatePlayerPositionOnBoard(currentPlayer, oldPosition, newPosition);
+    }
+    private void updatePlayerPositionOnBoard(Player player, int oldPosition, int newPosition) {
+        int size = determineBoardSize(difficulty);
+        int oldRow = size - 1 - (oldPosition / size);
+        int oldColumn = (oldRow % 2 == size % 2) ? size - 1 - (oldPosition % size) : oldPosition % size;
+        int newRow = size - 1 - (newPosition / size);
+        int newColumn = (newRow % 2 == size % 2) ? size - 1 - (newPosition % size) : newPosition % size;
+
+        // Find the corresponding tile Panes
+        Pane oldTile = getTileForPosition(oldRow, oldColumn);
+        Pane newTile = getTileForPosition(newRow, newColumn);
+
+        // Move the player's visual representation from the old tile to the new tile
+        Circle playerCircle = getPlayerCircle(player);
+        if (oldTile != null && newTile != null) {
+            oldTile.getChildren().remove(playerCircle);
+            newTile.getChildren().add(playerCircle);
+        }
+    }
+
+    private Pane getTileForPosition(int row, int column) {
+        for (Node node : BoardGrid.getChildren()) {
+            if (GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column) {
+                return (Pane) node;
+            }
+        }
+        return null; // Tile not found or invalid position
+    }
+
+    private Circle getPlayerCircle(Player player) {
+        return playerCircles.get(player);
     }
 
     private void updatePlayerTurn() {
@@ -504,5 +546,14 @@ public class GameBoardController {
 //        Label label = new Label("CLICK");
 //        label.setStyle("-fx-font-size: 24; -fx-text-fill: white;");
 //        return label;
+//    }
+    //    private SubScene create3DSubScene(Group content, double width, double height) {
+//        PerspectiveCamera camera = new PerspectiveCamera(true);
+//        camera.setTranslateZ(-500); // Adjust the camera position
+//
+//        SubScene subScene = new SubScene( content, width, height, true, SceneAntialiasing.BALANCED);
+//        subScene.setCamera(camera);
+//
+//        return subScene;
 //    }
 }

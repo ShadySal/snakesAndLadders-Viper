@@ -87,10 +87,35 @@ public class GameBoard {
     }
 
     public void movePlayer(Player player, int roll) {
-        // Logic to move the player based on the dice roll
-        // Check for snakes, ladders, and special tiles
-        // Update player's position in playerPositions map
+        int currentPosition = playerPositions.getOrDefault(player, 1); // Starting position is 1
+        int newPosition = currentPosition + roll;
+
+        int totalTiles = rows * columns;
+        // Check if the new position is beyond the board
+        if (newPosition > totalTiles) {
+            // You can either move the player to the last tile or not move them at all
+            newPosition = totalTiles;
+        }
+
+        // Check for ladders and snakes
+        if (ladders.containsKey(newPosition)) {
+            newPosition = ladders.get(newPosition); // Move the player up the ladder
+        } else if (snakes.containsKey(newPosition)) {
+            newPosition = snakes.get(newPosition); // Move the player down the snake
+        }
+
+        // Check for special tiles
+        if (specialTiles.containsKey(newPosition)) {
+            // Handle special tile logic (e.g., trigger a question or event)
+            // For example, you might want to call a method like handleSpecialTile(player, specialTiles.get(newPosition));
+        }
+
+        // Update the player's position
+        playerPositions.put(player, newPosition);
     }
+
+
+
     public boolean isPlayerOnSpecialTile(Player player) {
         Integer position = playerPositions.get(player);
         return specialTiles.containsKey(position);
