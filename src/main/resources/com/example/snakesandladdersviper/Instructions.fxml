@@ -4,7 +4,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 
-<VBox fx:id="InstructionsContainer" alignment="TOP_CENTER" spacing="20.0" style="-fx-background-color: #f0f4f7;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.MainController">
+<VBox fx:id="InstructionsContainer" alignment="TOP_CENTER" spacing="20.0" style="-fx-background-color: #f0f4f7; -fx-background-image: url('wp9142232.jpg'); -fx-background-position: center center; -fx-background-repeat: no-repeat; -fx-background-size: cover;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.MainController">
     <children>
         <!-- Game Title -->
         <Text text="Snakes and Ladders Instructions" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-fill: #333333;" />
