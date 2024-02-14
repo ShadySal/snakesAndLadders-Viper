@@ -13,16 +13,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.AddQuestionController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #f0f4f7; -fx-background-image: url('wp9142232.jpg'); -fx-background-position: center center; -fx-background-repeat: no-repeat; -fx-background-size: cover;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.AddQuestionController">
    <children>
-      <Text layoutX="229.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Question" />
-      <Text layoutX="488.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Question" />
+      <Text layoutX="229.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Question" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+      <Text layoutX="488.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Question" style="-fx-font-size: 30px; -fx-font-weight: bold;" />
       <TextField fx:id="QuestionTextField" layoutX="355.0" layoutY="151.0" prefHeight="27.0" prefWidth="407.0" />
       <VBox layoutX="43.0" layoutY="300.0" prefHeight="367.0" prefWidth="407.0">
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Enter the Answers here and select the correct answer" textAlignment="CENTER" wrappingWidth="408.5234375" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Enter the Answers here and select the correct answer" textAlignment="CENTER" wrappingWidth="408.5234375" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
@@ -51,10 +51,10 @@
             </HBox>
          </children>
       </VBox>
-      <Button fx:id="SubmitButton" layoutX="785.0" layoutY="689.0" mnemonicParsing="false" onAction="#onSubmitButtonClicked" text="Submit" />
-      <Button fx:id="BackButton" layoutX="141.0" layoutY="689.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="57.0" text="Back" />
+      <Button fx:id="SubmitButton" layoutX="785.0" layoutY="689.0" mnemonicParsing="false" onAction="#onSubmitButtonClicked" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" text="Submit" />
+      <Button fx:id="BackButton" layoutX="141.0" layoutY="689.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="57.0" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" text="Back" />
       <ChoiceBox fx:id="LevelChoiceBox" layoutX="738.0" layoutY="373.0" prefWidth="150.0" />
-      <Text layoutX="674.0" layoutY="391.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Level" wrappingWidth="56.79687857627869" />
+      <Text layoutX="674.0" layoutY="391.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Level" wrappingWidth="56.79687857627869" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
       <Button fx:id="BackButton1" defaultButton="true" mnemonicParsing="false" onAction="#BackButtonFunc" prefHeight="31.0" prefWidth="117.0" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-padding: 10px 20px; -fx-border-radius: 5px;" text="Back" textAlignment="CENTER">
          <font>
             <Font name="Arial Black" size="15.0" />
