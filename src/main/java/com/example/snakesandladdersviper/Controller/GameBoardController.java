@@ -207,6 +207,12 @@ public class GameBoardController {
                 createTile(number, col, row, size);
             }
         }
+        setPlayers(players);
+
+        // Display players on the board
+        displayPlayers(players);
+        updatePlayerTurn();
+
 //
 //        dice = create3DDice();
 //        dice.setOnMouseClicked(event -> onDiceRoll());
@@ -218,7 +224,7 @@ public class GameBoardController {
 //        gameDataPane.getChildren().add(diceSubScene);
 //        AnchorPane.setLeftAnchor(diceSubScene, 10.0); // Adjust the left anchor as needed
 
-        displayPlayers(players);
+        //displayPlayers(players);
     }
 
     private void createTile(int number, int col, int row, int size) {
@@ -234,15 +240,7 @@ public class GameBoardController {
 
         BoardGrid.add(tile, col, size - row - 1);
     }
-//    private SubScene create3DSubScene(Group content, double width, double height) {
-//        PerspectiveCamera camera = new PerspectiveCamera(true);
-//        camera.setTranslateZ(-500); // Adjust the camera position
-//
-//        SubScene subScene = new SubScene( content, width, height, true, SceneAntialiasing.BALANCED);
-//        subScene.setCamera(camera);
-//
-//        return subScene;
-//    }
+
 
     private void setupGridConstraints(int size) {
         BoardGrid.getColumnConstraints().clear();
@@ -276,39 +274,42 @@ public class GameBoardController {
         }
     }
 
-    public void startGame(List<Player> players) {
-        // Initialize game logic here
-        setPlayers(players);
+//    public void startGame(List<Player> players) {
+//        // Initialize game logic here
+//        setPlayers(players);
+//        playerCircles = new HashMap<>();
+//        for (Player player : players) {
+//            Circle playerCircle = new Circle(10); // adjust radius as needed
+//            playerCircle.setFill(player.getPlayerColor());
+//            playerCircles.put(player, playerCircle);
+//            // other game start logic...
+//        }
+//        // Display players on the board
+//        //displayPlayers(players);
+//        updatePlayerTurn();
+//
+//        // Other game start logic...
+//    }
+
+
+    //display players on Gameboard
+    public void displayPlayers(List<Player> players) {
         playerCircles = new HashMap<>();
         for (Player player : players) {
             Circle playerCircle = new Circle(10); // adjust radius as needed
             playerCircle.setFill(player.getPlayerColor());
             playerCircles.put(player, playerCircle);
             // other game start logic...
-        }
-        // Display players on the board
-        displayPlayers(players);
-        updatePlayerTurn();
-
-        // Other game start logic...
-    }
-
-
-    //display players on Gameboard
-    public void displayPlayers(List<Player> players) {
-        for (Player player : players) {
-            Circle playerCircle = new Circle(10); // Radius of 10, adjust as needed
-            playerCircle.setFill(player.getPlayerColor());
-
-            // Get the tile for the player
             Pane tile = getTileForPlayer(player);
-
-            // Check if the tile is valid
+            //check if tile is valid
             if (tile != null) {
                 // Add the circle to the tile
                 tile.getChildren().add(playerCircle);
- }}
-    }
+            }}
+        }
+
+
+
 
     @FXML
     void MainMenuFun(ActionEvent event) throws IOException {

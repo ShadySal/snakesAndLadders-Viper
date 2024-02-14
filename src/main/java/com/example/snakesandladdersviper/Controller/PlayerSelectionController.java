@@ -141,7 +141,7 @@ public class PlayerSelectionController {
             contentPane.getChildren().setAll(gameBoardRoot);
 
             // Initialize the game logic
-            gameBoardController.startGame(players);
+            //gameBoardController.startGame(players);
         } catch (Exception e) {
             e.printStackTrace();
             // Handle exceptions...

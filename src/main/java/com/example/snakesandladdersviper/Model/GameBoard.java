@@ -82,7 +82,6 @@ public class GameBoard {
     private void placeSpecialTiles() {
         /* TO DO*/
     }
-
     public void movePlayer(Player player, int roll) {
         int currentPosition = playerPositions.getOrDefault(player, 1); // Starting position is 1
         int newPosition = currentPosition + roll;
@@ -90,27 +89,24 @@ public class GameBoard {
         int totalTiles = rows * columns;
         // Check if the new position is beyond the board
         if (newPosition > totalTiles) {
-            // You can either move the player to the last tile or not move them at all
-            newPosition = totalTiles;
+            newPosition = totalTiles; // Adjust based on your game rules
         }
 
         // Check for ladders and snakes
-        if (ladders.containsKey(newPosition)) {
-            newPosition = ladders.get(newPosition); // Move the player up the ladder
-        } else if (snakes.containsKey(newPosition)) {
-            newPosition = snakes.get(newPosition); // Move the player down the snake
-        }
-
-        // Check for special tiles
-        if (specialTiles.containsKey(newPosition)) {
-            // Handle special tile logic (e.g., trigger a question or event)
-            // For example, you might want to call a method like handleSpecialTile(player, specialTiles.get(newPosition));
-        }
+        newPosition = adjustPosition(newPosition);
 
         // Update the player's position
         playerPositions.put(player, newPosition);
     }
 
+    public int adjustPosition(int newPosition) {
+        if (ladders.containsKey(newPosition)) {
+            return ladders.get(newPosition); // Move up the ladder
+        } else if (snakes.containsKey(newPosition)) {
+            return snakes.get(newPosition); // Move down the snake
+        }
+        return newPosition; // Return the adjusted position
+    }
 
 
     public boolean isPlayerOnSpecialTile(Player player) {
@@ -207,28 +203,6 @@ public class GameBoard {
     public void setPlayerPosition(Player player, int newPosition) {
         // Logic to set player's position
         playerPositions.put(player, newPosition);
-    }
-    public int adjustPosition(int newPosition) {
-        // Check if newPosition exceeds the board size
-        int maxPosition = rows * columns; // Assuming 'rows' and 'columns' define the board size
-        if (newPosition > maxPosition) {
-            // Handle the case when a player's move exceeds the board size.
-            // You can either set the position to maxPosition or handle it based on your game rules
-            newPosition = maxPosition;
-        }
-
-        // Check for ladders and snakes
-        if (ladders.containsKey(newPosition)) {
-            // Move up the ladder
-            newPosition = ladders.get(newPosition);
-        } else if (snakes.containsKey(newPosition)) {
-            // Move down the snake
-            newPosition = snakes.get(newPosition);
-        }
-
-        // Additional rules can be implemented here (e.g., special tiles)
-
-        return newPosition;
     }
 
 }
