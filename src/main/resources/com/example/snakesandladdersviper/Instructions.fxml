@@ -1,15 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
 
-<AnchorPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.MainController">
-   <children>
-       <AnchorPane layoutY="-1.0" prefHeight="807.0" prefWidth="800.0" styleClass="root" stylesheets="@../src/CssStyles/HelloPageStyle.css">
-       <Text layoutX="25.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size:22px" textAlignment="CENTER" text="In this game..." />
-       <Button fx:id="BackButton" defaultButton="true" mnemonicParsing="false" onAction="#BackButton" prefHeight="31.0" prefWidth="117.0" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-padding: 10px 20px; -fx-border-radius: 5px;" text="Back" textAlignment="CENTER">
-       </Button>
-       </AnchorPane>
-   </children>
-</AnchorPane>
+<VBox fx:id="InstructionsContainer" alignment="TOP_CENTER" spacing="20.0" style="-fx-background-color: #f0f4f7;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.MainController">
+    <children>
+        <!-- Game Title -->
+        <Text text="Snakes and Ladders Instructions" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-fill: #333333;" />
+
+        <!-- Objective Section -->
+        <VBox spacing="10.0" alignment="TOP_CENTER">
+            <Text text="Objective:" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-fill: #555555;" />
+            <Text text="Navigate from the start (square 1) to the finish (square 100), climbing ladders and avoiding snakes." style="-fx-font-size: 16px; -fx-fill: #666666;" wrappingWidth="600.0" />
+        </VBox>
+
+        <!-- Game Board Complexity Section -->
+        <VBox spacing="5.0" alignment="TOP_CENTER">
+            <Text text="Game Board Complexity:" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-fill: #555555;" />
+            <Text text="• Easy: 7x7 board with 49 squares." style="-fx-font-size: 16px; -fx-fill: #666666;" />
+            <Text text="• Medium: 10x10 board with 100 squares." style="-fx-font-size: 16px; -fx-fill: #666666;" />
+            <Text text="• Hard: 13x13 board with 169 squares." style="-fx-font-size: 16px; -fx-fill: #666666;" />
+        </VBox>
+
+        <!-- Ladders and Snakes Section -->
+        <VBox spacing="10.0" alignment="TOP_CENTER">
+            <Text text="Ladders and Snakes:" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-fill: #555555;" />
+            <Text text="Ladders will help players advance more quickly, while snakes will slow down their progress." style="-fx-font-size: 16px; -fx-fill: #666666;" wrappingWidth="600.0" />
+            <Text text="Different types of ladders and snakes will be placed on the board, which affect the gameplay differently." style="-fx-font-size: 16px; -fx-fill: #666666;" wrappingWidth="600.0" />
+        </VBox>
+
+        <!-- Buttons -->
+        <HBox alignment="CENTER" spacing="20.0">
+            <Button text="Back" onAction="#BackButton" style="-fx-background-color: #4e8d7c; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10px 20px;" />
+            <Button text="Start Game" onAction="#StartGame" style="-fx-background-color: #4e8d7c; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10px 20px;" />
+        </HBox>
+    </children>
+</VBox>
