@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.*;
 import javafx.scene.control.Alert;
@@ -229,17 +230,22 @@ public class GameBoardController {
 
     private void createTile(int number, int col, int row, int size) {
         Tile tile = new Tile(col, size - row - 1);
-        String backgroundColor = ((row + col) % 2 == 0) ? "-fx-background-color: green" : "-fx-background-color: white";
+
+        // Set the background color of the tile
+        String backgroundColor = ((row + col) % 2 == 0) ? "-fx-background-color: #008000" : "-fx-background-color: #FFFFFF";
         tile.setStyle(backgroundColor + "; -fx-border-color: black;");
 
+        // Create a label with a transparent background
         Label label = new Label(Integer.toString(number));
         label.setStyle("-fx-text-fill: black; -fx-font-size: 12;");
-        tile.getChildren().add(label);
-        GridPane.setValignment(label, VPos.TOP);
-        GridPane.setHalignment(label, HPos.LEFT);
 
-        BoardGrid.add(tile, col, size - row - 1);
+        // Create a StackPane to contain the label and players
+        StackPane stackPane = new StackPane(tile, label);
+        stackPane.setAlignment(Pos.TOP_LEFT);
+
+        BoardGrid.add(stackPane, col, size - row - 1);
     }
+
 
 
     private void setupGridConstraints(int size) {
@@ -299,15 +305,22 @@ public class GameBoardController {
             Circle playerCircle = new Circle(10); // adjust radius as needed
             playerCircle.setFill(player.getPlayerColor());
             playerCircles.put(player, playerCircle);
-            // other game start logic...
+
             Pane tile = getTileForPlayer(player);
-            //check if tile is valid
+            // check if tile is valid
             if (tile != null) {
                 // Add the circle to the tile
                 tile.getChildren().add(playerCircle);
-            }}
-        }
 
+                // Set the position of the circle in the tile
+                int circleIndex = tile.getChildren().indexOf(playerCircle);
+                double xOffset = (circleIndex - 0.8) * 10; // adjust the horizontal offset as needed
+                double yOffset = (circleIndex -0.3) * 11; // adjust the vertical offset as needed
+                playerCircle.setTranslateX(xOffset);
+                playerCircle.setTranslateY(yOffset);
+            }
+        }
+    }
 
 
 
