@@ -23,13 +23,13 @@ public class PlayerSelectionController {
     private Pane contentPane;
 
     @FXML
-    private Text PlayerSelectionTurn;
+    public Text PlayerSelectionTurn;
 
     @FXML
-    private TextField PlayerName;
+    public TextField PlayerName;
 
     @FXML
-    private ComboBox<String> ObjectSelect;
+    public ComboBox<String> ObjectSelect;
 
     private int currentPlayerNumber;
     private int totalPlayers;

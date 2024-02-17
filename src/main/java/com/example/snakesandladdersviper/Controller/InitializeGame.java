@@ -25,17 +25,17 @@ public class InitializeGame {
     private Pane MainPane;
 
     @FXML
-    private ComboBox<Integer> PlayersNum;
+    public ComboBox<Integer> PlayersNum;
 
     @FXML
-    private ComboBox<Difficulty> SelectDifficulty;
+    public ComboBox<Difficulty> SelectDifficulty;
 
     @FXML
-    private Button NextButton;
+    public Button NextButton;
     @FXML
-    private Button BackButton;
+    public Button BackButton;
     @FXML
-    private TextField PlayerName;
+    public TextField PlayerName;
 
 
     private List<Player> players;
@@ -53,6 +53,7 @@ public class InitializeGame {
         SelectDifficulty.setValue(Difficulty.EASY);
         players = new ArrayList<>();
         currentPlayerNumber = 1;
+
     }
 
     //doesnt work

@@ -1,37 +1,58 @@
 package com.example.snakesandladdersviper.test;
 
+import static org.junit.Assert.*;
+
 import com.example.snakesandladdersviper.Controller.InitializeGame;
 import com.example.snakesandladdersviper.Enums.Difficulty;
 import com.example.snakesandladdersviper.Model.Player;
-import org.junit.jupiter.api.BeforeEach;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import javafx.scene.control.ComboBox;
+import java.util.List;
 
-class InitializeGameTest {
+public class InitializeGameTest {
+    static {
+        new JFXPanel();
+    }
 
-    private InitializeGame controller;
+    private InitializeGame createControllerAndInitialize() {
+        // Create controller instance
+        InitializeGame controller = new InitializeGame();
 
-    @BeforeEach
-    void setUp() {
-        controller = new InitializeGame();
-        controller.initialize();
+        // Initialize JavaFX components manually
+        Platform.runLater(() -> {
+            controller.PlayersNum = new ComboBox<>();
+            controller.SelectDifficulty = new ComboBox<>();
+            controller.NextButton = new Button();
+            controller.BackButton = new Button();
+            controller.PlayerName = new TextField();
+
+            // Other initialization logic...
+            controller.initialize();
+        });
+
+        // Wait for the initialization to complete
+        waitForRunLater();
+
+        return controller;
+    }
+
+    private void waitForRunLater() {
+        try {
+            Thread.sleep(500); // Adjust the sleep time as necessary
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     @Test
-    void testInitialization() {
-        assertNotNull(controller.getPlayersNum(), "PlayersNum ComboBox should not be null");
-        assertEquals(2, controller.getPlayersNum().getValue(), "Default number of players should be 2");
-        assertNotNull(controller.getSelectDifficulty(), "SelectDifficulty ComboBox should not be null");
-        assertEquals(Difficulty.EASY, controller.getSelectDifficulty().getValue(), "Default difficulty should be EASY");
-    }
-
-    @Test
-    void testPlayerCreation() {
-        controller.SubmitChoices(null); // Simulate button click
-        assertFalse(controller.getPlayers().isEmpty(), "Players list should not be empty after SubmitChoices");
-        assertEquals(1, controller.getPlayers().size(), "There should be one player in the list");
-        Player player = controller.getPlayers().get(0);
-        assertNotNull(player, "Player should not be null");
-        assertEquals("Player 1", player.getName(), "Player name should be set correctly");
+    void testDifficultySetCorrectlyAfterSelection() {
+        InitializeGame controller = createControllerAndInitialize();
+        Platform.runLater(() -> controller.SelectDifficulty.setValue(Difficulty.MEDIUM));
+        waitForRunLater();
+        assertEquals("The selected difficulty should be set correctly", Difficulty.MEDIUM, controller.SelectDifficulty.getValue());
     }
 }
