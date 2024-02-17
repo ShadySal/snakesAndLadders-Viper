@@ -16,10 +16,10 @@ import java.io.IOException;
 public class AdminLoginController {
 
     @FXML
-    private TextField usernameField;
+    public TextField usernameField;
 
     @FXML
-    private PasswordField passwordField;
+    public PasswordField passwordField;
 
     private static final String ADMIN_USERNAME = "admin";
     private static final String ADMIN_PASSWORD = "admin123";
@@ -30,11 +30,12 @@ public class AdminLoginController {
 
     // Existing methods...
 
+
     public boolean isLoggedIn() {
         return loggedIn;
     }
     @FXML
-    private void loginButtonClicked() {
+    public void loginButtonClicked() {
         String enteredUsername = usernameField.getText();
         String enteredPassword = passwordField.getText();
 

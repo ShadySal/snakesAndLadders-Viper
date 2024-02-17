@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.*;
 import javafx.scene.control.*;
@@ -264,14 +265,22 @@ public class GameBoardController {
         }
 
         tile.setStyle(backgroundColor + "; -fx-border-color: black;");
+
+        // Create a StackPane to hold the label
+        StackPane stackPane = new StackPane();
         Label label = new Label(tileLabel);
         label.setStyle(textColor + " -fx-font-size: 12;");
-        tile.getChildren().add(label);
-        GridPane.setValignment(label, VPos.TOP);
-        GridPane.setHalignment(label, HPos.LEFT);
+
+        // Add label to StackPane and StackPane to Tile
+        stackPane.getChildren().add(label);
+        tile.getChildren().add(stackPane);
+
+        // Set alignment for the label in the upper-left corner
+        StackPane.setAlignment(label, Pos.TOP_LEFT);
 
         BoardGrid.add(tile, col, size - row - 1);
     }
+
 
 
     private void setupGridConstraints(int size) {
@@ -331,14 +340,22 @@ public class GameBoardController {
             Circle playerCircle = new Circle(10); // adjust radius as needed
             playerCircle.setFill(player.getPlayerColor());
             playerCircles.put(player, playerCircle);
-            // other game start logic...
+
             Pane tile = getTileForPlayer(player);
-            //check if tile is valid
+            // check if tile is valid
             if (tile != null) {
                 // Add the circle to the tile
                 tile.getChildren().add(playerCircle);
-            }}
+
+                // Set the position of the circle in the tile
+                int circleIndex = tile.getChildren().indexOf(playerCircle);
+                double xOffset = (circleIndex - 0.8) * 10; // adjust the horizontal offset as needed
+                double yOffset = (circleIndex -0.3) * 11; // adjust the vertical offset as needed
+                playerCircle.setTranslateX(xOffset);
+                playerCircle.setTranslateY(yOffset);
+            }
         }
+    }
 
     @FXML
     void MainMenuFun(ActionEvent event) throws IOException {
