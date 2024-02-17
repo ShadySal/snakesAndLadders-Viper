@@ -1,13 +1,11 @@
 package com.example.snakesandladdersviper.Controller;
 
-import com.example.snakesandladdersviper.Model.Dice;
-import com.example.snakesandladdersviper.Model.GameBoard;
-import com.example.snakesandladdersviper.Model.Player;
-import com.example.snakesandladdersviper.Model.Tile;
+import com.example.snakesandladdersviper.Model.*;
 import com.example.snakesandladdersviper.Enums.Difficulty;
 import javafx.animation.KeyFrame;
 import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,10 +13,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.*;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
@@ -32,10 +27,7 @@ import javafx.scene.transform.Rotate;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 
 public class GameBoardController {
@@ -128,8 +120,22 @@ public class GameBoardController {
                 default: return String.valueOf(rollResult);
             }
         } else if (difficulty == Difficulty.MEDIUM) {
-            // Logic for medium difficulty dice roll
-            // Adjust the logic as per your game rules
+            boolean isQuestionTurn = random.nextBoolean(); // 50% chance of getting question
+            if (isQuestionTurn) {
+                rollResult = random.nextInt(3);
+                if(rollResult == 0){
+                    return "EASY_QUESTION";
+                }
+                if(rollResult == 1){
+                    return "MEDIUM_QUESTION";
+                }
+                if(rollResult == 2){
+                    return "HARD_QUESTION";
+                }
+            } else {
+                rollResult = random.nextInt(6) + 1;
+                return String.valueOf(rollResult);
+            }
         } else if (difficulty == Difficulty.HARD) {
             // Logic for hard difficulty dice roll
             // Adjust the logic as per your game rules
@@ -153,66 +159,37 @@ public class GameBoardController {
 
     public void initializeBoard(Difficulty difficulty, List<Player> players) {
         int size = determineBoardSize(difficulty);
-
         gameBoard = new GameBoard(size, size);
-        if (size == 7) {
-            Dice easyGameDice = new Dice(6, EASY_GAME_QUESTION_PROBABILITY);
-            this.difficulty = difficulty;
 
-            gameBoard.setDice(easyGameDice);
+        // Initialize special tiles (questions and surprise)
+        Map<Integer, String> specialTiles = generateSpecialTiles(difficulty, size);
 
-        } else if (size == 10) {
-            Dice mediumGameDice = new Dice(9, MEDIUM_GAME_QUESTION_PROBABILITY); // 0-6 for movement, 7-9 for questions
-            gameBoard.setDice(mediumGameDice);
-            this.difficulty = difficulty;
-        } else if (size == 13) {
-            // TO DO
-            this.difficulty = difficulty;
-
-        }
-
+        this.difficulty = difficulty;
+        gameBoard.setDice(new Dice(6, EASY_GAME_QUESTION_PROBABILITY));
         gameBoard.initializePlayerPositions(players);
 
-        System.out.println(players);
-
-        setupGridConstraints(size); // Set up grid constraints
+        setupGridConstraints(size);
         LevelLabel.setText("Level: " + difficulty);
-        BoardGrid.getChildren().clear(); // Clear existing content
+        BoardGrid.getChildren().clear();
+        gameBoard.initializePlayerPositions(players);
+        setupGridConstraints(size);
+        LevelLabel.setText("Level: " + difficulty);
+        BoardGrid.getChildren().clear();
 
         BoardGrid.prefWidthProperty().bind(gamepane.widthProperty());
         BoardGrid.prefHeightProperty().bind(gamepane.heightProperty());
-        gamepane.setPadding(new Insets(0, 0, 0, 0)); // Remove padding if not needed
-        GridPane.setMargin(BoardGrid, new Insets(0)); // Remove margin if not needed
+        gamepane.setPadding(new Insets(0, 0, 0, 0));
+        GridPane.setMargin(BoardGrid, new Insets(0));
+
         for (int row = size - 1; row >= 0; row--) {
             for (int col = 0; col < size; col++) {
-                // Calculate tile number starting from bottom left
-                int number;  // Adjusted calculation
-
-                if(row % 2 == 0){
-                    number = (size * row) + col + 1;
-                }
-                else{
-                    number = (size * (row + 1)) - col;
-                }
-
-
-                // Alternate between two colors (e.g., green and white)
-                String backgroundColor;
-                if ((row + col) % 2 == 0) {
-                    backgroundColor = "-fx-background-color: green";
-                } else {
-                    backgroundColor = "-fx-background-color: white";
-                }
-
-                createTile(number, col, row, size);
+                int number = calculateTileNumber(row, col, size);
+                createTile(number, col, row, size, specialTiles.getOrDefault(number, ""));
             }
         }
         setPlayers(players);
-
-        // Display players on the board
         displayPlayers(players);
         updatePlayerTurn();
-
 //
 //        dice = create3DDice();
 //        dice.setOnMouseClicked(event -> onDiceRoll());
@@ -227,13 +204,68 @@ public class GameBoardController {
         //displayPlayers(players);
     }
 
-    private void createTile(int number, int col, int row, int size) {
-        Tile tile = new Tile(col, size - row - 1);
-        String backgroundColor = ((row + col) % 2 == 0) ? "-fx-background-color: green" : "-fx-background-color: white";
-        tile.setStyle(backgroundColor + "; -fx-border-color: black;");
+    private int calculateTileNumber(int row, int col, int size) {
+        if (row % 2 == 0) {
+            return (size * row) + col + 1;
+        } else {
+            return (size * (row + 1)) - col;
+        }
+    }
+    private Map<Integer, String> generateSpecialTiles(Difficulty difficulty, int size) {
+        Map<Integer, String> specialTiles = new HashMap<>();
+        Random random = new Random();
+        Set<Integer> usedTiles = new HashSet<>();
 
-        Label label = new Label(Integer.toString(number));
-        label.setStyle("-fx-text-fill: black; -fx-font-size: 12;");
+        // Define colors for question tiles
+        String[] questionColors = {"red", "green", "yellow"};
+        for (int i = 0; i < questionColors.length; i++) {
+            int tile = random.nextInt(size * size) + 1;
+            while (usedTiles.contains(tile)) {
+                tile = random.nextInt(size * size) + 1;
+            }
+            specialTiles.put(tile, questionColors[i]);
+            usedTiles.add(tile);
+        }
+
+        if (difficulty != Difficulty.EASY) {
+            int startTile = (size * size) - 10;
+            int endTile = size * size;
+            int surpriseTilesCount = (difficulty == Difficulty.MEDIUM) ? 1 : 2;
+
+            for (int i = 0; i < surpriseTilesCount; i++) {
+                int tile = random.nextInt(endTile - startTile + 1) + startTile;
+                while (usedTiles.contains(tile)) {
+                    tile = random.nextInt(endTile - startTile + 1) + startTile;
+                }
+                specialTiles.put(tile, "blue");
+                usedTiles.add(tile);
+            }
+        }
+        return specialTiles;
+    }
+
+
+    private void createTile(int number, int col, int row, int size, String specialTileColor) {
+        Tile tile = new Tile(col, size - row - 1);
+        String backgroundColor = "-fx-background-color: ";
+        String textColor = "-fx-text-fill: black;";
+        String tileLabel = Integer.toString(number);
+
+        if (!specialTileColor.isEmpty()) {
+            backgroundColor += specialTileColor;
+            if (specialTileColor.equals("blue")) {
+                tileLabel = "Surprise";
+            } else {
+                tileLabel = "?";
+            }
+            textColor = "-fx-text-fill: white;";
+        } else {
+            backgroundColor += ((row + col) % 2 == 0) ? "green" : "white";
+        }
+
+        tile.setStyle(backgroundColor + "; -fx-border-color: black;");
+        Label label = new Label(tileLabel);
+        label.setStyle(textColor + " -fx-font-size: 12;");
         tile.getChildren().add(label);
         GridPane.setValignment(label, VPos.TOP);
         GridPane.setHalignment(label, HPos.LEFT);
@@ -308,9 +340,6 @@ public class GameBoardController {
             }}
         }
 
-
-
-
     @FXML
     void MainMenuFun(ActionEvent event) throws IOException {
         // Create a confirmation alert
@@ -369,48 +398,127 @@ public class GameBoardController {
     }
 
 
-    private String getDiceRollOutcome(Difficulty difficulty) {
-        Random random = new Random();
-        int maxRoll;
-        int rollResult;
 
-        switch (difficulty) {
-            case EASY:
-                maxRoll = 7; // 0-4 for numbers, 5 for easy question, 6 for medium question, 7 for hard question
-                rollResult = random.nextInt(maxRoll + 1);
-                if (rollResult >= 5) {
-                    if (rollResult == 5) return "EASY_QUESTION";
-                    if (rollResult == 6) return "MEDIUM_QUESTION";
-                    return "HARD_QUESTION";
-                }
-                break;
-            case MEDIUM:
-                maxRoll = 6; // Maximum roll for medium difficulty
-                rollResult = random.nextInt(maxRoll + 1);
-                break;
-            case HARD:
-                maxRoll = 10; // Maximum roll for hard difficulty
-                rollResult = random.nextInt(maxRoll + 1);
-                break;
-            default:
-                throw new IllegalArgumentException("Unrecognized difficulty level");
-        }
-
-        return String.valueOf(rollResult);
-    }
 
 
     private void processDiceOutcome(String outcome) {
+        boolean questionAnsweredCorrectly = false;
+
         if (outcome.equals("EASY_QUESTION")) {
-            // Handle easy question
+            questionAnsweredCorrectly = askQuestion("easy");
         } else if (outcome.equals("MEDIUM_QUESTION")) {
-            // Handle medium question
+            questionAnsweredCorrectly = askQuestion("medium");
         } else if (outcome.equals("HARD_QUESTION")) {
-            // Handle hard question
+            questionAnsweredCorrectly = askQuestion("hard");
         } else {
             int steps = Integer.parseInt(outcome);
-            // Move the player 'steps' number of tiles
             movePlayer(steps);
+            return;
+        }
+
+        handleQuestionOutcome(questionAnsweredCorrectly, outcome);
+    }
+    private void handleQuestionOutcome(boolean isCorrect, String difficulty) {
+        Player currentPlayer = players.get(currentPlayerIndex);
+        if (isCorrect) {
+            if (difficulty.equals("HARD_QUESTION")) {
+                // If the question is hard and the answer is correct, move forward one step
+                gameBoard.movePlayer(currentPlayer, 1);
+            }
+            // No action needed for correct answers to easy or medium questions
+        } else {
+            int stepsBack = 0;
+            if (difficulty.equals("EASY_QUESTION")) {
+                stepsBack = 1;
+            } else if (difficulty.equals("MEDIUM_QUESTION")) {
+                stepsBack = 2;
+            } else if (difficulty.equals("HARD_QUESTION")) {
+                stepsBack = 3;
+            }
+
+            int currentPosition = gameBoard.getPlayerPosition(currentPlayer);
+            int newPosition = Math.max(1, currentPosition - stepsBack); // Ensure not to go below tile 1
+            gameBoard.setPlayerPosition(currentPlayer, newPosition);
+        }
+
+        updatePlayerPositionOnBoard(currentPlayer);
+    }
+
+    private boolean askQuestion(String difficultyLevel) {
+        int difficulty = convertDifficultyLevelToNumber(difficultyLevel);
+        Question question = SysData.getInstance().getRandomQuestion(difficulty);
+
+        if (question == null) {
+            showAlert("No Questions", "No questions available for this difficulty.");
+            return false;
+        }
+
+        final boolean[] isCorrect = {false};
+
+        // Schedule the dialog to be shown on the JavaFX Application Thread
+        Platform.runLater(() -> {
+            isCorrect[0] = showQuestionDialog(question, difficultyLevel);
+        });
+
+        return isCorrect[0];
+    }
+    private boolean showQuestionDialog(Question question, String difficultyLevel) {
+        // Creating a custom dialog
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Question - " + capitalizeFirstLetter(difficultyLevel));
+        dialog.setHeaderText(question.getQuestionText());
+
+        // Set up the buttons
+        ButtonType confirmButtonType = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(confirmButtonType, ButtonType.CANCEL);
+
+        // Create a VBox to hold question choices
+        VBox vbox = new VBox(10);
+        ToggleGroup group = new ToggleGroup();
+
+        question.getAnswers().forEach((key, value) -> {
+            RadioButton rb = new RadioButton(value);
+            rb.setUserData(key); // Store answer key
+            rb.setToggleGroup(group);
+            vbox.getChildren().add(rb);
+        });
+
+        dialog.getDialogPane().setContent(vbox);
+
+        // Show dialog and wait for response
+        Optional<ButtonType> result = dialog.showAndWait();
+
+        if (result.isPresent() && result.get() == confirmButtonType) {
+            RadioButton selected = (RadioButton) group.getSelectedToggle();
+            return question.getCorrectAns() == (int) selected.getUserData();
+        }
+
+        return false;
+    }
+    private String capitalizeFirstLetter(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+    private int convertDifficultyLevelToNumber(String difficultyLevel) {
+        switch (difficultyLevel.toLowerCase()) {
+            case "easy":
+                return 1;
+            case "medium":
+                return 2;
+            case "hard":
+                return 3;
+            default:
+                return 0;
         }
     }
 
@@ -492,6 +600,7 @@ public class GameBoardController {
         return playerCircles.get(player);
     }
 
+
     private void updatePlayerTurn() {
         if (players == null || players.isEmpty()) {
             System.out.println("Player list is empty or not initialized.");
@@ -552,5 +661,48 @@ public class GameBoardController {
 //        Label label = new Label("CLICK");
 //        label.setStyle("-fx-font-size: 24; -fx-text-fill: white;");
 //        return label;
+//    }
+
+//    private String getDiceRollOutcome(Difficulty difficulty) {
+//        Random random = new Random();
+//        int maxRoll;
+//        int rollResult;
+//
+//        switch (difficulty) {
+//            case EASY:
+//                maxRoll = 7; // 0-4 for numbers, 5 for easy question, 6 for medium question, 7 for hard question
+//                rollResult = random.nextInt(maxRoll + 1);
+//                if (rollResult >= 5) {
+//                    if (rollResult == 5) return "EASY_QUESTION";
+//                    if (rollResult == 6) return "MEDIUM_QUESTION";
+//                    return "HARD_QUESTION";
+//                }
+//                break;
+//            case MEDIUM:
+//                boolean isQuestionTurn = random.nextBoolean(); // 50% chance of getting question
+//                if (isQuestionTurn) {
+//                    rollResult = random.nextInt(3);
+//                    if(rollResult == 0){
+//                        return "EASY_QUESTION";
+//                    }
+//                    if(rollResult == 1){
+//                        return "MEDIUM_QUESTION";
+//                    }
+//                    if(rollResult == 2){
+//                        return "HARD_QUESTION";
+//                    }
+//                } else {
+//                    rollResult = random.nextInt(6) + 1; // 1-6 להתקדמות
+//                }
+//                break;
+//            case HARD:
+//                maxRoll = 10; // Maximum roll for hard difficulty
+//                rollResult = random.nextInt(maxRoll + 1);
+//                break;
+//            default:
+//                throw new IllegalArgumentException("Unrecognized difficulty level");
+//        }
+//
+//        return String.valueOf(rollResult);
 //    }
 }

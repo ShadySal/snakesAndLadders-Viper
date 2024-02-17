@@ -12,6 +12,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * Manages questions and history.
@@ -208,6 +211,18 @@ public class SysData {
             e.printStackTrace();
         }
     }
+
+    // In SysData
+    public Question getRandomQuestion(int difficulty) {
+        List<Question> filteredQuestions = questionList.stream()
+                .filter(q -> q.getDifficulty() == difficulty)
+                .collect(Collectors.toList());
+        if (filteredQuestions.isEmpty()) {
+            return null;
+        }
+        return filteredQuestions.get(new Random().nextInt(filteredQuestions.size()));
+    }
+
 
 
 
