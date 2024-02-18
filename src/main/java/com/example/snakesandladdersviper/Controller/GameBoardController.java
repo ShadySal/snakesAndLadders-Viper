@@ -491,18 +491,13 @@ public class GameBoardController {
         return isCorrect[0];
     }
     private boolean showQuestionDialog(Question question, String difficultyLevel) {
-        // Creating a custom dialog
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Question - " + capitalizeFirstLetter(difficultyLevel));
         dialog.setHeaderText(question.getQuestionText());
-        dialog.setResizable(false);
-
-        // Prevent dialog from closing without a valid answer
-        dialog.setOnCloseRequest(event -> event.consume());
 
         // Set up the buttons
         ButtonType confirmButtonType = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(confirmButtonType, ButtonType.CANCEL);
+        dialog.getDialogPane().getButtonTypes().add(confirmButtonType);
 
         // Create a VBox to hold question choices
         VBox vbox = new VBox(10);
@@ -516,6 +511,15 @@ public class GameBoardController {
         });
 
         dialog.getDialogPane().setContent(vbox);
+
+        // Disable the "Confirm" button initially
+        final Button confirmButton = (Button) dialog.getDialogPane().lookupButton(confirmButtonType);
+        confirmButton.setDisable(true);
+
+        // Enable the "Confirm" button only when an option is selected
+        group.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            confirmButton.setDisable(newVal == null);
+        });
 
         // Show dialog and wait for response
         Optional<ButtonType> result = dialog.showAndWait();
