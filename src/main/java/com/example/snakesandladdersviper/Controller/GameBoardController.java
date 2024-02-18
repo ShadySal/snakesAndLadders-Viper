@@ -138,8 +138,19 @@ public class GameBoardController {
                 return String.valueOf(rollResult);
             }
         } else if (difficulty == Difficulty.HARD) {
-            // Logic for hard difficulty dice roll
-            // Adjust the logic as per your game rules
+            if (random.nextDouble() < 0.25) { // 25% chance for a hard question
+                return "HARD_QUESTION";
+            } else if (random.nextDouble() < 0.5) { // Additional 25% chance for an easy or medium question
+                rollResult = random.nextInt(2);
+                if(rollResult == 0) {
+                    return "EASY_QUESTION";
+                } else {
+                    return "MEDIUM_QUESTION";
+                }
+            } else {
+                rollResult = random.nextInt(6) + 1; // 1-6 for movement
+                return String.valueOf(rollResult);
+            }
         }
 
         // Default return statement if none of the above conditions are met
@@ -484,6 +495,10 @@ public class GameBoardController {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Question - " + capitalizeFirstLetter(difficultyLevel));
         dialog.setHeaderText(question.getQuestionText());
+        dialog.setResizable(false);
+
+        // Prevent dialog from closing without a valid answer
+        dialog.setOnCloseRequest(event -> event.consume());
 
         // Set up the buttons
         ButtonType confirmButtonType = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
@@ -507,11 +522,29 @@ public class GameBoardController {
 
         if (result.isPresent() && result.get() == confirmButtonType) {
             RadioButton selected = (RadioButton) group.getSelectedToggle();
-            return question.getCorrectAns() == (int) selected.getUserData();
+            boolean isCorrect = question.getCorrectAns() == (int) selected.getUserData();
+            showAnswerResultAlert(isCorrect);
+            return isCorrect;
         }
 
+        // Considered wrong if no answer is selected
+        showAnswerResultAlert(false);
         return false;
     }
+
+    private void showAnswerResultAlert(boolean isCorrect) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Answer Result");
+        if (isCorrect) {
+            alert.setHeaderText("Correct Answer!");
+            alert.setContentText("You have answered the question correctly.");
+        } else {
+            alert.setHeaderText("Wrong Answer");
+            alert.setContentText("Sorry, your answer is incorrect.");
+        }
+        alert.showAndWait();
+    }
+
     private String capitalizeFirstLetter(String input) {
         if (input == null || input.isEmpty()) {
             return input;

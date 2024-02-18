@@ -6,14 +6,13 @@ import static org.junit.Assert.*;
 
 import com.example.snakesandladdersviper.Controller.InitializeGame;
 import com.example.snakesandladdersviper.Enums.Difficulty;
-import com.example.snakesandladdersviper.Model.Player;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import org.junit.jupiter.api.Test;
 import javafx.scene.control.ComboBox;
-import java.util.List;
+
 
 public class InitializeGameTest {
     static {
