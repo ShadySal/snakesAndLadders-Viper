@@ -4,6 +4,7 @@ import com.example.snakesandladdersviper.Model.*;
 import com.example.snakesandladdersviper.Enums.Difficulty;
 import javafx.animation.KeyFrame;
 import javafx.animation.RotateTransition;
+
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -16,6 +17,7 @@ import javafx.geometry.VPos;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -72,21 +74,44 @@ public class GameBoardController {
     private Label currentPlayerLabel;
 
     private int currentPlayerIndex = 0;
-    private List<Player> players;
+    private List<Player> players = new ArrayList<Player>();
     private Map<Player, Circle> playerCircles;
-
+    private Map<Player, ImageView> playerImages;
     public void initialize() {
         startTime = System.currentTimeMillis();
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> updateClock()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
         playerCircles = new HashMap<>();
-
+        playerImages = new HashMap<>();
         setupDiceRollAnimation();
 
-
+        if (players != null) {
+            loadPlayerImages();
+        } else {
+            System.out.println("Players list is null.");
+        }
     }
-
+    private void loadPlayerImages() {
+        for (Player player : players) {
+            String color = player.getPlayerColor();
+            if (color != null) {
+                String imageFileName = "/com/example/snakesandladdersviper/Images/" + color + ".png";
+                InputStream is = getClass().getResourceAsStream(imageFileName);
+                if (is != null) {
+                    Image image = new Image(is);
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(20); // Set size as needed
+                    imageView.setFitWidth(20);
+                    playerImages.put(player, imageView);
+                } else {
+                    System.out.println("Image file not found: " + imageFileName);
+                }
+            } else {
+                System.out.println("Color is null for player: " + player.getName());
+            }
+        }
+    }
     //dice animation
     private void setupDiceRollAnimation() {
         diceRollAnimation = new Timeline(new KeyFrame(Duration.millis(100), e -> {
@@ -200,7 +225,7 @@ public class GameBoardController {
             }
         }
         setPlayers(players);
-        displayPlayers(players);
+
         updatePlayerTurn();
 //
 //        dice = create3DDice();
@@ -213,7 +238,7 @@ public class GameBoardController {
 //        gameDataPane.getChildren().add(diceSubScene);
 //        AnchorPane.setLeftAnchor(diceSubScene, 10.0); // Adjust the left anchor as needed
 
-        //displayPlayers(players);
+
     }
 
     private int calculateTileNumber(int row, int col, int size) {
@@ -326,44 +351,24 @@ public class GameBoardController {
         }
     }
 
-//    public void startGame(List<Player> players) {
-//        // Initialize game logic here
-//        setPlayers(players);
-//        playerCircles = new HashMap<>();
-//        for (Player player : players) {
-//            Circle playerCircle = new Circle(10); // adjust radius as needed
-//            playerCircle.setFill(player.getPlayerColor());
-//            playerCircles.put(player, playerCircle);
-//            // other game start logic...
-//        }
-//        // Display players on the board
-//        //displayPlayers(players);
-//        updatePlayerTurn();
-//
-//        // Other game start logic...
-//    }
 
 
     //display players on Gameboard
     public void displayPlayers(List<Player> players) {
-        playerCircles = new HashMap<>();
         for (Player player : players) {
-            Circle playerCircle = new Circle(10); // adjust radius as needed
-            playerCircle.setFill(player.getPlayerColor());
-            playerCircles.put(player, playerCircle);
-
+            ImageView playerImage = playerImages.get(player);
             Pane tile = getTileForPlayer(player);
-            // check if tile is valid
-            if (tile != null) {
-                // Add the circle to the tile
-                tile.getChildren().add(playerCircle);
-
-                // Set the position of the circle in the tile
-                int circleIndex = tile.getChildren().indexOf(playerCircle);
-                double xOffset = (circleIndex - 0.8) * 10; // adjust the horizontal offset as needed
-                double yOffset = (circleIndex -0.3) * 11; // adjust the vertical offset as needed
-                playerCircle.setTranslateX(xOffset);
-                playerCircle.setTranslateY(yOffset);
+            if (tile != null && playerImage != null) {
+                tile.getChildren().add(playerImage);
+                playerImage.setFitHeight(1000); // Increase height (e.g., 40)
+                playerImage.setFitWidth(1000);
+                int imageIndex = tile.getChildren().indexOf(playerImage);
+                double xOffset = (imageIndex - 0.8) * 10;
+                double yOffset = (imageIndex - 0.3) * 11;
+                playerImage.setTranslateX(xOffset);
+                playerImage.setTranslateY(yOffset);
+            } else {
+                System.out.println("Tile or Player Image is null for player: " + player.getName());
             }
         }
     }
@@ -677,6 +682,14 @@ public class GameBoardController {
 
     public void setPlayers(List<Player> players){
         this.players = players;
+        playerImages = new HashMap<>();
+        if (players != null) {
+            loadPlayerImages();
+            displayPlayers(players);
+
+        } else {
+            System.out.println("Players list is null.");
+        }
     }
 
 

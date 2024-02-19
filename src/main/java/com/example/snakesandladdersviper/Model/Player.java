@@ -7,12 +7,13 @@ public class Player {
     private String name;
     private int position;
     private int PlayerNumber;
-    private Color playerColor= Color.BLACK;
+    private String playerColor;
 
-    public Player(String name, int PlayerNumber) {
+    public Player(String name, int PlayerNumber, String PlayerColor) {
         this.name = name;
         this.PlayerNumber = PlayerNumber;
         this.position = 1;
+        this.playerColor = PlayerColor;
     }
 
 
@@ -71,12 +72,12 @@ public class Player {
     }
 
 
-    public void setPlayerColor(Color playerColor) {
+    public void setPlayerColor(String playerColor) {
         this.playerColor = playerColor;
     }
 
-    public Color getPlayerColor() {
-        return playerColor;
+    public String getPlayerColor() {
+        return this.playerColor;
     }
 
 
@@ -85,7 +86,7 @@ public class Player {
         return "Player{" +
                 "name='" + name + '\'' +
                 ", position=" + position +
-                ", PlayerNumber=" + PlayerNumber +
+                ", PlayerNumber=" + PlayerNumber + ",Color=" + playerColor +
                 '}';
     }
 

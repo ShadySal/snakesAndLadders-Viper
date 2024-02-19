@@ -134,6 +134,7 @@ public class PlayerSelectionController {
             Parent gameBoardRoot = loader.load();
             GameBoardController gameBoardController = loader.getController();
 
+            System.out.println(players);
             // Assuming 'difficulty' and 'players' are already defined and initialized
             gameBoardController.initializeBoard(difficulty, players);
 
@@ -152,7 +153,7 @@ public class PlayerSelectionController {
     public void savePlayerSelection() {
         String playerName = PlayerName.getText();
         String selectedColorName = ObjectSelect.getValue();
-
+        System.out.println(selectedColorName);
         // Check if playerName or selectedColorName is empty
         if (playerName.isEmpty() || selectedColorName == null) {
             showAlert("Error", "Please enter a username and select a color.");
@@ -174,13 +175,13 @@ public class PlayerSelectionController {
             player = players.get(currentPlayerNumber - 1); // -1 because list is 0-indexed
         } else {
             // Create a new player if not already existent
-            player = new Player(playerName, currentPlayerNumber);
+            player = new Player(playerName, currentPlayerNumber, selectedColorName);
             players.add(player);
         }
 
         // Set or update the player's name, selected color, and object
         player.setName(playerName);
-        player.setPlayerColor(color);
+        player.setPlayerColor(selectedColorName);
         player.setSelectedObject(selectedColorName);
         ObjectSelect.getItems().remove(selectedColorName);
 
