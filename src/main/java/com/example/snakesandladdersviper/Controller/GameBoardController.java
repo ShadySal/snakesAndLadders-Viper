@@ -360,8 +360,8 @@ public class GameBoardController {
             Pane tile = getTileForPlayer(player);
             if (tile != null && playerImage != null) {
                 tile.getChildren().add(playerImage);
-                playerImage.setFitHeight(1000); // Increase height (e.g., 40)
-                playerImage.setFitWidth(1000);
+                playerImage.setFitHeight(40); // Increase height (e.g., 40)
+                playerImage.setFitWidth(40);
                 int imageIndex = tile.getChildren().indexOf(playerImage);
                 double xOffset = (imageIndex - 0.8) * 10;
                 double yOffset = (imageIndex - 0.3) * 11;
@@ -634,25 +634,26 @@ public class GameBoardController {
         // Convert this position to row and column on the grid
         int size = determineBoardSize(difficulty);
         int row = size - 1 - (newPosition / size);
-        int column;
-        if (row % 2 == size % 2) {
-            column = size - 1 - (newPosition % size);
-        } else {
-            column = newPosition % size;
-        }
+        int column = (row % 2 == size % 2) ? size - 1 - (newPosition % size) : newPosition % size;
 
         // Get the tile Pane for the new position
         Pane newTile = getTileForPlayer(player);
 
-        // Move the player's visual representation to the new tile
         if (newTile != null) {
-            Circle playerCircle = getPlayerCircle(player);
+            ImageView playerImage = playerImages.get(player);
 
-            // Check if the circle is already on the tile
-            if (!newTile.getChildren().contains(playerCircle)) {
+            // Check if the ImageView is already on the tile
+            if (!newTile.getChildren().contains(playerImage)) {
                 // If not, add it to the tile
-                newTile.getChildren().add(playerCircle);
+                newTile.getChildren().add(playerImage);
             }
+
+            // Adjust the position of the image in the tile
+            int imageIndex = newTile.getChildren().indexOf(playerImage);
+            double xOffset = (imageIndex - 0.8) * 40; // Adjust based on image size
+            double yOffset = (imageIndex - 0.3) * 40;
+            playerImage.setTranslateX(xOffset);
+            playerImage.setTranslateY(yOffset);
         }
     }
     private Circle getPlayerCircle(Player player) {
