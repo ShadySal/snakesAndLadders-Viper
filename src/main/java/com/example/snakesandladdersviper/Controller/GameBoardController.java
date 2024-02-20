@@ -77,6 +77,7 @@ public class GameBoardController {
     private List<Player> players = new ArrayList<Player>();
     private Map<Player, Circle> playerCircles;
     private Map<Player, ImageView> playerImages;
+
     public void initialize() {
         startTime = System.currentTimeMillis();
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> updateClock()));
@@ -224,6 +225,8 @@ public class GameBoardController {
                 createTile(number, col, row, size, specialTiles.getOrDefault(number, ""));
             }
         }
+        generateSnakesAndLadders(difficulty);
+
         setPlayers(players);
 
         updatePlayerTurn();
@@ -240,7 +243,80 @@ public class GameBoardController {
 
 
     }
+    private void generateSnakesAndLadders(Difficulty difficulty) {
+        List<Snake> snakes = new ArrayList<>();
+        List<Ladder> ladders = new ArrayList<>();
 
+        // Example: Add snakes and ladders based on difficulty
+        switch (difficulty) {
+            case EASY:
+//                snakes.add(new Snake(/* start and end positions for yellow snake */));
+//                snakes.add(new Snake(/* start and end positions for green snake */));
+//                snakes.add(new Snake(/* start and end positions for blue snake */));
+//                snakes.add(new Snake(/* start and end positions for red snake */));
+//                for (int i = 1; i <= 4; i++) {
+//                    ladders.add(new Ladder(/* start and end positions for ladder of length i */));
+//                }
+                break;
+            case MEDIUM:
+//                for (int i = 0; i < 2; i++) {
+//                    snakes.add(new Snake(/* start and end positions for red snake */));
+//                    snakes.add(new Snake(/* start and end positions for green snake */));
+//                }
+//                snakes.add(new Snake(/* start and end positions for blue snake */));
+//                snakes.add(new Snake(/* start and end positions for yellow snake */));
+//                for (int i = 1; i <= 6; i++) {
+//                    ladders.add(new Ladder(/* start and end positions for ladder of length i */));
+//                }
+                break;
+            case HARD:
+//                for (int i = 0; i < 2; i++) {
+//                    snakes.add(new Snake(/* start and end positions for yellow snake */));
+//                    snakes.add(new Snake(/* start and end positions for green snake */));
+//                    snakes.add(new Snake(/* start and end positions for blue snake */));
+//                    snakes.add(new Snake(/* start and end positions for red snake */));
+//                }
+//                for (int i = 1; i <= 8; i++) {
+//                    ladders.add(new Ladder(/* start and end positions for ladder of length i */));
+//                }
+                break;
+        }
+
+        placeSnakesAndLadders(snakes, ladders);
+    }
+    private void placeSnakesAndLadders(List<Snake> snakes, List<Ladder> ladders) {
+        for (Snake snake : snakes) {
+            ImageView snakeImage = new ImageView(new Image(getClass().getResourceAsStream("/path/to/snake/image.png")));
+            placeOnBoard(snake.getStartPosition(), snake.getEndPosition(), snakeImage);
+        }
+
+        for (Ladder ladder : ladders) {
+            ImageView ladderImage = new ImageView(new Image(getClass().getResourceAsStream("/path/to/ladder/image.png")));
+            placeOnBoard(ladder.getStart(), ladder.getEnd(), ladderImage);
+        }
+    }
+    private void placeOnBoard(int start, int end, ImageView imageView) {
+//        for (Snake snake : snakes) {
+//            // Assuming you have a method to get the corresponding tile Pane for a position
+//            Pane startTile = getTileForPosition(snake.getStartPos());
+//            Pane endTile = getTileForPosition(snake.getEndPos());
+//
+//            // Load the snake image and place it on the start and end tiles
+//            ImageView snakeImage = new ImageView(new Image(/* path to snake image */));
+//            startTile.getChildren().add(snakeImage);
+//            endTile.getChildren().add(snakeImage); // or use different logic to show the snake spans multiple tiles
+//        }
+//
+//        for (Ladder ladder : ladders) {
+//            Pane startTile = getTileForPosition(ladder.getStartPos());
+//            Pane endTile = getTileForPosition(ladder.getEndPos());
+//
+//            // Load the ladder image and place it on the start and end tiles
+//            ImageView ladderImage = new ImageView(new Image(/* path to ladder image */));
+//            startTile.getChildren().add(ladderImage);
+//            endTile.getChildren().add(ladderImage); // or use different logic to show the ladder spans multiple tiles
+//        }
+    }
     private int calculateTileNumber(int row, int col, int size) {
         if (row % 2 == 0) {
             return (size * row) + col + 1;
@@ -626,6 +702,21 @@ public class GameBoardController {
 
         // Update the UI to reflect the new position
         updatePlayerPositionOnBoard(currentPlayer);
+        if (hasPlayerWon(currentPlayer)) {
+            handlePlayerWin(currentPlayer);
+        }
+    }
+    private void handlePlayerWin(Player player) {
+        // Show a congratulation message
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Over");
+        alert.setHeaderText(null);
+        alert.setContentText("Congratulations " + player.getName() + "! You have won the game.");
+
+        alert.showAndWait();
+
+        SysData.getInstance().addGameHistory(player, startTime);
+
     }
     private void updatePlayerPositionOnBoard(Player player) {
         // Get the player's new position
@@ -693,6 +784,22 @@ public class GameBoardController {
         }
     }
 
+    public boolean hasPlayerWon(Player player) {
+        int totalTiles = getTotalTilesForDifficulty(difficulty);
+        return gameBoard.getPlayerPosition(player) == totalTiles;
+    }
+    private int getTotalTilesForDifficulty(Difficulty difficulty) {
+        switch (difficulty) {
+            case EASY:
+                return 7 * 7; // Assuming a 7x7 board for easy difficulty
+            case MEDIUM:
+                return 10 * 10; // Assuming a 10x10 board for medium difficulty
+            case HARD:
+                return 13 * 13; // Assuming a 13x13 board for hard difficulty
+            default:
+                throw new IllegalArgumentException("Unrecognized difficulty level");
+        }
+    }
 
     //create 3d dice
 //    private Box create3DDice() {

@@ -24,7 +24,7 @@ public class SysData {
     private static SysData instance = null;
     private ArrayList<Question> questionList;
     private static final String QUESTIONS_FILE = "questions.json";
-    private static final String HISTORY_FILE = "history.json";
+    private static final String HISTORY_FILE = "GameHistory.json";
 
     /**
      * Singleton pattern to ensure only one instance of SysData.
@@ -72,22 +72,27 @@ public class SysData {
         saveQuestionsToJsonFile();
     }
 
-    /**
-     * Adds a high score entry to the JSON file.
-     * @param playerName The player's name
-     * @param score The player's score
-     */
-    public void addHighScore(String playerName, int score) {
+    public void addGameHistory( Player player,long startTimeMillis ) {
+        String gameDuration = calculateGameDuration(startTimeMillis);
         JSONObject jsonObject = readJsonFile(HISTORY_FILE);
         JSONArray historyArray = jsonObject.getJSONArray("history");
 
         JSONObject newScoreJson = new JSONObject();
-        newScoreJson.put("player", playerName);
-        newScoreJson.put("score", score);
+        newScoreJson.put("player", player.getName());
+        newScoreJson.put("score", player.getScore());
         newScoreJson.put("date", LocalDate.now());
+        newScoreJson.put("duration", gameDuration);
 
         historyArray.put(newScoreJson);
         saveJsonToFile(jsonObject, HISTORY_FILE);
+    }
+    public String calculateGameDuration(long startTimeMillis) {
+        long durationMillis = System.currentTimeMillis() - startTimeMillis;
+        long seconds = (durationMillis / 1000) % 60;
+        long minutes = (durationMillis / (1000 * 60)) % 60;
+        long hours = (durationMillis / (1000 * 60 * 60)) % 24;
+
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
     /**
@@ -222,9 +227,6 @@ public class SysData {
         }
         return filteredQuestions.get(new Random().nextInt(filteredQuestions.size()));
     }
-
-
-
 
     /**
      * Saves a JSON object to a file.

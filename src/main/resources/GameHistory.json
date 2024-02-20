@@ -1,0 +1,16 @@
+{
+  "GameHistory": [
+    {
+      "player": "Neil",
+      "date": "2023-01-02",
+      "score": "310",
+      "time": ""
+    },
+    {
+      "date": "2023-01-02",
+      "score": "1",
+      "player": "shady",
+      "time": ""
+    }
+  ]
+}

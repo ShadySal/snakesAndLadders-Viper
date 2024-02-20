@@ -6,8 +6,13 @@ import javafx.scene.paint.Color;
 public class Player {
     private String name;
     private int position;
+
+
+
     private int PlayerNumber;
     private String playerColor;
+
+    private int score;
 
     public Player(String name, int PlayerNumber, String PlayerColor) {
         this.name = name;
@@ -93,5 +98,13 @@ public class Player {
     public void setSelectedObject(String selectedObject) {
 
     }
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
 }
 
