@@ -174,7 +174,7 @@ public class PlayerSelectionVsBotController {
     private void createBots() {
         List<String> availableColors = ObjectSelect.getItems();
         Random random = new Random();
-        int botCount = determineBotCountBasedOnDifficulty(difficulty);
+        int botCount = numberOfBots;
 
         for (int i = 1; i <= botCount; i++) {
             String botColor = availableColors.remove(random.nextInt(availableColors.size()));
@@ -182,14 +182,7 @@ public class PlayerSelectionVsBotController {
         }
     }
 
-    private int determineBotCountBasedOnDifficulty(Difficulty difficulty) {
-        switch (difficulty) {
-            case EASY:   return 3; // Example: 3 bots for easy level
-            case MEDIUM: return 5; // Example: 5 bots for medium level
-            case HARD:   return 7; // Example: 7 bots for hard level
-            default:     return 3; // Default to 3 bots
-        }
-    }
+
         private void showAlert(String title, String content) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle(title);
