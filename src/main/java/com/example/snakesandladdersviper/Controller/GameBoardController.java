@@ -506,7 +506,29 @@ public class GameBoardController {
         return null; // Tile not found or invalid position
     }
 
+    private Pane getTileForPosition(int position) {
+        int size = determineBoardSize(difficulty); // Assuming this method returns the size of the grid
+        position--; // Adjusting because positions start at 1
 
+        int row = size - 1 - (position / size);
+        int column;
+
+        if (row % 2 == size % 2) {
+            // For even rows (if size is odd) or odd rows (if size is even), numbering goes from right to left
+            column = size - 1 - (position % size);
+        } else {
+            // For odd rows (if size is odd) or even rows (if size is even), numbering goes from left to right
+            column = position % size;
+        }
+
+        // Find the corresponding tile Pane
+        for (Node node : BoardGrid.getChildren()) {
+            if (GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column) {
+                return (Pane) node;
+            }
+        }
+        return null; // Tile not found or invalid position
+    }
 
 
 
