@@ -1,4 +1,5 @@
 .root{
     -fx-background-image: url(../main/resources/wp9142232.jpg);
-    -fx-background-size: cover;
+    -fx-background-size: 100% 100%; /* Cover the entire area of the root node */
+    -fx-background-repeat: no-repeat; /* Prevent the background image from repeating */
 }
