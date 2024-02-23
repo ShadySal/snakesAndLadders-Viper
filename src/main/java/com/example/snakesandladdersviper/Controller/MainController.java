@@ -11,6 +11,10 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
+
+
 
 public class MainController {
 
@@ -45,10 +49,16 @@ public class MainController {
 
     public void InstructionsOfGame(ActionEvent event) throws IOException {
         Parent InstructionPage = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/Instructions.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage stage = new Stage(); // Create a new stage for the instruction page
         stage.setScene(new Scene(InstructionPage));
+
+        // Set full-screen mode for the instruction page
+        stage.setFullScreen(true);
+
+        // Show the instruction page
         stage.show();
     }
+
 
     @FXML
     void BackButton(ActionEvent event) throws IOException {
@@ -63,6 +73,9 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+
+
     @FXML
     private void onQuestionManagementBtnClicked(ActionEvent event) throws IOException {
         // Load AdminLogin.fxml
@@ -82,14 +95,20 @@ public class MainController {
         if (adminLoginController.isLoggedIn()) {
             // Admin successfully logged in, proceed to question management
             Parent questionsPage = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/QuestionsPage.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(questionsPage));
-            stage.show();
+            Stage questionStage = new Stage(); // Create a new stage for the question management page
+            questionStage.setScene(new Scene(questionsPage));
+
+            // Set full-screen mode for the question management page
+            questionStage.setFullScreen(true);
+
+            // Show the question management page
+            questionStage.show();
         } else {
             // Admin login unsuccessful, show an error message to the user
             showAlert("Access Denied", "You must log in as an admin to access this feature.");
         }
     }
+
 
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
