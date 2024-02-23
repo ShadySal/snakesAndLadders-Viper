@@ -131,7 +131,7 @@ public class QuestionsPageController {
         EditQuestionController editQuestionController = loader.getController();
         editQuestionController.setQuestionDetails(selectedQuestion);
 
-        Stage stage = new Stage();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(editQuestionRoot));
         stage.show();
     }
