@@ -3,32 +3,23 @@ package com.example.snakesandladdersviper.Controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import javafx.scene.control.Alert;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
-
 import java.io.IOException;
-import javafx.geometry.Rectangle2D;
-import javafx.stage.Screen;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.ScaleTransition;
 import javafx.scene.text.Font;
-import javafx.animation.ScaleTransition;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.animation.ScaleTransition;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
@@ -67,6 +58,7 @@ public class MainController implements Initializable{
         animateButton(QuestionManagementBtn, 0.3);
         animateButton(InstructionsBtn, 0.4);
     }
+
     private void customizeTitle() {
         // Set a larger font size for the title
         titleLabel.setFont(new Font("Arial Bold", 60));
@@ -122,8 +114,6 @@ public class MainController implements Initializable{
     }
 
 
-
-
     public void StartGame() throws IOException {
         Stage currentStage = (Stage) StartGameBtn.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/gameMode.fxml"));
@@ -138,18 +128,28 @@ public class MainController implements Initializable{
     }
 
 
-    public void InstructionsOfGame(ActionEvent event) throws IOException {
-        Parent InstructionPage = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/Instructions.fxml"));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(InstructionPage));
+    public void InstructionsOfGame(ActionEvent event) {
+        try {
+            Parent InstructionPage = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/Instructions.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(InstructionPage, 800, 800)); // Assuming you want 800x800 size
 
-        // Set full-screen mode for the instruction page
-        stage.setFullScreen(true);
+            // Set full-screen mode for the instruction page
+            stage.setFullScreen(true);
 
-        // Show the instruction page
-        stage.show();
+            // Show the instruction page
+            stage.show();
+        } catch (IOException e) {
+            showError("Error", "Failed to load instructions.");
+        }
     }
-
+    private void showError(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 
     @FXML
     void BackButton(ActionEvent event) throws IOException {
