@@ -6,12 +6,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <VBox prefHeight="600.0" prefWidth="600.0" spacing="10" xmlns="http://javafx.com/javafx/17.0.2-ea" style="-fx-background-color: #f0f4f7; -fx-background-image: url('wp9142232.jpg'); -fx-background-position: center center; -fx-background-repeat: no-repeat; -fx-background-size: cover;" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.AdminLoginController">
-        <Label text="Admin Login" style="-fx-font-size: 20px;-fx-font-weight: bold;-fx-alignment: center ;-fx-text-alignment: center"/>
-    <Text text="please enter your username"/>
+    <HBox alignment="TOP_CENTER">
+        <Label text="Admin Login" style="-fx-font-size: 25px;-fx-font-weight: bold;-fx-alignment: center ;-fx-text-alignment: center"/>
+    </HBox>
+    <Text text="please enter your username" style="-fx-font-size: 20px"/>
     <TextField fx:id="usernameField" />
-    <Text text="please enter your upassword"/>
+    <Text text="please enter your password" style="-fx-font-size: 20px"/>
     <PasswordField fx:id="passwordField" />
     <HBox alignment="CENTER">
-        <Button onAction="#loginButtonClicked" layoutX="300.0" layoutY="300.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-border-radius: 5px;" text="Login" />
+        <Button onAction="#loginButtonClicked" layoutX="300.0" layoutY="300.0" prefHeight="45.0" prefWidth="85.0" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-border-radius: 5px;" text="Login" />
     </HBox>
 </VBox>
