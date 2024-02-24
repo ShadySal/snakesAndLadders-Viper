@@ -46,7 +46,7 @@ public class AddQuestionController {
     private Button SubmitButton;
 
     @FXML
-    private Button BackButton;
+    private Button BackButton1;
 
     @FXML
     private ChoiceBox<String> LevelChoiceBox;
@@ -178,7 +178,7 @@ public class AddQuestionController {
                     Scene nextScene = new Scene(root);
 
                     // Get the current stage and set the new scene
-                    Stage currentStage = (Stage) BackButton.getScene().getWindow();
+                    Stage currentStage = (Stage) BackButton1.getScene().getWindow();
                     currentStage.setScene(nextScene);
                 } catch (Exception e) {
                     e.printStackTrace();

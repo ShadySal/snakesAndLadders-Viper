@@ -49,7 +49,7 @@ public class MainController {
 
     public void InstructionsOfGame(ActionEvent event) throws IOException {
         Parent InstructionPage = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/Instructions.fxml"));
-        Stage stage = new Stage(); // Create a new stage for the instruction page
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(InstructionPage));
 
         // Set full-screen mode for the instruction page
@@ -95,7 +95,7 @@ public class MainController {
         if (adminLoginController.isLoggedIn()) {
             // Admin successfully logged in, proceed to question management
             Parent questionsPage = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/QuestionsPage.fxml"));
-            Stage questionStage = new Stage(); // Create a new stage for the question management page
+            Stage questionStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             questionStage.setScene(new Scene(questionsPage));
 
             // Set full-screen mode for the question management page
