@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
-<BorderPane fx:id="MainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: #f0eee6; -fx-background-size: cover; -fx-background-position: center center;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.MainController">
+
+<BorderPane fx:id="MainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: #f0eee6;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.MainController">
     <center>
-        <VBox alignment="CENTER" spacing="20" styleClass="root" stylesheets="@../src/CssStyles/HelloPageStyle.css">
+        <VBox fx:id="vboxContainer" alignment="CENTER" spacing="20" styleClass="root" stylesheets="@../src/CssStyles/HelloPageStyle.css">
             <children>
-                <Text layoutX="150.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Snakes And Ladders">
+                <Text fx:id="titleLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Snakes And Ladders">
                     <font>
                         <Font name="Arial" size="48.0" />
                     </font>

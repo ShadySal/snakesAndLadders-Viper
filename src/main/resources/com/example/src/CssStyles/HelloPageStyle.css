@@ -2,3 +2,13 @@
     -fx-background-image: url('/wp9142232.jpg');
     -fx-background-size: cover;
 }
+.titleText {
+    -fx-fill: linear-gradient(to bottom, #2e4a8e 0%, #00aa00 100%);
+}
+
+.menuButton {
+    -fx-background-radius: 30;
+    -fx-background-color: linear-gradient(#7ed56f, #28b485);
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
