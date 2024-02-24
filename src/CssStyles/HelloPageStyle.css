@@ -1,15 +1,15 @@
-.root{
-    -fx-background-image: url(../main/resources/wp9142232.jpg);
-    -fx-background-size: 100% 100%; /* Cover the entire area of the root node */
-    -fx-background-repeat: no-repeat; /* Prevent the background image from repeating */
-}
-.titleText {
-    -fx-fill: linear-gradient(to bottom, #2e4a8e 0%, #00aa00 100%);
-}
+/*.root{*/
+/*    -fx-background-image: url(../main/resources/wp9142232.jpg);*/
+/*    -fx-background-size: 100% 100%; !* Cover the entire area of the root node *!*/
+/*    -fx-background-repeat: no-repeat; !* Prevent the background image from repeating *!*/
+/*}*/
+/*.titleText {*/
+/*    -fx-fill: linear-gradient(to bottom, #2e4a8e 0%, #00aa00 100%);*/
+/*}*/
 
-.menuButton {
-    -fx-background-radius: 30;
-    -fx-background-color: linear-gradient(#7ed56f, #28b485);
-    -fx-text-fill: #ffffff;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
-}
+/*.menuButton {*/
+/*    -fx-background-radius: 30;*/
+/*    -fx-background-color: linear-gradient(#7ed56f, #28b485);*/
+/*    -fx-text-fill: #ffffff;*/
+/*    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);*/
+/*}*/

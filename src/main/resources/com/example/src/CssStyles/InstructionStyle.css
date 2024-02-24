@@ -6,6 +6,10 @@
     -fx-background-size: cover;
 }
 
+.main-pane {
+     -fx-background-color: #f0eee6;
+ }
+
 .page-title {
     -fx-font-size: 28px;
     -fx-font-weight: bold;

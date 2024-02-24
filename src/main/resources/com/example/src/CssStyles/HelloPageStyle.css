@@ -1,14 +1,35 @@
+
 .root{
     -fx-background-image: url('/wp9142232.jpg');
     -fx-background-size: cover;
-}
-.titleText {
-    -fx-fill: linear-gradient(to bottom, #2e4a8e 0%, #00aa00 100%);
+}.main-pane {
+    -fx-background-color: #f0eee6;
 }
 
-.menuButton {
-    -fx-background-radius: 30;
-    -fx-background-color: linear-gradient(#7ed56f, #28b485);
-    -fx-text-fill: #ffffff;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+.vbox-container {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 20, 0, 0, 10);
+    -fx-padding: 20;
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-background-radius: 10;
+}
+
+.title-text {
+    -fx-font-size: 48px;
+    -fx-fill: linear-gradient(to bottom, #2e4a8e, #00aa00);
+    -fx-font-family: "Arial", sans-serif;
+    -fx-effect: dropshadow(gaussian, black, 5, 0, 0, 1);
+}
+
+.menu-button {
+    -fx-background-radius: 20;
+    -fx-background-color: linear-gradient(to right, #7ed56f, #28b485);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-padding: 10 20;
+    -fx-effect: dropshadow(gaussian, black, 5, 0, 0, 1);
+}
+
+.menu-button:hover {
+    -fx-background-color: linear-gradient(to right, #28b485, #7ed56f);
 }
