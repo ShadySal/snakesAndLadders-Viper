@@ -1,52 +1,60 @@
 .instructions-container {
-    -fx-background-color: #f0f4f7;
+    -fx-background-color: rgba(240, 244, 247, 0.9); /* Slightly increase transparency for readability */
     -fx-background-image: url('/wp9142232.jpg');
     -fx-background-position: center center;
     -fx-background-repeat: no-repeat;
     -fx-background-size: cover;
+    -fx-padding: 40px; /* Add more padding */
+    -fx-border-radius: 20px; /* Rounded corners for modern look */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 20, 0.3, 0, 12); /* Soft shadow for depth */
 }
 
 .main-pane {
-     -fx-background-color: #f0eee6;
- }
+    -fx-background-color: transparent; /* If you want the background image to shine through */
+}
 
 .page-title {
-    -fx-font-size: 28px;
+    -fx-font-size: 36px; /* Increase size for impact */
     -fx-font-weight: bold;
-    -fx-fill: #333333;
-    -fx-padding: 20px;
+    -fx-fill: linear-gradient(from 0% 0% to 100% 100%, #2e4a8e, #00aa00); /* Diagonal gradient */
+    -fx-effect: dropshadow(gaussian, black, 5, 0, 0, 1); /* Text shadow for better readability */
 }
 
 .section {
-    -fx-alignment: center;
+    -fx-alignment: top-center;
+    -fx-spacing: 10px; /* Ensure spacing between section elements */
 }
 
 .section-title {
-    -fx-font-size: 22px;
+    -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-fill: #333333;
+    -fx-fill: #2e4a8e; /* Slightly darker color for contrast */
 }
 
 .section-content {
-    -fx-font-size: 16px;
-    -fx-fill: #333333;
+    -fx-font-size: 18px;
+    -fx-fill: #4a4a4a; /* Darker color for readability */
     -fx-text-align: justify;
     -fx-wrap-text: true;
-    -fx-max-width: 600px;
+    -fx-max-width: 700px; /* Adjust based on your UI layout */
 }
 
 .buttons-container {
-    -fx-padding: 20px;
+    -fx-padding: 30px;
+    -fx-spacing: 15px; /* Space between buttons */
 }
 
 .action-button {
-    -fx-background-color: linear-gradient(#7ed56f, #28b485);
+    -fx-background-color: linear-gradient(to bottom, #7ed56f, #28b485);
     -fx-text-fill: white;
-    -fx-padding: 10px 20px;
-    -fx-border-radius: 5px;
-    -fx-background-radius: 5px;
+    -fx-padding: 15px 30px;
+    -fx-border-radius: 15px; /* More pronounced rounded corners */
+    -fx-background-radius: 15px;
+    -fx-font-size: 18px; /* Larger font size */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0); /* Enhance shadow */
 }
 
 .action-button:hover {
-    -fx-background-color: linear-gradient(#28b485, #7ed56f);
+    -fx-background-color: linear-gradient(to bottom, #28b485, #7ed56f);
+    -fx-cursor: hand; /* Cursor change to indicate clickable */
 }
