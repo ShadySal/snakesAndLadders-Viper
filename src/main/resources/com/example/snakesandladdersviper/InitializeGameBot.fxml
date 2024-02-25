@@ -5,20 +5,34 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="MainPane" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.InitializeGameBotController" stylesheets="@../src/CssStyles/initializeGameStyle.css">
+   <top>
+      <HBox alignment="TOP_LEFT" spacing="20" style="-fx-background-color: transparent;">
+         <Button fx:id="BackButton" mnemonicParsing="false" onAction="#BackButton" prefHeight="31.0" prefWidth="117.0" style="-fx-background-color: linear-gradient(#7ed56f, #28b485); -fx-padding: 10px 20px; -fx-border-radius: 5px;" text="Back">
+            <font>
+               <Font name="Arial Black" size="15.0" />
+            </font>
+         </Button>
+      </HBox>
+   </top>
    <center>
-      <VBox alignment="CENTER" spacing="20" styleClass="vbox-container">
-         <Text text="Choose the number of bots" styleClass="text-large"/>
-         <ComboBox fx:id="PlayersNum" prefWidth="150.0" styleClass="combo-box"/>
-
-         <Text text="Choose the Game's difficulty" styleClass="text-large"/>
-         <ComboBox fx:id="SelectDifficulty" prefWidth="150.0" styleClass="combo-box"/>
-
-         <Button fx:id="NextButton" onAction="#SubmitChoices" text="Next" styleClass="button-large"/>
+      <VBox alignment="CENTER" spacing="80" fillWidth="false">
+         <HBox spacing="10" alignment="CENTER_LEFT">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 25px;" text="Choose the number of players:" />
+            <ComboBox fx:id="PlayersNum" prefWidth="150.0" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" />
+         </HBox>
+         <HBox spacing="10" alignment="CENTER_LEFT">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 25px;" text="Choose the Game's difficulty:" />
+            <ComboBox fx:id="SelectDifficulty" prefWidth="150.0" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" />
+         </HBox>
+         <Button fx:id="NextButton" mnemonicParsing="false" onAction="#SubmitChoices" prefHeight="68.0" prefWidth="163.0" style="-fx-background-radius: 30;-fx-text-fill: #ffffff;-fx-background-color: linear-gradient(#7ed56f, #28b485); -fx-padding: 10px 20px; -fx-border-radius: 5px;" text="Next">
+            <font>
+               <Font name="Corbel Bold" size="21.0" />
+            </font>
+         </Button>
       </VBox>
    </center>
-   <top>
-      <Button fx:id="BackButton" onAction="#BackButton" text="Back" styleClass="button-back" layoutX="10" layoutY="10"/>
-   </top>
 </BorderPane>
