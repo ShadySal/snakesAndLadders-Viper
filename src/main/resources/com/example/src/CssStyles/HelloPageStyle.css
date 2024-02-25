@@ -2,7 +2,8 @@
 .root{
     -fx-background-image: url('/wp9142232.jpg');
     -fx-background-size: cover;
-}.main-pane {
+}
+.main-pane {
     -fx-background-color: #f0eee6;
 }
 
