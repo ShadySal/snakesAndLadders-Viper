@@ -51,7 +51,7 @@
             </HBox>
          </children>
       </VBox>
-      <Button fx:id="SubmitButton" layoutX="785.0" layoutY="689.0" mnemonicParsing="false" onAction="#onSubmitButtonClicked" style="-fx-background-color: linear-gradient(#7ed56f, #28b485);" text="Submit" />
+      <Button fx:id="SubmitButton" layoutX="785.0" layoutY="689.0" mnemonicParsing="false" onAction="#onSubmitButtonClicked" style="-fx-background-color: linear-gradient(#7ed56f, #28b485); -fx-padding: 15px 25px;" text="Submit" />
       <ChoiceBox fx:id="LevelChoiceBox" layoutX="738.0" layoutY="373.0" prefWidth="150.0" />
       <Text layoutX="674.0" layoutY="391.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Level" wrappingWidth="56.79687857627869" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
       <Button fx:id="BackButton1" defaultButton="true" mnemonicParsing="false" onAction="#BackButtonFunc" prefHeight="31.0" prefWidth="117.0" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-padding: 10px 20px; -fx-border-radius: 5px;" text="Back" textAlignment="CENTER">
