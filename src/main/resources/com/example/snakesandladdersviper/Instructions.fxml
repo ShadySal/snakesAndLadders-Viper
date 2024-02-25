@@ -17,9 +17,9 @@
         <VBox alignment="TOP_CENTER" spacing="5" styleClass="section">
             <children>
                 <Text text="Difficulty Levels:" styleClass="section-title" />
-                <Text text="• Beginner: A smaller board with fewer obstacles." styleClass="section-content" />
-                <Text text="• Intermediate: A standard board with a balanced number of ladders and snakes." styleClass="section-content" />
-                <Text text="• Expert: A larger board with numerous challenges." styleClass="section-content" />
+                <Text text="• Easy: A smaller board with fewer obstacles." styleClass="section-content" />
+                <Text text="• Medium: A standard board with a balanced number of ladders and snakes." styleClass="section-content" />
+                <Text text="• Hard: A larger board with numerous challenges." styleClass="section-content" />
             </children>
         </VBox>
 
