@@ -54,28 +54,10 @@ public class MainController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         customizeTitle();
         animateTitle();
-        animateButtonSequentially(StartGameBtn, 0.5, 0.5);
-
-    }
-    private void animateButtonSequentially(Button button, double initialDelay, double delayIncrement) {
-        double delay = initialDelay;
-
-        for (Button btn : new Button[]{StartGameBtn, GameHistoryBtn, QuestionManagementBtn, InstructionsBtn}) {
-            FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.5), btn);
-            fadeTransition.setFromValue(0);
-            fadeTransition.setToValue(1);
-            fadeTransition.setDelay(Duration.seconds(delay));
-
-            TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1.5), btn);
-            translateTransition.setFromX(100);
-            translateTransition.setToX(0);
-            translateTransition.setDelay(Duration.seconds(delay));
-
-            fadeTransition.play();
-            translateTransition.play();
-
-            delay += delayIncrement; // Increment the delay for the next button
-        }
+        animateButton(StartGameBtn, 0.1);
+        animateButton(GameHistoryBtn, 0.2);
+        animateButton(QuestionManagementBtn, 0.3);
+        animateButton(InstructionsBtn, 0.4);
     }
 
     private void customizeTitle() {
@@ -116,6 +98,21 @@ public class MainController implements Initializable{
         translateTransition.play();
     }
 
+    private void animateButton(Button button, double delay) {
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(1.5), button); // Slower fade transition
+        fadeTransition.setFromValue(0);
+        fadeTransition.setToValue(1);
+        fadeTransition.setDelay(Duration.seconds(delay));
+
+        TranslateTransition translateTransition = new TranslateTransition(Duration.seconds(1.5), button); // Slower translate transition
+        translateTransition.setFromX(100);
+        translateTransition.setToX(0);
+        translateTransition.setDelay(Duration.seconds(delay));
+
+        // Play transitions sequentially or at the same time depending on desired effect
+        fadeTransition.play();
+        translateTransition.play();
+    }
 
 
     public void StartGame() throws IOException {
