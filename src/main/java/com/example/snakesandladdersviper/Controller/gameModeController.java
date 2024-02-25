@@ -29,6 +29,9 @@ public class gameModeController {
 
             // Set the new scene on the current stage
             stage.setScene(new Scene(root));
+            // Set full-screen mode
+            stage.setFullScreen(true);
+
             stage.show();
         } catch (IOException e) {
             e.printStackTrace(); // Handle the exception as appropriate

@@ -1,0 +1,36 @@
+.vbox-container {
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+}
+
+.title-text {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-fill: #333;
+}
+
+.text-large {
+    -fx-font-size: 20px;
+    -fx-fill: #333;
+}
+
+.text-field, .combo-box {
+    -fx-background-color: linear-gradient(to bottom, #7ed56f, #28b485);
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
+}
+
+.button-large, .button-back {
+    -fx-background-color: linear-gradient(to bottom, #7ed56f, #28b485);
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 20px;
+}
+
+.button-large:hover, .button-back:hover {
+    -fx-background-color: linear-gradient(to bottom, #28b485, #7ed56f);
+    -fx-cursor: hand;
+}

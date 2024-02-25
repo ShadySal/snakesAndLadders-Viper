@@ -80,6 +80,7 @@ public class InitializeGameBotController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/player_selectionVsBot.fxml"));
             Parent root = loader.load();
 
+
             // Get the controller for the player selection scene (PlayerSelectionController)
             PlayerSelectionVsBotController playerSelectionController = loader.getController();
 

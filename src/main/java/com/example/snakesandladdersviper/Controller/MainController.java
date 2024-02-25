@@ -1,5 +1,6 @@
 package com.example.snakesandladdersviper.Controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -140,16 +141,27 @@ public class MainController implements Initializable{
             // Show the instruction page
             stage.show();
         } catch (IOException e) {
-            showError("Error", "Failed to load instructions.");
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            showError("Failed to load instructions.", currentStage);
         }
     }
-    private void showError(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+
+    public void showError(String errorMessage, Stage stage) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText(errorMessage);
+            alert.initOwner(stage);
+            alert.showAndWait();
+
+            // Check if full screen was exited and reapply if necessary
+            if (!stage.isFullScreen()) {
+                stage.setFullScreen(true);
+            }
+        });
     }
+
 
     @FXML
     void BackButton(ActionEvent event) throws IOException {

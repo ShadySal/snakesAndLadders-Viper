@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="MainPane" prefHeight="800.0" prefWidth="800.0" styleClass="root" stylesheets="@../src/CssStyles/HelloPageStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.InitializeGame">
+<BorderPane fx:id="MainPane" prefHeight="800.0" prefWidth="800.0" styleClass="root" stylesheets="@../src/CssStyles/initializeGameStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.InitializeGame">
    <top>
       <HBox alignment="TOP_LEFT" spacing="20" style="-fx-background-color: transparent;">
          <Button fx:id="BackButton" mnemonicParsing="false" onAction="#BackButton" prefHeight="31.0" prefWidth="117.0" style="-fx-background-color: linear-gradient(#7ed56f, #28b485); -fx-padding: 10px 20px; -fx-border-radius: 5px;" text="Back">

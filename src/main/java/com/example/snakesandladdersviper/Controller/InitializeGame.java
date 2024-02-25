@@ -49,57 +49,53 @@ public class InitializeGame {
             PlayersNum.getItems().add(i);
         }
         PlayersNum.setValue(2);
+
         SelectDifficulty.setItems(FXCollections.observableArrayList(Difficulty.values()));
         SelectDifficulty.setValue(Difficulty.EASY);
+
         players = new ArrayList<>();
-        currentPlayerNumber = 1;
 
     }
 
     //doesnt work
+
     @FXML
-    void BackButton(ActionEvent event) throws IOException {
+    void BackButton(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/hello-view.fxml"));
             Parent root = loader.load();
             Scene nextScene = new Scene(root);
-// Get the current stage and set the new scene
             Stage currentStage = (Stage) BackButton.getScene().getWindow();
             currentStage.setScene(nextScene);
+            currentStage.setFullScreen(true); // Keep full screen
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     public void SubmitChoices(ActionEvent event) {
         int numberOfPlayers = PlayersNum.getValue();
         difficulty = SelectDifficulty.getValue();
 
-        // Load the player selection scene for each player
-
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/player_selection.fxml"));
             Parent root = loader.load();
-
-            // Get the controller for the player selection scene (PlayerSelectionController)
             PlayerSelectionController playerSelectionController = loader.getController();
-
-            // Create a new Player instance for this player
             Player player = new Player("Player " + currentPlayerNumber);
             player.setPlayerNumber(currentPlayerNumber);
             players.add(player);
             playerSelectionController.setDifficulty(difficulty);
-            // Pass the player number and player instance to the controller
             playerSelectionController.setPlayerData(currentPlayerNumber, player, 1, numberOfPlayers);
-
-            // Create a new scene and set it on a new stage for each player
-            MainPane.getChildren().clear();
-            MainPane.getChildren().add(root);
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setFullScreen(true); // Maintain full screen across scenes
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
 
     public ComboBox<Integer> getPlayersNum() {
