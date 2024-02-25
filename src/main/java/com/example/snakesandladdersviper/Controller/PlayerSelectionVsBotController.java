@@ -37,8 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 public class PlayerSelectionVsBotController {
 
-
-
         @FXML
         private Pane contentPane;
 
@@ -211,18 +209,7 @@ public class PlayerSelectionVsBotController {
             }
         }
 
-        public int getBoardDifficulty(Difficulty diff){
-            switch (difficulty) {
-                case EASY:
-                    return 7;
-                case MEDIUM:
-                    return 10;
-                case HARD:
-                    return 13;
-                default:
-                    throw new IllegalArgumentException("Unrecognized difficulty level");
-            }
-        }
+
 
 
     public void setNumOfBots(int numberOfPlayers) {
