@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" spacing="10" style="-fx-background-color: #f0f4f7; -fx-background-image: url('adminPhoto.jpg'); -fx-background-position: center center; -fx-background-repeat: no-repeat; -fx-background-size: cover;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.AdminLoginController">
+<VBox prefHeight="600.0" prefWidth="600.0" spacing="10" style="-fx-background-color: #f0f4f7; -fx-background-image: url('16888464777_0073470e81_b.jpg'); -fx-background-position: center center; -fx-background-repeat: no-repeat; -fx-background-size: cover;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.AdminLoginController">
    <children>
        <HBox alignment="TOP_CENTER" prefHeight="50.0" prefWidth="600.0">
           <children>

@@ -5,35 +5,36 @@
 
 <VBox fx:id="InstructionsContainer" prefHeight="600.0" prefWidth="800.0" alignment="TOP_CENTER" spacing="20" styleClass="instructions-container" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.InstructionsController" stylesheets="@../src/CssStyles/InstructionStyle.css">
     <children>
-        <Text text="Game Instructions" styleClass="page-title" />
+        <Text text="Snakes and Ladders Instructions" styleClass="page-title" />
 
         <VBox alignment="TOP_CENTER" spacing="10" styleClass="section">
             <children>
-                <Text text="Goal:" styleClass="section-title" />
-                <Text text="The aim is to travel across the board from the first square to the last, helped or hindered by ladders and snakes respectively." styleClass="section-content" />
+                <Text text="Objective:" styleClass="section-title" />
+                <Text text="Navigate from the start (square 1) to the finish (square 100), climbing ladders and avoiding snakes." styleClass="section-content" />
             </children>
         </VBox>
 
         <VBox alignment="TOP_CENTER" spacing="5" styleClass="section">
             <children>
-                <Text text="Difficulty Levels:" styleClass="section-title" />
-                <Text text="• Easy: A smaller board with fewer obstacles." styleClass="section-content" />
-                <Text text="• Medium: A standard board with a balanced number of ladders and snakes." styleClass="section-content" />
-                <Text text="• Hard: A larger board with numerous challenges." styleClass="section-content" />
+                <Text text="Game Board Complexity:" styleClass="section-title" />
+                <Text text="• Easy: 7x7 board with 49 squares." styleClass="section-content" />
+                <Text text="• Medium: 10x10 board with 100 squares." styleClass="section-content" />
+                <Text text="• Hard: 13x13 board with 169 squares." styleClass="section-content" />
             </children>
         </VBox>
 
         <VBox alignment="TOP_CENTER" spacing="10" styleClass="section">
             <children>
-                <Text text="Game Elements:" styleClass="section-title" />
-                <Text text="Ladders will propel you forward and snakes will pull you back. The game's dynamics change with each roll of the dice." styleClass="section-content" />
+                <Text text="Ladders and Snakes:" styleClass="section-title" />
+                <Text text="Ladders will help players advance more quickly, while snakes will slow down their progress." styleClass="section-content" />
+                <Text text="Different types of ladders and snakes will be placed on the board, which affect the gameplay differently." styleClass="section-content" />
             </children>
         </VBox>
 
         <HBox alignment="CENTER" spacing="20" styleClass="buttons-container">
             <children>
-                <Button fx:id="BackButton" onAction="#BackButton" text="Return" styleClass="action-button" />
-                <Button fx:id="StartGameBtn" onAction="#StartGame" text="Play Now" styleClass="action-button" />
+                <Button fx:id="BackButton" onAction="#BackButton" text="Back" styleClass="action-button" />
+                <Button fx:id="StartGameBtn" onAction="#StartGame" text="Start Game" styleClass="action-button" />
             </children>
         </HBox>
     </children>

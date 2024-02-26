@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1000.0" style="-fx-background-color: #f0f4f7; -fx-background-image: url('QuestionsWizard.jpg'); -fx-background-position: center center; -fx-background-repeat: no-repeat; -fx-background-size: cover;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.QuestionsPageController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1000.0" style="-fx-background-color: #f0f4f7; -fx-background-image: url('wp9142232.jpg'); -fx-background-position: center center; -fx-background-repeat: no-repeat; -fx-background-size: cover;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.QuestionsPageController">
    <children>
       <ListView fx:id="QuestionsView" layoutX="35.0" layoutY="131.0" prefHeight="500.0" prefWidth="400.0" />
       <ListView fx:id="answersView" layoutX="567.0" layoutY="131.0" prefHeight="500.0" prefWidth="400.0" />
