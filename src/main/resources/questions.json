@@ -330,7 +330,7 @@
         "correct_ans": 3
     },
     {
-        "difficulty": 1,
+        "difficulty": "1",
         "question": "What is Software Architecture?",
         "answers": [
             "The process of developing software",
@@ -338,10 +338,10 @@
             "The programming languages used in a system",
             "The user interface design of a system"
         ],
-        "correct_ans": 2
+        "correct_ans": "2"
     },
     {
-        "difficulty": 2,
+        "difficulty": "2",
         "question": "How do Perry and Wolf define Software Architecture?",
         "answers": [
             "As a collection of software development tools",
@@ -349,10 +349,10 @@
             "As the {Elements, Form, Rationale} of a system",
             "As the documentation of a software system"
         ],
-        "correct_ans": 3
+        "correct_ans": "3"
     },
     {
-        "difficulty": 2,
+        "difficulty": "2",
         "question": "What is an Architectural Pattern?",
         "answers": [
             "A detailed plan of the software's user interface",
@@ -360,21 +360,21 @@
             "A programming paradigm used in software development",
             "The algorithmic structure of a software system"
         ],
-        "correct_ans": 2
+        "correct_ans": "2"
     },
     {
-        "difficulty": 2,
+        "difficulty": "2",
         "question": "What is the primary goal of a System Requirement Review (SRR)?",
-        "answers": [
-            "To finalize the software design",
-            "To verify system requirements and ensure understanding between stakeholders",
-            "To complete the software development",
-            "To start the testing phase"
-        ],
-        "correct_ans": 2
+    "answers": [
+        "To finalize the software design",
+        "To verify system requirements and ensure understanding between stakeholders",
+        "To complete the software development",
+        "To start the testing phase"
+    ],
+    "correct_ans": "2"
     },
     {
-        "difficulty": 1,
+        "difficulty": "1",
         "question": "What is the significance of the SRS (Software Requirement Specification) document?",
         "answers": [
             "It serves as a contract between the developer and the client outlining the software functionalities",
@@ -382,10 +382,10 @@
             "It is a manual for end-users",
             "It outlines the project budget"
         ],
-        "correct_ans": 1
+        "correct_ans": "1"
     },
     {
-        "difficulty": 2,
+        "difficulty": "2",
         "question": "What types of errors in requirements are typically identified during requirement analysis?",
         "answers": [
             "Syntax errors in the code",
@@ -393,6 +393,6 @@
             "Errors in hardware configuration",
             "Bugs in the software"
         ],
-        "correct_ans": 2
+        "correct_ans": "2"
     }
 ]}
