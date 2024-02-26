@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-public class GameBoardController {
+public class GameBoardController implements GameObserver {
     @FXML
     private GridPane BoardGrid;
     @FXML
@@ -65,6 +65,67 @@ public class GameBoardController {
     private Map<Player, Circle> playerCircles;
     private Map<Player, ImageView> playerImages;
 
+
+    @Override
+    public void update(GameEvent event) {
+        switch (event.getEventType()) {
+            case PLAYER_MOVED:
+                handlePlayerMove(event);
+                break;
+            case SPECIAL_TILE_HIT:
+                handleSpecialTile(event);
+                break;
+            case PLAYER_WON:
+                handlePlayerWin(event);
+                break;
+            // Add other cases as needed...
+        }
+    }
+    private void handlePlayerMove(GameEvent event) {
+        Player player = event.getPlayer();
+        int newPosition = event.getNewPosition();
+
+        // Find the corresponding tile Pane for the new position
+        Pane newTile = getTileForPosition(newPosition);
+
+        if (newTile != null) {
+            ImageView playerImage = playerImages.get(player);
+
+            // Remove player image from the old position
+            Pane oldTile = getTileForPlayer(player);
+            oldTile.getChildren().remove(playerImage);
+
+            // Add player image to the new position
+            newTile.getChildren().add(playerImage);
+
+            // Adjust the position of the image in the tile
+            // You might want to animate this movement for a better UX
+            int imageIndex = newTile.getChildren().indexOf(playerImage);
+            double xOffset = (imageIndex - 0.8) * 40;
+            double yOffset = (imageIndex - 0.3) * 40;
+            playerImage.setTranslateX(xOffset);
+            playerImage.setTranslateY(yOffset);
+        }
+    }
+    private void handleSpecialTile(GameEvent event) {
+        Player player = event.getPlayer();
+        int tilePosition = event.getTilePosition();
+        String tileType = event.getTileType();
+
+        // Based on tileType, you can show a dialog, animate movement, etc.
+        switch (tileType) {
+            case "snake":
+                // Handle snake logic
+                break;
+            case "ladder":
+                // Handle ladder logic
+                break;
+            case "question":
+                // Show a question dialog and wait for the answer
+                break;
+            // Handle other special tile types...
+        }
+    }
     public void initialize() {
         startTime = System.currentTimeMillis();
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> updateClock()));
@@ -227,7 +288,7 @@ public class GameBoardController {
 
     private void generateSnakesAndLadders(Difficulty difficulty) {
         int boardSize = determineBoardSize(difficulty);
-        Map<Integer, String> specialTiles = generateSpecialTiles(difficulty, boardSize); // Assuming this method generates special tiles
+        Map<Integer, String> specialTiles = generateSpecialTiles(difficulty, boardSize);
         Set<Integer> occupiedPositions = determineOccupiedPositions(specialTiles, boardSize);
 
         Pair<List<Snake>, List<Ladder>> snakesAndLadders = createDynamicSnakesAndLadders(difficulty, boardSize, occupiedPositions);
@@ -281,12 +342,12 @@ public class GameBoardController {
         for (int i = 0; i < numberOfSnakes; i++) {
             int start, end;
             do {
-                start = random.nextInt(maxPosition - 1) + 2; // Snake can't start from the first tile
-                end = random.nextInt(start - 1) + 1; // Snake moves player back, so end < start
+                start = random.nextInt(maxPosition - 1) + 2;
+                end = random.nextInt(start - 1) + 1;
             } while (occupiedPositions.contains(start) || occupiedPositions.contains(end));
             occupiedPositions.add(start);
             occupiedPositions.add(end);
-            snakes.add(new Snake(start, end));
+            snakes.add(GameElementFactory.createSnake(start, end));
         }
     }
     private void addRandomLadders(List<Ladder> ladders, int numberOfLadders, int maxPosition, Set<Integer> occupiedPositions) {
@@ -295,11 +356,11 @@ public class GameBoardController {
             int start, end;
             do {
                 start = random.nextInt(maxPosition - 1) + 1;
-                end = random.nextInt(maxPosition - start) + start + 1; // Ladder moves player forward
+                end = random.nextInt(maxPosition - start) + start + 1;
             } while (occupiedPositions.contains(start) || occupiedPositions.contains(end));
             occupiedPositions.add(start);
             occupiedPositions.add(end);
-            ladders.add(new Ladder(start, end));
+            ladders.add(GameElementFactory.createLadder(start, end));
         }
     }
     private void placeSnakesAndLadders(List<Snake> snakes, List<Ladder> ladders) {
@@ -736,6 +797,18 @@ public class GameBoardController {
         if (hasPlayerWon(currentPlayer)) {
             handlePlayerWin(currentPlayer);
         }
+    }
+    private void handlePlayerWin(GameEvent event) {
+        Player player = event.getPlayer();
+
+        // Show a congratulatory message or dialog
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Over");
+        alert.setHeaderText(null);
+        alert.setContentText("Congratulations " + player.getName() + "! You have won the game.");
+        alert.showAndWait();
+        SysData.getInstance().addGameHistory(player, startTime);
+        // You can also add animations or sounds here to celebrate the win
     }
     private void handlePlayerWin(Player player) {
         // Show a congratulation message
