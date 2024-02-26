@@ -1,3 +1,7 @@
+.root{
+    -fx-background-image: url('/wp9142232.jpg');
+    -fx-background-size: cover;
+}
 .vbox-container {
     -fx-spacing: 20px;
     -fx-alignment: center;

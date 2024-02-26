@@ -3,10 +3,11 @@ package com.example.snakesandladdersviper.Model;
 
 
 import com.example.snakesandladdersviper.Enums.Difficulty;
+import com.example.snakesandladdersviper.Enums.GameEventType;
 
 import java.util.*;
 
-public class GameBoard {
+public class GameBoard implements GameSubject{
     private int rows;
     private int columns;
     private final Map<Integer, Integer> snakes; // Map from start position to end position of snakes
@@ -19,7 +20,24 @@ public class GameBoard {
 
     private Dice dice;
     private Difficulty difficulty;
+    private List<GameObserver> observers = new ArrayList<>();
 
+    @Override
+    public void registerObserver(GameObserver observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(GameObserver observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(GameEvent event) {
+        for (GameObserver observer : observers) {
+            observer.update(event);
+        }
+    }
 
     public GameBoard(int rows, int columns) {
         this.rows = rows;
@@ -31,30 +49,25 @@ public class GameBoard {
         this.players = new ArrayList<>();
         initializeBoard();
     }
-//    public GameBoard(int difficulty) {
-//        // Initialize the board based on difficulty
-//        switch (difficulty) {
-//            case 1: // Easy
-//                this.rows = 7;
-//                this.columns = 7;
-//                break;
-//            case 2: // Medium
-//                this.rows = 10;
-//                this.columns = 10;
-//                break;
-//            case 3: // Hard
-//                this.rows = 13;
-//                this.columns = 13;
-//                break;
-//
-//        }
-//
-//        this.snakes = new HashMap<>();
-//        this.ladders = new HashMap<>();
-//        this.specialTiles = new HashMap<>();
-//
-//        initializeBoard();
-//    }
+    public void movePlayer(Player player, int roll) {
+        int currentPosition = playerPositions.getOrDefault(player, 1);
+        int newPosition = currentPosition + roll;
+
+        int totalTiles = rows * columns;
+        if (newPosition > totalTiles) {
+            newPosition = totalTiles;
+        }
+
+        newPosition = adjustPosition(newPosition);
+
+        // Update the player's position
+        playerPositions.put(player, newPosition);
+
+        // Notify observers about the player movement
+        GameEvent event = new GameEvent(GameEventType.PLAYER_MOVED, player, newPosition, "Player moved");
+        notifyObservers(event);
+    }
+
 
     public void initializePlayerPositions(List<Player> players) {
         for (Player player : players) {
@@ -82,22 +95,7 @@ public class GameBoard {
     private void placeSpecialTiles() {
         /* TO DO*/
     }
-    public void movePlayer(Player player, int roll) {
-        int currentPosition = playerPositions.getOrDefault(player, 1); // Starting position is 1
-        int newPosition = currentPosition + roll;
 
-        int totalTiles = rows * columns;
-        // Check if the new position is beyond the board
-        if (newPosition > totalTiles) {
-            newPosition = totalTiles; // Adjust based on your game rules
-        }
-
-        // Check for ladders and snakes
-        newPosition = adjustPosition(newPosition);
-
-        // Update the player's position
-        playerPositions.put(player, newPosition);
-    }
 
     public int adjustPosition(int newPosition) {
         if (ladders.containsKey(newPosition)) {

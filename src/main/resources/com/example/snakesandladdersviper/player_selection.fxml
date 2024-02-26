@@ -4,18 +4,18 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane fx:id="contentPane" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.PlayerSelectionController" stylesheets="@../src/CssStyles/PlayerSelectionsStyle.css">
+<BorderPane fx:id="contentPane" prefHeight="800.0" prefWidth="800.0" stylesheets="@../src/CssStyles/PlayerSelectionsStyle.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.PlayerSelectionController">
    <top>
-      <Button fx:id="BackButton" onAction="#BackButtonFunc" text="Back" styleClass="button-back" layoutX="10" layoutY="10"/>
+      <Button fx:id="BackButton" layoutX="10" layoutY="10" onAction="#BackButtonFunc" styleClass="button-back" text="Back" />
    </top>
    <center>
       <VBox alignment="CENTER" spacing="20" styleClass="vbox-container">
-         <Text text="Player X" styleClass="title-text" fx:id="PlayerSelectionTurn"/>
-         <Text text="Please Enter Your Name" styleClass="text-large"/>
-         <TextField fx:id="PlayerName" prefWidth="300" styleClass="text-field"/>
-         <Text text="Choose Your Object" styleClass="text-large"/>
-         <ComboBox fx:id="ObjectSelect" prefWidth="300" styleClass="combo-box"/>
-         <Button onAction="#savePlayerSelection" text="Next" styleClass="button-large"/>
+         <Text fx:id="PlayerSelectionTurn" styleClass="title-text" text="Player X" />
+         <Text styleClass="text-large" text="Please Enter Your Name" />
+         <TextField fx:id="PlayerName" prefHeight="31.0" prefWidth="172.0" styleClass="text-field" />
+         <Text styleClass="text-large" text="Choose Your Object" />
+         <ComboBox fx:id="ObjectSelect" prefWidth="300" styleClass="combo-box" />
+         <Button onAction="#savePlayerSelection" prefHeight="50.0" prefWidth="200.0" styleClass="button-large" text="Next" />
       </VBox>
    </center>
 </BorderPane>
