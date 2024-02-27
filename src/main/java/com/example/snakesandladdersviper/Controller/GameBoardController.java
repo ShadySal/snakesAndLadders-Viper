@@ -794,12 +794,18 @@ public class GameBoardController implements GameObserver {
 
         // Update the UI to reflect the new position
         updatePlayerPositionOnBoard(currentPlayer);
+
         if (hasPlayerWon(currentPlayer)) {
-            handlePlayerWin(currentPlayer);
+            // Create a GameEvent object with the winning player
+            GameEvent winEvent = new GameEvent(currentPlayer); // Adjust this line based on your GameEvent class constructor or methods
+
+            // Handle the player win with the correct GameEvent object
+            handlePlayerWin(winEvent);
         }
     }
+
     private void handlePlayerWin(GameEvent event) {
-        Player player = event.getPlayer();
+        Player player = event.getPlayer(); // Assuming event.getPlayer() returns a Player object
 
         // Show a congratulatory message or dialog
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -807,21 +813,15 @@ public class GameBoardController implements GameObserver {
         alert.setHeaderText(null);
         alert.setContentText("Congratulations " + player.getName() + "! You have won the game.");
         alert.showAndWait();
-        SysData.getInstance().addGameHistory(player, startTime);
+
+        // Assuming the addGameHistory method in SysData requires the winner's name, start time, and difficulty
+        // Here, you need to provide the correct difficulty level if required
+        String difficulty = "Easy"; // Example, adjust based on your game's logic
+        SysData.getInstance().addGameHistory(player.getName(), startTime, difficulty);
+
         // You can also add animations or sounds here to celebrate the win
     }
-    private void handlePlayerWin(Player player) {
-        // Show a congratulation message
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Game Over");
-        alert.setHeaderText(null);
-        alert.setContentText("Congratulations " + player.getName() + "! You have won the game.");
 
-        alert.showAndWait();
-
-        SysData.getInstance().addGameHistory(player, startTime);
-
-    }
     private void updatePlayerPositionOnBoard(Player player) {
         // Get the player's new position
         int newPosition = gameBoard.getPlayerPosition(player);
