@@ -53,9 +53,9 @@ public class SysData {
         this.questionList = questions;
     }
 
-   /* public ArrayList<GameHistory> getHistory() {
+    public ArrayList<GameHistory> getHistory() {
         return importHistory();
-    }*/
+    }
 
     /**
      * Adds a question and updates JSON file.
