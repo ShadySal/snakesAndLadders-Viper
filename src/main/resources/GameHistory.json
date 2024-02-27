@@ -1,16 +1,14 @@
 {
   "GameHistory": [
     {
-      "player": "Neil",
-      "date": "2023-01-02",
-      "score": "310",
-      "time": ""
+      "winner": "Alice",
+      "duration": "15 minutes",
+      "difficulty": "Easy"
     },
     {
-      "date": "2023-01-02",
-      "score": "1",
-      "player": "shady",
-      "time": ""
+      "winner": "Bob",
+      "duration": "30 minutes",
+      "difficulty": "Hard"
     }
   ]
 }

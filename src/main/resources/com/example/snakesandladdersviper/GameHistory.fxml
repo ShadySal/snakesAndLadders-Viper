@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <TableView fx:id="gameHistoryTable" prefHeight="200.0" prefWidth="400.0">
+        <columns>
+            <TableColumn fx:id="winnerColumn" prefWidth="100.0" text="Winner" />
+            <TableColumn fx:id="durationColumn" prefWidth="100.0" text="Duration" />
+            <TableColumn fx:id="difficultyColumn" prefWidth="100.0" text="Difficulty" />
+        </columns>
+    </TableView>
+</AnchorPane>
