@@ -52,14 +52,5 @@ public class GameHistoryController {
         });
     }
 
-    public void initialize() {
-        // Set up the columns to use the property getters from the GameHistory class
-        winnerColumn.setCellValueFactory(new PropertyValueFactory<>("winner"));
-        durationColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
-        difficultyColumn.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
 
-        // Fetch the game history data and populate the table
-        List<GameHistory> historyList = SysData.getInstance().getHistory();
-        historyTable.setItems(FXCollections.observableArrayList(historyList));
-    }
 }

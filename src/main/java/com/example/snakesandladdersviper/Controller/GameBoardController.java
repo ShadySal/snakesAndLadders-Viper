@@ -923,7 +923,6 @@ public class GameBoardController implements GameObserver {
         }
     }
 }
-
     //create 3d dice
 //    private Box create3DDice() {
 //        double size = 100.0;
@@ -1003,3 +1002,4 @@ public class GameBoardController implements GameObserver {
 //
 //        return String.valueOf(rollResult);
 //    }
+
