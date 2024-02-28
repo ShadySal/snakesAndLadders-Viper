@@ -29,6 +29,7 @@ import javafx.util.Pair;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class GameBoardController implements GameObserver {
     @FXML
@@ -462,7 +463,7 @@ public class GameBoardController implements GameObserver {
             backgroundColor += ((row + col) % 2 == 0) ? "green" : "white";
         }
 
-        tile.setStyle("-fx-background-color: " + backgroundColor + "; -fx-border-color: black;");
+        tile.setStyle(backgroundColor + "; -fx-border-color: black;");
 
         // Create a StackPane to hold the label
         StackPane stackPane = new StackPane();
@@ -616,21 +617,16 @@ public class GameBoardController implements GameObserver {
 
 
     private void processDiceOutcome(String outcome) {
-        boolean questionAnsweredCorrectly = false;
-
         if (outcome.equals("EASY_QUESTION")) {
-            questionAnsweredCorrectly = askQuestion("easy");
+            askQuestion("easy", isCorrect -> handleQuestionOutcome(isCorrect, "easy"));
         } else if (outcome.equals("MEDIUM_QUESTION")) {
-            questionAnsweredCorrectly = askQuestion("medium");
+            askQuestion("medium", isCorrect -> handleQuestionOutcome(isCorrect, "medium"));
         } else if (outcome.equals("HARD_QUESTION")) {
-            questionAnsweredCorrectly = askQuestion("hard");
+            askQuestion("hard", isCorrect -> handleQuestionOutcome(isCorrect, "hard"));
         } else {
             int steps = Integer.parseInt(outcome);
             movePlayer(steps);
-            return;
         }
-
-        handleQuestionOutcome(questionAnsweredCorrectly, outcome);
     }
 
     private void handleQuestionOutcome(boolean isCorrect, String difficulty) {
@@ -659,29 +655,31 @@ public class GameBoardController implements GameObserver {
         updatePlayerPositionOnBoard(currentPlayer);
     }
 
-    private boolean askQuestion(String difficultyLevel) {
+    private void askQuestion(String difficultyLevel, Consumer<Boolean> callback) {
         int difficulty = convertDifficultyLevelToNumber(difficultyLevel);
         Question question = SysData.getInstance().getRandomQuestion(difficulty);
 
         if (question == null) {
             showAlert("No Questions", "No questions available for this difficulty.");
-            return false;
+            callback.accept(false); // Assuming false for no question available
+            return;
         }
 
-        final boolean[] isCorrect = {false};
-
-        // Schedule the dialog to be shown on the JavaFX Application Thread
         Platform.runLater(() -> {
-            isCorrect[0] = showQuestionDialog(question, difficultyLevel);
+            boolean isCorrect = showQuestionDialog(question, difficultyLevel);
+            callback.accept(isCorrect);
         });
-
-        return isCorrect[0];
     }
+
 
     private boolean showQuestionDialog(Question question, String difficultyLevel) {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Question - " + capitalizeFirstLetter(difficultyLevel));
         dialog.setHeaderText(question.getQuestionText());
+
+        // Setting the owner of the dialog
+        Stage primaryStage = (Stage) BoardGrid.getScene().getWindow(); // Replace 'BoardGrid' with an actual component from your primary stage
+        dialog.initOwner(primaryStage);
 
         // Set up the buttons
         ButtonType confirmButtonType = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
@@ -705,9 +703,7 @@ public class GameBoardController implements GameObserver {
         confirmButton.setDisable(true);
 
         // Enable the "Confirm" button only when an option is selected
-        group.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
-            confirmButton.setDisable(newVal == null);
-        });
+        group.selectedToggleProperty().addListener((obs, oldVal, newVal) -> confirmButton.setDisable(newVal == null));
 
         // Show dialog and wait for response
         Optional<ButtonType> result = dialog.showAndWait();
@@ -727,6 +723,7 @@ public class GameBoardController implements GameObserver {
     private void showAnswerResultAlert(boolean isCorrect) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Answer Result");
+
         if (isCorrect) {
             alert.setHeaderText("Correct Answer!");
             alert.setContentText("You have answered the question correctly.");
@@ -734,9 +731,13 @@ public class GameBoardController implements GameObserver {
             alert.setHeaderText("Wrong Answer");
             alert.setContentText("Sorry, your answer is incorrect.");
         }
+
+        // Setting the owner of the alert
+        Stage primaryStage = (Stage) BoardGrid.getScene().getWindow(); // Replace 'BoardGrid' with an actual component from your primary stage
+        alert.initOwner(primaryStage);
+
         alert.showAndWait();
     }
-
     private String capitalizeFirstLetter(String input) {
         if (input == null || input.isEmpty()) {
             return input;
