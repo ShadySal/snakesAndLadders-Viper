@@ -41,6 +41,6 @@ public class InstructionsController {
 
     public void StartGame(ActionEvent event) throws IOException {
         Stage stage = (Stage) StartGameBtn.getScene().getWindow();
-        SceneUtils.changeScene(stage, "/com/example/snakesandladdersviper/InitializeGame.fxml", true);
+        SceneUtils.changeScene(stage, "/com/example/snakesandladdersviper/gameMode.fxml", true);
     }
 }
