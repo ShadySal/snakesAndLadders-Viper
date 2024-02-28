@@ -2,6 +2,13 @@
     -fx-background-image: url('/wp9142232.jpg');
     -fx-background-size: cover;
 }
+
+.stack-pane {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+}
+
 .vbox-container {
     -fx-spacing: 20px;
     -fx-alignment: center;
