@@ -88,6 +88,7 @@ public class QuestionsPageController {
                     // Get the current stage and set the new scene
                     Stage currentStage = (Stage) BackButton.getScene().getWindow();
                     currentStage.setScene(nextScene);
+                    currentStage.setFullScreen(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -133,6 +134,7 @@ public class QuestionsPageController {
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(editQuestionRoot));
+        stage.setFullScreen(true);
         stage.show();
     }
     private Question findQuestionByText(String questionText) {
@@ -165,7 +167,7 @@ public class QuestionsPageController {
 
         // Set the scene with addQuestion.fxml
         stage.setScene(new Scene(addQuestionParent));
-
+        stage.setFullScreen(true);
         // Show the updated stage
         stage.show();
     }

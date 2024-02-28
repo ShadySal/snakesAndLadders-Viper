@@ -6,7 +6,13 @@
 
 <BorderPane fx:id="contentPane" prefHeight="800.0" prefWidth="800.0" stylesheets="@../src/CssStyles/PlayerSelectionsStyle.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.PlayerSelectionController">
    <top>
-      <Button fx:id="BackButton" layoutX="10" layoutY="10" onAction="#BackButtonFunc" styleClass="button-back" text="Back" />
+      <HBox alignment="TOP_LEFT" spacing="20" style="-fx-background-color: transparent;">
+         <Button fx:id="BackButton" mnemonicParsing="false" onAction="#BackButtonFunc" prefHeight="31.0" prefWidth="117.0" style="-fx-background-color: linear-gradient(#7ed56f, #28b485); -fx-padding: 10px 20px; -fx-border-radius: 5px;" text="Back">
+            <font>
+               <Font name="Arial Black" size="15.0" />
+            </font>
+         </Button>
+      </HBox>
    </top>
    <center>
       <VBox alignment="CENTER" spacing="20" styleClass="vbox-container">

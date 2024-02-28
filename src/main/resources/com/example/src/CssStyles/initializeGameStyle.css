@@ -1,8 +1,12 @@
 .root {
+    -fx-background-color: rgba(240, 244, 247, 0.9); /* Slightly increase transparency for readability */
     -fx-background-image: url('/wp9142232.jpg');
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
     -fx-background-size: cover;
-    -fx-background-color: #f0f4f7;
-
+    -fx-padding: 40px; /* Add more padding */
+    -fx-border-radius: 20px; /* Rounded corners for modern look */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 20, 0.3, 0, 12); /* Soft shadow for depth */
 }
 
 .button {

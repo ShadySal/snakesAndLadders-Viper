@@ -26,7 +26,7 @@ public class gameModeController {
 
             // Get the current stage from the event source
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
+            stage.setTitle("Initialize Game Vs Bot");
             // Set the new scene on the current stage
             stage.setScene(new Scene(root));
             // Set full-screen mode
@@ -50,6 +50,7 @@ public class gameModeController {
             stage.setTitle("Initialize Game");
             // Set the new scene on the current stage
             stage.setScene(new Scene(root));
+            stage.setFullScreen(true);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace(); // Handle the exception as appropriate
