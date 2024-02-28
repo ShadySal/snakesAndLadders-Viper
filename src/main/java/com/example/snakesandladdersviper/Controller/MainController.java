@@ -131,6 +131,27 @@ public class MainController implements Initializable{
         currentStage.show();
     }
 
+    public void showGameHistory(ActionEvent event) {
+        try {
+            // Load the GameHistory.fxml file
+            Parent gameHistoryPage = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/GameHistory.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Set the scene with the GameHistory view, adjust size as needed
+            stage.setScene(new Scene(gameHistoryPage, 800, 600)); // Adjust the size according to your GameHistory view's requirement
+
+            // Optional: Set full-screen mode for the Game History page
+            stage.setFullScreen(true);
+
+            // Show the Game History page
+            stage.show();
+        } catch (IOException e) {
+            // Handle the case where the FXML file couldn't be loaded
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            showError("Failed to load game history.", currentStage);
+        }
+    }
+
 
     public void InstructionsOfGame(ActionEvent event) {
         try {

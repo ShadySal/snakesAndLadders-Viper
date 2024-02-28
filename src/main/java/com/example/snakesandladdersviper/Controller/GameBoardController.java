@@ -29,9 +29,8 @@ import javafx.util.Pair;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-import java.util.function.Consumer;
 
-public class GameBoardController {
+public class GameBoardController implements GameObserver {
     @FXML
     private GridPane BoardGrid;
     @FXML
@@ -67,47 +66,49 @@ public class GameBoardController {
     private Map<Player, ImageView> playerImages;
 
 
-//    @Override
-//    public void update(GameEvent event) {
-//        switch (event.getEventType()) {
-//            case PLAYER_MOVED:
-//                handlePlayerMove(event);
-//                break;
-//            case SPECIAL_TILE_HIT:
-//                handleSpecialTile(event);
-//                break;
-//            case PLAYER_WON:
-//                handlePlayerWin(event);
-//                break;
-//            // Add other cases as needed...
-//        }
-//    }
-//    private void handlePlayerMove(GameEvent event) {
-//        Player player = event.getPlayer();
-//        int newPosition = event.getNewPosition();
-//
-//        // Find the corresponding tile Pane for the new position
-//        Pane newTile = getTileForPosition(newPosition);
-//
-//        if (newTile != null) {
-//            ImageView playerImage = playerImages.get(player);
-//
-//            // Remove player image from the old position
-//            Pane oldTile = getTileForPlayer(player);
-//            oldTile.getChildren().remove(playerImage);
-//
-//            // Add player image to the new position
-//            newTile.getChildren().add(playerImage);
-//
-//            // Adjust the position of the image in the tile
-//            // You might want to animate this movement for a better UX
-//            int imageIndex = newTile.getChildren().indexOf(playerImage);
-//            double xOffset = (imageIndex - 0.8) * 40;
-//            double yOffset = (imageIndex - 0.3) * 40;
-//            playerImage.setTranslateX(xOffset);
-//            playerImage.setTranslateY(yOffset);
-//        }
-//    }
+    @Override
+    public void update(GameEvent event) {
+        switch (event.getEventType()) {
+            case PLAYER_MOVED:
+                handlePlayerMove(event);
+                break;
+            case SPECIAL_TILE_HIT:
+                handleSpecialTile(event);
+                break;
+            case PLAYER_WON:
+                handlePlayerWin(event);
+                break;
+            // Add other cases as needed...
+        }
+    }
+
+    private void handlePlayerMove(GameEvent event) {
+        Player player = event.getPlayer();
+        int newPosition = event.getNewPosition();
+
+        // Find the corresponding tile Pane for the new position
+        Pane newTile = getTileForPosition(newPosition);
+
+        if (newTile != null) {
+            ImageView playerImage = playerImages.get(player);
+
+            // Remove player image from the old position
+            Pane oldTile = getTileForPlayer(player);
+            oldTile.getChildren().remove(playerImage);
+
+            // Add player image to the new position
+            newTile.getChildren().add(playerImage);
+
+            // Adjust the position of the image in the tile
+            // You might want to animate this movement for a better UX
+            int imageIndex = newTile.getChildren().indexOf(playerImage);
+            double xOffset = (imageIndex - 0.8) * 40;
+            double yOffset = (imageIndex - 0.3) * 40;
+            playerImage.setTranslateX(xOffset);
+            playerImage.setTranslateY(yOffset);
+        }
+    }
+
     private void handleSpecialTile(GameEvent event) {
         Player player = event.getPlayer();
         int tilePosition = event.getTilePosition();
@@ -127,6 +128,7 @@ public class GameBoardController {
             // Handle other special tile types...
         }
     }
+
     public void initialize() {
         startTime = System.currentTimeMillis();
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> updateClock()));
@@ -142,6 +144,7 @@ public class GameBoardController {
             System.out.println("Players list is null.");
         }
     }
+
     private void loadPlayerImages() {
         for (Player player : players) {
             String color = player.getPlayerColor();
@@ -162,6 +165,7 @@ public class GameBoardController {
             }
         }
     }
+
     //dice animation
     private void setupDiceRollAnimation() {
         diceRollAnimation = new Timeline(new KeyFrame(Duration.millis(100), e -> {
@@ -179,6 +183,7 @@ public class GameBoardController {
         }));
         diceRollAnimation.setCycleCount(10); // Adjust the cycle count to control the speed of the animation
     }
+
     //number generation
     private String generateRandomNumber(Difficulty difficulty) {
         Random random = new Random();
@@ -187,22 +192,26 @@ public class GameBoardController {
             int maxRoll = 7; // 0-4 for numbers, 5 for easy question, 6 for medium question, 7 for hard question
             rollResult = random.nextInt(maxRoll + 1);
             switch (rollResult) {
-                case 5: return "EASY_QUESTION";
-                case 6: return "MEDIUM_QUESTION";
-                case 7: return "HARD_QUESTION";
-                default: return String.valueOf(rollResult);
+                case 5:
+                    return "EASY_QUESTION";
+                case 6:
+                    return "MEDIUM_QUESTION";
+                case 7:
+                    return "HARD_QUESTION";
+                default:
+                    return String.valueOf(rollResult);
             }
         } else if (difficulty == Difficulty.MEDIUM) {
             boolean isQuestionTurn = random.nextBoolean(); // 50% chance of getting question
             if (isQuestionTurn) {
                 rollResult = random.nextInt(3);
-                if(rollResult == 0){
+                if (rollResult == 0) {
                     return "EASY_QUESTION";
                 }
-                if(rollResult == 1){
+                if (rollResult == 1) {
                     return "MEDIUM_QUESTION";
                 }
-                if(rollResult == 2){
+                if (rollResult == 2) {
                     return "HARD_QUESTION";
                 }
             } else {
@@ -214,7 +223,7 @@ public class GameBoardController {
                 return "HARD_QUESTION";
             } else if (random.nextDouble() < 0.5) { // Additional 25% chance for an easy or medium question
                 rollResult = random.nextInt(2);
-                if(rollResult == 0) {
+                if (rollResult == 0) {
                     return "EASY_QUESTION";
                 } else {
                     return "MEDIUM_QUESTION";
@@ -228,6 +237,7 @@ public class GameBoardController {
         return "Invalid difficulty";
         // Other difficulty cases...
     }
+
     private void updateClock() {
         long now = System.currentTimeMillis();
         long elapsedMillis = now - startTime;
@@ -295,6 +305,7 @@ public class GameBoardController {
         Pair<List<Snake>, List<Ladder>> snakesAndLadders = createDynamicSnakesAndLadders(difficulty, boardSize, occupiedPositions);
         placeSnakesAndLadders(snakesAndLadders.getKey(), snakesAndLadders.getValue());
     }
+
     private Set<Integer> determineOccupiedPositions(Map<Integer, String> specialTiles, int boardSize) {
         Set<Integer> occupiedPositions = new HashSet<>();
 
@@ -351,6 +362,7 @@ public class GameBoardController {
             snakes.add(GameElementFactory.createSnake(start, end));
         }
     }
+
     private void addRandomLadders(List<Ladder> ladders, int numberOfLadders, int maxPosition, Set<Integer> occupiedPositions) {
         Random random = new Random();
         for (int i = 0; i < numberOfLadders; i++) {
@@ -364,6 +376,7 @@ public class GameBoardController {
             ladders.add(GameElementFactory.createLadder(start, end));
         }
     }
+
     private void placeSnakesAndLadders(List<Snake> snakes, List<Ladder> ladders) {
         for (Snake snake : snakes) {
             placeSnakeOnBoard(snake);
@@ -388,6 +401,7 @@ public class GameBoardController {
 //        // Additional logic for positioning the ladder image
 //        startTile.getChildren().add(ladderImage);
     }
+
     private int calculateTileNumber(int row, int col, int size) {
         if (row % 2 == 0) {
             return (size * row) + col + 1;
@@ -395,6 +409,7 @@ public class GameBoardController {
             return (size * (row + 1)) - col;
         }
     }
+
     private Map<Integer, String> generateSpecialTiles(Difficulty difficulty, int size) {
         Map<Integer, String> specialTiles = new HashMap<>();
         Random random = new Random();
@@ -447,7 +462,7 @@ public class GameBoardController {
             backgroundColor += ((row + col) % 2 == 0) ? "green" : "white";
         }
 
-        tile.setStyle(backgroundColor + "; -fx-border-color: black;");
+        tile.setStyle("-fx-background-color: " + backgroundColor + "; -fx-border-color: black;");
 
         // Create a StackPane to hold the label
         StackPane stackPane = new StackPane();
@@ -463,7 +478,6 @@ public class GameBoardController {
 
         BoardGrid.add(tile, col, size - row - 1);
     }
-
 
 
     private void setupGridConstraints(int size) {
@@ -498,7 +512,8 @@ public class GameBoardController {
         }
     }
 
-    //display players on Game board
+
+    //display players on Gameboard
     public void displayPlayers(List<Player> players) {
         for (Player player : players) {
             ImageView playerImage = playerImages.get(player);
@@ -600,19 +615,24 @@ public class GameBoardController {
     }
 
 
-
     private void processDiceOutcome(String outcome) {
+        boolean questionAnsweredCorrectly = false;
+
         if (outcome.equals("EASY_QUESTION")) {
-            askQuestion("easy", isCorrect -> handleQuestionOutcome(isCorrect, "easy"));
+            questionAnsweredCorrectly = askQuestion("easy");
         } else if (outcome.equals("MEDIUM_QUESTION")) {
-            askQuestion("medium", isCorrect -> handleQuestionOutcome(isCorrect, "medium"));
+            questionAnsweredCorrectly = askQuestion("medium");
         } else if (outcome.equals("HARD_QUESTION")) {
-            askQuestion("hard", isCorrect -> handleQuestionOutcome(isCorrect, "hard"));
+            questionAnsweredCorrectly = askQuestion("hard");
         } else {
             int steps = Integer.parseInt(outcome);
             movePlayer(steps);
+            return;
         }
+
+        handleQuestionOutcome(questionAnsweredCorrectly, outcome);
     }
+
     private void handleQuestionOutcome(boolean isCorrect, String difficulty) {
         Player currentPlayer = players.get(currentPlayerIndex);
         if (isCorrect) {
@@ -638,30 +658,30 @@ public class GameBoardController {
 
         updatePlayerPositionOnBoard(currentPlayer);
     }
-    private void askQuestion(String difficultyLevel, Consumer<Boolean> callback) {
+
+    private boolean askQuestion(String difficultyLevel) {
         int difficulty = convertDifficultyLevelToNumber(difficultyLevel);
         Question question = SysData.getInstance().getRandomQuestion(difficulty);
 
         if (question == null) {
             showAlert("No Questions", "No questions available for this difficulty.");
-            callback.accept(false);
-            return;
+            return false;
         }
 
+        final boolean[] isCorrect = {false};
+
+        // Schedule the dialog to be shown on the JavaFX Application Thread
         Platform.runLater(() -> {
-            boolean isCorrect = showQuestionDialog(question, difficultyLevel);
-            callback.accept(isCorrect);
+            isCorrect[0] = showQuestionDialog(question, difficultyLevel);
         });
+
+        return isCorrect[0];
     }
 
     private boolean showQuestionDialog(Question question, String difficultyLevel) {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Question - " + capitalizeFirstLetter(difficultyLevel));
         dialog.setHeaderText(question.getQuestionText());
-
-        // Setting the owner of the dialog
-        Stage primaryStage = (Stage) BoardGrid.getScene().getWindow(); // Replace 'BoardGrid' with an actual component from your primary stage
-        dialog.initOwner(primaryStage);
 
         // Set up the buttons
         ButtonType confirmButtonType = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
@@ -685,7 +705,9 @@ public class GameBoardController {
         confirmButton.setDisable(true);
 
         // Enable the "Confirm" button only when an option is selected
-        group.selectedToggleProperty().addListener((obs, oldVal, newVal) -> confirmButton.setDisable(newVal == null));
+        group.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            confirmButton.setDisable(newVal == null);
+        });
 
         // Show dialog and wait for response
         Optional<ButtonType> result = dialog.showAndWait();
@@ -702,11 +724,9 @@ public class GameBoardController {
         return false;
     }
 
-
     private void showAnswerResultAlert(boolean isCorrect) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Answer Result");
-
         if (isCorrect) {
             alert.setHeaderText("Correct Answer!");
             alert.setContentText("You have answered the question correctly.");
@@ -714,11 +734,6 @@ public class GameBoardController {
             alert.setHeaderText("Wrong Answer");
             alert.setContentText("Sorry, your answer is incorrect.");
         }
-
-        // Setting the owner of the alert
-        Stage primaryStage = (Stage) BoardGrid.getScene().getWindow(); // Replace 'BoardGrid' with an actual component from your primary stage
-        alert.initOwner(primaryStage);
-
         alert.showAndWait();
     }
 
@@ -736,6 +751,7 @@ public class GameBoardController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
     private int convertDifficultyLevelToNumber(String difficultyLevel) {
         switch (difficultyLevel.toLowerCase()) {
             case "easy":
@@ -781,7 +797,7 @@ public class GameBoardController {
         try {
             Integer.parseInt(str);
             return true;
-        } catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return false;
         }
     }
@@ -794,12 +810,18 @@ public class GameBoardController {
 
         // Update the UI to reflect the new position
         updatePlayerPositionOnBoard(currentPlayer);
+
         if (hasPlayerWon(currentPlayer)) {
-            handlePlayerWin(currentPlayer);
+            // Create a GameEvent object with the winning player
+            GameEvent winEvent = new GameEvent(currentPlayer); // Adjust this line based on your GameEvent class constructor or methods
+
+            // Handle the player win with the correct GameEvent object
+            handlePlayerWin(winEvent);
         }
     }
+
     private void handlePlayerWin(GameEvent event) {
-        Player player = event.getPlayer();
+        Player player = event.getPlayer(); // Assuming event.getPlayer() returns a Player object
 
         // Show a congratulatory message or dialog
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -807,21 +829,15 @@ public class GameBoardController {
         alert.setHeaderText(null);
         alert.setContentText("Congratulations " + player.getName() + "! You have won the game.");
         alert.showAndWait();
-        SysData.getInstance().addGameHistory(player, startTime);
+
+        // Assuming the addGameHistory method in SysData requires the winner's name, start time, and difficulty
+        // Here, you need to provide the correct difficulty level if required
+        String difficulty = "Easy"; // Example, adjust based on your game's logic
+        SysData.getInstance().addGameHistory(player.getName(), startTime, difficulty);
+
         // You can also add animations or sounds here to celebrate the win
     }
-    private void handlePlayerWin(Player player) {
-        // Show a congratulation message
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Game Over");
-        alert.setHeaderText(null);
-        alert.setContentText("Congratulations " + player.getName() + "! You have won the game.");
 
-        alert.showAndWait();
-
-        SysData.getInstance().addGameHistory(player, startTime);
-
-    }
     private void updatePlayerPositionOnBoard(Player player) {
         // Get the player's new position
         int newPosition = gameBoard.getPlayerPosition(player);
@@ -851,6 +867,7 @@ public class GameBoardController {
             playerImage.setTranslateY(yOffset);
         }
     }
+
     private Circle getPlayerCircle(Player player) {
         return playerCircles.get(player);
     }
@@ -876,7 +893,7 @@ public class GameBoardController {
         }
     }
 
-    public void setPlayers(List<Player> players){
+    public void setPlayers(List<Player> players) {
         this.players = players;
         playerImages = new HashMap<>();
         if (players != null) {
@@ -892,6 +909,7 @@ public class GameBoardController {
         int totalTiles = getTotalTilesForDifficulty(difficulty);
         return gameBoard.getPlayerPosition(player) == totalTiles;
     }
+
     private int getTotalTilesForDifficulty(Difficulty difficulty) {
         switch (difficulty) {
             case EASY:
@@ -904,7 +922,7 @@ public class GameBoardController {
                 throw new IllegalArgumentException("Unrecognized difficulty level");
         }
     }
-
+}
     //create 3d dice
 //    private Box create3DDice() {
 //        double size = 100.0;
@@ -984,4 +1002,4 @@ public class GameBoardController {
 //
 //        return String.valueOf(rollResult);
 //    }
-}
+

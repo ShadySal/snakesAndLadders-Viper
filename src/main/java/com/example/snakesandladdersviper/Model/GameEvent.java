@@ -17,6 +17,10 @@ public class GameEvent {
         this.newPosition = newPosition;
         this.additionalInfo = additionalInfo;
     }
+
+    public GameEvent(Player currentPlayer) {
+    }
+
     // Getters
     public GameEventType getEventType() {
         return eventType;
@@ -55,4 +59,5 @@ public class GameEvent {
     public String getTileType() {
         return tileType;
     }
+    
 }

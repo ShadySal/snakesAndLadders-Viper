@@ -18,7 +18,7 @@
             <children>
                 <Text fx:id="titleLabel" styleClass="title-text" text="Snakes And Ladders" wrappingWidth="472.640625" />
                 <Button fx:id="StartGameBtn" onAction="#StartGame" prefHeight="61.0" prefWidth="177.0" styleClass="menu-button" text="Start Game" />
-                <Button fx:id="GameHistoryBtn" prefHeight="60.0" prefWidth="168.0" styleClass="menu-button" text="Game History" />
+                <Button fx:id="GameHistoryBtn" onAction="#showGameHistory" prefHeight="60.0" prefWidth="168.0" styleClass="menu-button" text="Game History" />
                 <Button fx:id="QuestionManagementBtn" onAction="#onQuestionManagementBtnClicked" prefHeight="58.0" prefWidth="277.0" styleClass="menu-button" text="Question Management Wizard" />
                 <Button fx:id="InstructionsBtn" onAction="#InstructionsOfGame" prefHeight="59.0" prefWidth="163.0" styleClass="menu-button" text="Instructions" />
             </children>

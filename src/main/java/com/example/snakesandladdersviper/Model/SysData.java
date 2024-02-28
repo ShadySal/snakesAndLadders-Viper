@@ -72,20 +72,28 @@ public class SysData {
         saveQuestionsToJsonFile();
     }
 
-    public void addGameHistory( Player player,long startTimeMillis ) {
-        String gameDuration = calculateGameDuration(startTimeMillis);
-        JSONObject jsonObject = readJsonFile(HISTORY_FILE);
-        JSONArray historyArray = jsonObject.getJSONArray("history");
 
-        JSONObject newScoreJson = new JSONObject();
-        newScoreJson.put("player", player.getName());
-        newScoreJson.put("score", player.getScore());
-        newScoreJson.put("date", LocalDate.now());
-        newScoreJson.put("duration", gameDuration);
 
-        historyArray.put(newScoreJson);
-        saveJsonToFile(jsonObject, HISTORY_FILE);
+    public void addGameHistory(String winnerName, long startTimeMillis, String difficulty) {
+        String gameDuration = calculateGameDuration(startTimeMillis); // Ensure this method returns a duration in minutes as a string, e.g., "15 minutes"
+        JSONObject jsonObject = readJsonFile(HISTORY_FILE); // Implement this method to read the JSON file and return a JSONObject
+        JSONArray gameHistoryArray = jsonObject.optJSONArray("GameHistory");
+        if (gameHistoryArray == null) {
+            gameHistoryArray = new JSONArray();
+            jsonObject.put("GameHistory", gameHistoryArray);
+        }
+
+        JSONObject newGameHistoryJson = new JSONObject();
+        newGameHistoryJson.put("winner", winnerName);
+        newGameHistoryJson.put("duration", gameDuration);
+        newGameHistoryJson.put("difficulty", difficulty);
+
+        gameHistoryArray.put(newGameHistoryJson);
+        saveJsonToFile(jsonObject, HISTORY_FILE); // Implement this method to save the JSONObject back to the file
     }
+
+
+
     public String calculateGameDuration(long startTimeMillis) {
         long durationMillis = System.currentTimeMillis() - startTimeMillis;
         long seconds = (durationMillis / 1000) % 60;
@@ -101,20 +109,25 @@ public class SysData {
      */
     private ArrayList<GameHistory> importHistory() {
         ArrayList<GameHistory> historyList = new ArrayList<>();
-        JSONObject jsonObject = readJsonFile(HISTORY_FILE);
+        JSONObject jsonObject = readJsonFile(HISTORY_FILE); // Ensure this method is implemented to read your JSON file
 
-        JSONArray historyArray = jsonObject.getJSONArray("history");
-        for (Object obj : historyArray) {
-            JSONObject historyJson = (JSONObject) obj;
-            GameHistory gameHistory = new GameHistory(
-                    historyJson.getString("player"),
-                    historyJson.getInt("score"),
-                    parseDate(historyJson.getString("date"))
-            );
-            historyList.add(gameHistory);
+        // Access the "GameHistory" array from the JSON object
+        JSONArray historyArray = jsonObject.optJSONArray("GameHistory");
+        if (historyArray != null) {
+            for (Object obj : historyArray) {
+                JSONObject historyJson = (JSONObject) obj;
+                // Create a new GameHistory object with the winner, duration, and difficulty
+                GameHistory gameHistory = new GameHistory(
+                        historyJson.getString("winner"),
+                        historyJson.getString("duration"),
+                        historyJson.getString("difficulty")
+                );
+                historyList.add(gameHistory);
+            }
         }
         return historyList;
     }
+
 
     private LocalDate parseDate(String dateString) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -244,9 +257,12 @@ public class SysData {
 
     @Override
     public String toString() {
+        // Make sure history is imported and cached
+        ArrayList<GameHistory> history = importHistory();
         return "SysData{" +
                 "questions=" + questionList +
-                ", history=" + getHistory() +
+                ", history=" + history +
                 '}';
     }
+
 }
