@@ -122,7 +122,7 @@ public class MainController implements Initializable{
         Stage currentStage = (Stage) StartGameBtn.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/gameMode.fxml"));
         currentStage.setTitle("Select Game Mode");
-        currentStage.setScene(new Scene(root, 800, 800));
+      currentStage.setScene(new Scene(root, 800, 800));
 
         // Set full-screen mode
         currentStage.setFullScreen(true);
