@@ -59,19 +59,7 @@
     -fx-cursor: hand; /* Cursor change to indicate clickable */
 }
 
-.custom-table-view {
-    -fx-border-color: #666;
-    -fx-border-width: 1;
-    -fx-border-radius: 5;
-    -fx-background-color: #FFF;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 0.0, 0.0);
-}
 
-.custom-table-column {
-    -fx-background-color: #EEE;
-    -fx-font-weight: bold;
-    -fx-text-fill: #333;
-}
 
 
 

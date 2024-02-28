@@ -33,6 +33,28 @@ public class GameHistoryController {
 
     @FXML
     public Button BackButton;
+
+
+    @FXML
+    private TableView<GameHistory> gameHistoryTable;
+
+
+    @FXML
+    public void initialize() {
+        // Bind the table columns to the properties of the GameHistory class
+        winnerColumn.setCellValueFactory(new PropertyValueFactory<>("winnerName"));
+        durationColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
+        difficultyColumn.setCellValueFactory(new PropertyValueFactory<>("difficulty"));
+
+        // Load the game history data into the table
+        loadGameHistoryData();
+    }
+
+    private void loadGameHistoryData() {
+        // Assuming SysData.getHistory() returns a List<GameHistory>
+        List<GameHistory> historyList = SysData.getInstance().getHistory();
+        gameHistoryTable.setItems(FXCollections.observableArrayList(historyList));
+    }
     @FXML
     void BackButton(ActionEvent event) {
         Stage stage = (Stage) BackButton.getScene().getWindow();
