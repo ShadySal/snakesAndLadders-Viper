@@ -3,16 +3,16 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="HistoryContainer" prefHeight="600.0" prefWidth="800.0" alignment="TOP_CENTER" spacing="20" styleClass="instructions-container" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.GameHistoryController" stylesheets="@../src/CssStyles/InstructionStyle.css">
+<VBox fx:id="HistoryContainer" prefHeight="600.0" prefWidth="800.0" alignment="TOP_CENTER" spacing="20" styleClass="HistoryContainer-container" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.GameHistoryController" stylesheets="@../src/CssStyles/GameHistory.css">
     <children>
         <Text text="Game History" styleClass="page-title" />
 
-        <StackPane VBox.vgrow="ALWAYS" alignment="CENTER">
-            <TableView fx:id="gameHistoryTable" prefHeight="150.0" prefWidth="350.0" styleClass="custom-table-view">
+        <StackPane alignment="CENTER" VBox.vgrow="ALWAYS">
+            <TableView fx:id="gameHistoryTable" prefHeight="200.0" prefWidth="350.0" styleClass="custom-table-view">
                 <columns>
-                    <TableColumn fx:id="winnerColumn" prefWidth="100.0" text="Winner" styleClass="custom-table-column" />
-                    <TableColumn fx:id="durationColumn" prefWidth="100.0" text="Duration" styleClass="custom-table-column" />
-                    <TableColumn fx:id="difficultyColumn" prefWidth="100.0" text="Difficulty" styleClass="custom-table-column" />
+                    <TableColumn fx:id="winnerColumn" prefWidth="116.66" text="Winner" styleClass="custom-table-column" />
+                    <TableColumn fx:id="durationColumn" prefWidth="116.66" text="Duration" styleClass="custom-table-column" />
+                    <TableColumn fx:id="difficultyColumn" prefWidth="116.66" text="Difficulty" styleClass="custom-table-column" />
                 </columns>
             </TableView>
         </StackPane>
