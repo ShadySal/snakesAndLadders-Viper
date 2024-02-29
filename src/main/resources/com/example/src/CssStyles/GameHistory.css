@@ -1,0 +1,78 @@
+/* GameHistory.css */
+
+.HistoryContainer-container {
+    -fx-background-color: rgba(240, 244, 247, 0.9);
+    -fx-background-image: url('/wp9142232.jpg');
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+    -fx-padding: 40px;
+    -fx-border-radius: 20px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 20, 0.3, 0, 12);
+}
+
+.page-title {
+    -fx-font-size: 48px; /* Increased font size for page title */
+    -fx-font-weight: bold;
+    -fx-fill: linear-gradient(from 0% 0% to 100% 100%, #2e4a8e, #00aa00);
+    -fx-effect: dropshadow(gaussian, black, 5, 0, 0, 1);
+}
+
+
+.custom-table-view {
+    -fx-pref-width: 300px; /* Table width */
+    -fx-pref-height: 300px; /* Table height */
+    -fx-max-height: 300px; /* To match preferred height */
+    -fx-max-width: 500px; /* To match preferred width */
+    -fx-border-color: black;
+    -fx-table-cell-border-color: transparent;
+    -fx-alignment: center; /* This will center the content within the TableView */
+
+}
+
+
+.custom-table-column {
+    -fx-font-size: 20px; /* Increased font size for table columns */
+    -fx-alignment: center-left;
+    -fx-pref-width: 133px; /* Each column will be roughly a third of the table width */
+}
+
+.buttons-container {
+    -fx-padding: 30px;
+    -fx-spacing: 15px;
+}
+
+.action-button {
+    -fx-font-size: 24px; /* Increased font size for action buttons */
+    -fx-background-color: linear-gradient(to bottom, #7ed56f, #28b485);
+    -fx-text-fill: white;
+    -fx-padding: 15px 30px;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
+
+.action-button:hover {
+    -fx-background-color: linear-gradient(to bottom, #28b485, #7ed56f);
+    -fx-cursor: hand;
+}
+
+/* If you have other sections, you can style them accordingly */
+.section-title {
+    -fx-font-size: 30px; /* Increased font size for section titles */
+    -fx-font-weight: bold;
+    -fx-fill: #2e4a8e;
+}
+
+.section-content {
+    -fx-font-size: 22px; /* Increased font size for section content */
+    -fx-fill: #4a4a4a;
+    -fx-text-align: justify;
+    -fx-wrap-text: true;
+    -fx-max-width: 700px;
+}
+
+/* Add this for the StackPane that wraps your TableView to center it */
+.stack-pane {
+    -fx-alignment: center;
+}
