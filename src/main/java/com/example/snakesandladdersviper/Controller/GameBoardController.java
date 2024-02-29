@@ -31,7 +31,7 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class GameBoardController implements GameObserver {
+public class GameBoardController {
     @FXML
     private GridPane BoardGrid;
     @FXML
@@ -65,23 +65,10 @@ public class GameBoardController implements GameObserver {
     private List<Player> players = new ArrayList<Player>();
     private Map<Player, Circle> playerCircles;
     private Map<Player, ImageView> playerImages;
+    private Set<Integer> occupiedPositions;
+    private int bsize;
 
 
-    @Override
-    public void update(GameEvent event) {
-        switch (event.getEventType()) {
-            case PLAYER_MOVED:
-                handlePlayerMove(event);
-                break;
-            case SPECIAL_TILE_HIT:
-                handleSpecialTile(event);
-                break;
-            case PLAYER_WON:
-                handlePlayerWin(event);
-                break;
-            // Add other cases as needed...
-        }
-    }
 
     private void handlePlayerMove(GameEvent event) {
         Player player = event.getPlayer();
@@ -137,6 +124,8 @@ public class GameBoardController implements GameObserver {
         timeline.play();
         playerCircles = new HashMap<>();
         playerImages = new HashMap<>();
+        occupiedPositions = new HashSet<>();
+
         setupDiceRollAnimation();
 
         if (players != null) {
@@ -251,10 +240,15 @@ public class GameBoardController implements GameObserver {
 
     public void initializeBoard(Difficulty difficulty, List<Player> players) {
         int size = determineBoardSize(difficulty);
+        this.bsize = size*size;
+        System.out.println(bsize);
         gameBoard = new GameBoard(size, size);
+        List<Snake> snakes = new ArrayList<>(); // List to store snakes
+        List<Ladder> ladders = new ArrayList<>();
+        Map<Integer, String> specialTiles = generateSpecialTiles(difficulty, size);
+        Set<Integer> occupiedPositions = determineOccupiedPositions(specialTiles, size); // Determine occupied positions
 
         // Initialize special tiles (questions and surprise)
-        Map<Integer, String> specialTiles = generateSpecialTiles(difficulty, size);
 
         this.difficulty = difficulty;
         gameBoard.setDice(new Dice(6, EASY_GAME_QUESTION_PROBABILITY));
@@ -279,12 +273,26 @@ public class GameBoardController implements GameObserver {
                 createTile(number, col, row, size, specialTiles.getOrDefault(number, ""));
             }
         }
-        generateSnakesAndLadders(difficulty);
+        switch (difficulty) {
+            case EASY:
+                generateSnakesAndLaddersForEasy(snakes, ladders, occupiedPositions, bsize);
+                break;
+            case MEDIUM:
+                generateSnakesAndLaddersForMedium(snakes, ladders, occupiedPositions, bsize);
+                break;
+            case HARD:
+                generateSnakesAndLaddersForHard(snakes, ladders, occupiedPositions, bsize);
+                break;
+            default:
+                throw new IllegalArgumentException("Unrecognized difficulty level");
+        }
+
+        // Place the snakes and ladders on the board
+        placeSnakesAndLadders(snakes, ladders);
 
         setPlayers(players);
-
         updatePlayerTurn();
-//
+
 //        dice = create3DDice();
 //        dice.setOnMouseClicked(event -> onDiceRoll());
 //
@@ -297,15 +305,180 @@ public class GameBoardController implements GameObserver {
 
 
     }
+    // Generate snakes and ladders for the easy difficulty
+    private void generateSnakesAndLaddersForEasy(List<Snake> snakes, List<Ladder> ladders, Set<Integer> occupiedPosition, int maxPosition) {
+        // Generate 4 snakes, one of each type (Yellow, Green, Blue, Red)
+        // Yellow: moves back one row
+        // Green: moves back two rows
+        // Blue: moves back three rows
+        // Red: moves back to the start
+        System.out.println("reached generateSnakesAndLaddersForEasy");
+        int minPositionForYellow = maxPosition / bsize; // Assuming 'size' is the dimension of your board
+        generateSnake(snakes, occupiedPositions, maxPosition, "yellow", minPositionForYellow);
+        // Other snake types
+        generateSnake(snakes, occupiedPositions, maxPosition, "green", 2); // Adjust the min start position as needed
+        generateSnake(snakes, occupiedPositions, maxPosition, "blue", 3);  // Adjust the min start position as needed
+        generateSnake(snakes, occupiedPositions, maxPosition, "red", 2);
 
-    private void generateSnakesAndLadders(Difficulty difficulty) {
-        int boardSize = determineBoardSize(difficulty);
-        Map<Integer, String> specialTiles = generateSpecialTiles(difficulty, boardSize);
-        Set<Integer> occupiedPositions = determineOccupiedPositions(specialTiles, boardSize);
 
-        Pair<List<Snake>, List<Ladder>> snakesAndLadders = createDynamicSnakesAndLadders(difficulty, boardSize, occupiedPositions);
-        placeSnakesAndLadders(snakesAndLadders.getKey(), snakesAndLadders.getValue());
+        // Generate 4 ladders of lengths 1, 2, 3, and 4
+        for (int i = 1; i <= 4; i++) {
+            generateLadder(ladders, occupiedPositions, maxPosition, i);
+        }
     }
+
+    // Generate snakes and ladders for the medium difficulty
+    private void generateSnakesAndLaddersForMedium(List<Snake> snakes, List<Ladder> ladders, Set<Integer> occupiedPositions, int maxPosition) {
+        // Min start positions for snake types
+        int minPositionForYellow = maxPosition / bsize;
+        int minPositionForGreen = 2;
+        int minPositionForBlue = 3;
+        // No restriction for red snakes
+
+        // Generate 6 snakes
+        for (int i = 0; i < 2; i++) {
+            generateSnake(snakes, occupiedPositions, maxPosition, "red", 2);
+            generateSnake(snakes, occupiedPositions, maxPosition, "green", minPositionForGreen);
+        }
+        generateSnake(snakes, occupiedPositions, maxPosition, "blue", minPositionForBlue);
+        generateSnake(snakes, occupiedPositions, maxPosition, "yellow", minPositionForYellow);
+
+        // Generate 6 ladders of lengths 1 to 6
+        for (int i = 1; i <= 6; i++) {
+            generateLadder(ladders, occupiedPositions, maxPosition, i);
+        }
+    }
+
+    // Generate snakes and ladders for the hard difficulty
+    private void generateSnakesAndLaddersForHard(List<Snake> snakes, List<Ladder> ladders, Set<Integer> occupiedPositions, int maxPosition) {
+        int minPositionForYellow = maxPosition / bsize;
+        int minPositionForGreen = 2;
+        int minPositionForBlue = 3;
+        // No restriction for red snakes
+
+        // Generate 8 snakes (2 of each type)
+        for (int i = 0; i < 2; i++) {
+            generateSnake(snakes, occupiedPositions, maxPosition, "red", 2);
+            generateSnake(snakes, occupiedPositions, maxPosition, "green", minPositionForGreen);
+            generateSnake(snakes, occupiedPositions, maxPosition, "blue", minPositionForBlue);
+            generateSnake(snakes, occupiedPositions, maxPosition, "yellow", minPositionForYellow);
+        }
+
+        // Generate 8 ladders of lengths 1 to 8
+        for (int i = 1; i <= 8; i++) {
+            generateLadder(ladders, occupiedPositions, maxPosition, i);
+        }
+    }
+
+    // Helper method to generate a single snake
+    private void generateSnake(List<Snake> snakes, Set<Integer> occupiedPositions, int maxPosition, String type, int size) {
+        Random random = new Random();
+        int start, end, minLength = 1, maxLength = maxPosition - 1;
+
+        switch (type) {
+            case "yellow":
+                minLength = size + 1; // Yellow can't be in the first row
+                break;
+            case "green":
+                minLength = 2 * size + 1;
+                break;
+            case "blue":
+                minLength = 3 * size + 1;
+                break;
+            case "red":
+                minLength = 2; // Red can be anywhere except the first tile
+                break;
+        }
+
+        do {
+            // Ensure that the range for the random number is positive
+            if (maxLength - minLength <= 0) {
+                System.out.println("Error: Invalid range for snake generation");
+                return;
+            }
+            start = minLength + random.nextInt(maxLength - minLength);
+            end = random.nextInt(start - 1) + 1; // Ensuring end is before start
+        } while (occupiedPositions.contains(start) || occupiedPositions.contains(end));
+
+        snakes.add(new Snake(start, end, type));
+        System.out.println(snakes);
+        occupiedPositions.add(start);
+        occupiedPositions.add(end);
+    }
+    // Helper method to generate a single ladder
+    private void generateLadder(List<Ladder> ladders, Set<Integer> occupiedPositions, int maxPosition, int length) {
+        Random random = new Random();
+        int start, end;
+        boolean valid;
+
+        do {
+            System.out.println("reached generateLadder");
+            valid = true;
+            start = random.nextInt(maxPosition - length) + 1; // Ensure ladder fits within the board
+            end = start + length;
+
+            // Check for position validity
+            if (occupiedPositions.contains(start) || occupiedPositions.contains(end)) {
+                valid = false;
+            }
+        } while (!valid);
+
+        ladders.add(new Ladder(start, end));
+        occupiedPositions.add(start);
+        occupiedPositions.add(end);
+    }
+    private void placeSnakesAndLadders(List<Snake> snakes, List<Ladder> ladders) {
+        for (Snake snake : snakes) {
+            placeSnakeOnBoard(snake);
+        }
+        for (Ladder ladder : ladders) {
+            placeLadderOnBoard(ladder);
+        }
+    }
+
+    private void placeSnakeOnBoard(Snake snake) {
+        Pane startTile = getTileForPosition(snake.getStartPosition());
+        Pane endTile = getTileForPosition(snake.getEndPosition());
+        String snakeImageName = chooseSnakeImage(snake.getType()); // Assuming getType() method returns snake type
+        InputStream is = getClass().getResourceAsStream("/com/example/snakesandladdersviper/Images/"  + snakeImageName);
+        if (is != null) {
+            Image snakeImage = new Image(is);
+            ImageView snakeImageView = new ImageView(snakeImage);
+//            Position and size the snake image appropriately
+            snakeImageView.setFitHeight(50);
+            snakeImageView.setFitWidth(50);
+            startTile.getChildren().add(snakeImageView);
+        } else {
+            System.out.println("Image file not found: " + snakeImageName);
+        }
+    }
+
+    private String chooseSnakeImage(String snakeType) {
+        switch (snakeType) {
+            case "yellow":
+                return "YellowSnake.png";
+            case "green":
+                return "GreenSnake.png";
+            case "blue":
+                return "BlueSnake.png";
+            case "red":
+                return "RedSnake.png";
+            default:
+                return "DefaultSnake.png";
+        }
+    }
+
+    private void placeLadderOnBoard(Ladder ladder) {
+        Pane startTile = getTileForPosition(ladder.getStart());
+        Pane endTile = getTileForPosition(ladder.getEnd());
+        // Assume a ladder image is available
+        // String ladderImageName = "LadderImage.png";
+        // ImageView ladderImage = new ImageView(new Image(/* path to ladder image */));
+        // Position the ladder image appropriately
+        // startTile.getChildren().add(ladderImage);
+    }
+
+
 
     private Set<Integer> determineOccupiedPositions(Map<Integer, String> specialTiles, int boardSize) {
         Set<Integer> occupiedPositions = new HashSet<>();
@@ -320,87 +493,6 @@ public class GameBoardController implements GameObserver {
         occupiedPositions.add(boardSize * boardSize); // Ending position
 
         return occupiedPositions;
-    }
-
-
-    private Pair<List<Snake>, List<Ladder>> createDynamicSnakesAndLadders(Difficulty difficulty, int boardSize, Set<Integer> occupiedPositions) {
-        List<Snake> snakes = new ArrayList<>();
-        List<Ladder> ladders = new ArrayList<>();
-        int maxPosition = boardSize * boardSize;
-
-        // Define the number of snakes and ladders based on difficulty
-        int numberOfSnakes, numberOfLadders;
-        switch (difficulty) {
-            case EASY:
-                numberOfSnakes = numberOfLadders = 4;
-                break;
-            case MEDIUM:
-                numberOfSnakes = numberOfLadders = 6;
-                break;
-            case HARD:
-                numberOfSnakes = numberOfLadders = 8;
-                break;
-            default:
-                throw new IllegalArgumentException("Unrecognized difficulty level");
-        }
-
-        addRandomSnakes(snakes, numberOfSnakes, maxPosition, occupiedPositions);
-        addRandomLadders(ladders, numberOfLadders, maxPosition, occupiedPositions);
-
-        return new Pair<>(snakes, ladders);
-    }
-
-    private void addRandomSnakes(List<Snake> snakes, int numberOfSnakes, int maxPosition, Set<Integer> occupiedPositions) {
-        Random random = new Random();
-        for (int i = 0; i < numberOfSnakes; i++) {
-            int start, end;
-            do {
-                start = random.nextInt(maxPosition - 1) + 2;
-                end = random.nextInt(start - 1) + 1;
-            } while (occupiedPositions.contains(start) || occupiedPositions.contains(end));
-            occupiedPositions.add(start);
-            occupiedPositions.add(end);
-            snakes.add(GameElementFactory.createSnake(start, end));
-        }
-    }
-
-    private void addRandomLadders(List<Ladder> ladders, int numberOfLadders, int maxPosition, Set<Integer> occupiedPositions) {
-        Random random = new Random();
-        for (int i = 0; i < numberOfLadders; i++) {
-            int start, end;
-            do {
-                start = random.nextInt(maxPosition - 1) + 1;
-                end = random.nextInt(maxPosition - start) + start + 1;
-            } while (occupiedPositions.contains(start) || occupiedPositions.contains(end));
-            occupiedPositions.add(start);
-            occupiedPositions.add(end);
-            ladders.add(GameElementFactory.createLadder(start, end));
-        }
-    }
-
-    private void placeSnakesAndLadders(List<Snake> snakes, List<Ladder> ladders) {
-        for (Snake snake : snakes) {
-            placeSnakeOnBoard(snake);
-        }
-        for (Ladder ladder : ladders) {
-            placeLadderOnBoard(ladder);
-        }
-    }
-
-    private void placeSnakeOnBoard(Snake snake) {
-        Pane startTile = getTileForPosition(snake.getStartPosition());
-        Pane endTile = getTileForPosition(snake.getEndPosition());
-        //ImageView snakeImage = new ImageView(new Image(/* path to snake image */));
-        // Additional logic for positioning the snake image
-        //startTile.getChildren().add(snakeImage);
-    }
-
-    private void placeLadderOnBoard(Ladder ladder) {
-        Pane startTile = getTileForPosition(ladder.getStart());
-        Pane endTile = getTileForPosition(ladder.getEnd());
-//        ImageView ladderImage = new ImageView(new Image(/* path to ladder image */));
-//        // Additional logic for positioning the ladder image
-//        startTile.getChildren().add(ladderImage);
     }
 
     private int calculateTileNumber(int row, int col, int size) {

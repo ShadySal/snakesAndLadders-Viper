@@ -1,11 +1,10 @@
 package com.example.snakesandladdersviper.Model;
 
-import com.example.snakesandladdersviper.Model.Player;
-
 public class Snake {
     private int startPosition;
     private int endPosition;
-    private String Color;
+    private String Type;
+
 
     public int getStartPosition() {
         return startPosition;
@@ -23,16 +22,17 @@ public class Snake {
         this.endPosition = endPosition;
     }
 
-    public String getColor() {
-        return Color;
+
+
+    public void setType(String type) {
+        this.Type = type;
     }
 
-    public void setColor(String color) {
-        Color = color;
-    }
+    public Snake(int startPosition, int endPosition, String type) {
+        this.startPosition = startPosition;
+        this.endPosition = endPosition;
+        this.Type = type;
 
-    public Snake(int startPosition, int endPosition) {
-        // Initialize snake attributes here
     }
 
     public void triggerEffect(Player player) {
@@ -40,5 +40,9 @@ public class Snake {
     }
     public int getStart(){
         return this.startPosition;
+    }
+
+    public String getType() {
+        return this.Type;
     }
 }

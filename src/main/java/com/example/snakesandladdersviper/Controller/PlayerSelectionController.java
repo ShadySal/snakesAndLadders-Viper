@@ -198,10 +198,15 @@ public class PlayerSelectionController {
 
 
     private void showAlert(String title, String content) {
-        Alert alert = new Alert(AlertType.ERROR);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
+
+        // Set the owner of the alert
+        Stage primaryStage = (Stage) contentPane.getScene().getWindow();
+        alert.initOwner(primaryStage);
+
         alert.showAndWait();
     }
 
