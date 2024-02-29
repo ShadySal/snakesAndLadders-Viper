@@ -20,10 +20,10 @@
 
 
 .custom-table-view {
-    -fx-pref-width: 500px; /* Table width */
-    -fx-pref-height: 600px; /* Table height */
-    -fx-max-height: 500px; /* To match preferred height */
-    -fx-max-width: 900px; /* To match preferred width */
+    -fx-pref-width: 300px; /* Table width */
+    -fx-pref-height: 300px; /* Table height */
+    -fx-max-height: 300px; /* To match preferred height */
+    -fx-max-width: 500px; /* To match preferred width */
     -fx-border-color: black;
     -fx-table-cell-border-color: transparent;
     -fx-alignment: center; /* This will center the content within the TableView */
