@@ -16,7 +16,7 @@
    </top>
    <center>
       <StackPane styleClass="stack-pane" alignment="CENTER">
-      <VBox alignment="CENTER" spacing="40" styleClass="vbox-container">
+      <VBox alignment="CENTER" spacing="40" maxWidth="300" styleClass="vbox-container">
          <Text fx:id="PlayerSelectionTurn" text="Player X " styleClass="title-text"/>
          <Text styleClass="text-large" text="Please Enter your name"/>
          <TextField fx:id="PlayerName" styleClass="text-field" prefHeight="31.0" prefWidth="172.0"/>
