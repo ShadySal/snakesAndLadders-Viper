@@ -877,7 +877,7 @@ public class GameBoardController {
                 // If it's a number, parse it and handle it as a dice number
                 int finalNumber = Integer.parseInt(finalOutcome);
                 if (finalNumber == 0) {
-                    Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpg"); // Replace with the path to your image
+                    Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpg");
                     ImageView imageView = new ImageView(image);
                     imageView.setFitHeight(150); // Match the size of the diceImageContainer
                     imageView.setFitWidth(150);
@@ -887,7 +887,7 @@ public class GameBoardController {
                     diceImageContainer.getChildren().add(imageView);
                 }
                 if (finalNumber == 1) {
-                    Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpg"); // Replace with the path to your image
+                    Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpg");
                     ImageView imageView = new ImageView(image);
                     imageView.setFitHeight(150); // Match the size of the diceImageContainer
                     imageView.setFitWidth(150);
@@ -897,7 +897,7 @@ public class GameBoardController {
                     diceImageContainer.getChildren().add(imageView);
                 }
                 if (finalNumber == 2) {
-                    Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpeg"); // Replace with the path to your image
+                    Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpeg");
                     ImageView imageView = new ImageView(image);
                     imageView.setFitHeight(150); // Match the size of the diceImageContainer
                     imageView.setFitWidth(150);
@@ -907,7 +907,7 @@ public class GameBoardController {
                     diceImageContainer.getChildren().add(imageView);
                 }
                 if (finalNumber == 3) {
-                    Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpeg"); // Replace with the path to your image
+                    Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpeg");
                     ImageView imageView = new ImageView(image);
                     imageView.setFitHeight(150); // Match the size of the diceImageContainer
                     imageView.setFitWidth(150);
@@ -917,7 +917,27 @@ public class GameBoardController {
                     diceImageContainer.getChildren().add(imageView);
                 }
                 if (finalNumber == 4) {
-                    Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpeg"); // Replace with the path to your image
+                    Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpeg");
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(150); // Match the size of the diceImageContainer
+                    imageView.setFitWidth(150);
+
+                    // Clear previous content and add the new ImageView
+                    diceImageContainer.getChildren().clear();
+                    diceImageContainer.getChildren().add(imageView);
+                }
+                if (finalNumber == 5) {
+                    Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpeg");
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(150); // Match the size of the diceImageContainer
+                    imageView.setFitWidth(150);
+
+                    // Clear previous content and add the new ImageView
+                    diceImageContainer.getChildren().clear();
+                    diceImageContainer.getChildren().add(imageView);
+                }
+                if (finalNumber == 6) {
+                    Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpg");
                     ImageView imageView = new ImageView(image);
                     imageView.setFitHeight(150); // Match the size of the diceImageContainer
                     imageView.setFitWidth(150);
@@ -930,6 +950,13 @@ public class GameBoardController {
                 movePlayer(finalNumber);
             } else {
                 // If it's not a number, it must be a question or another string outcome
+                Image image = new Image("/com/example/snakesandladdersviper/Images/QuestionIcon.jpg");
+                ImageView imageView = new ImageView(image);
+                imageView.setFitHeight(150); // Match the size of the diceImageContainer
+                imageView.setFitWidth(150);
+                // Clear previous content and add the new ImageView
+                diceImageContainer.getChildren().clear();
+                diceImageContainer.getChildren().add(imageView);
                 // Handle the string outcome (like "EASY_QUESTION")
                 processDiceOutcome(finalOutcome);
             }
