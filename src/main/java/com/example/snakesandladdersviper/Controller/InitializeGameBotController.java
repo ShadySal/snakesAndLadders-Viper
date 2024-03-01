@@ -60,7 +60,7 @@ public class InitializeGameBotController {
     @FXML
     void BackButton(ActionEvent event) throws IOException {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/hello-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/gameMode.fxml"));
             Parent root = loader.load();
             Scene nextScene = new Scene(root);
 // Get the current stage and set the new scene

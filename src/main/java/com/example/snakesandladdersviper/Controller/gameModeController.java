@@ -21,6 +21,25 @@ public class gameModeController {
 
     @FXML
     private StackPane MainPane;
+
+    @FXML
+    public Button BackButton;
+
+    @FXML
+    void handleBackButtonAction(ActionEvent event){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/hello-view.fxml"));
+            Parent root = loader.load();
+            Scene nextScene = new Scene(root);
+            Stage currentStage = (Stage) BackButton.getScene().getWindow();
+            currentStage.setScene(nextScene);
+            currentStage.setFullScreen(true); // Keep full screen
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @FXML
     void onPlayVsBotClicked(ActionEvent event) {
         try {
