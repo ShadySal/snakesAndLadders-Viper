@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -17,6 +18,9 @@ public class gameModeController {
 
     @FXML
     private Button PlayWithFriendsBtn;
+
+    @FXML
+    private StackPane MainPane;
     @FXML
     void onPlayVsBotClicked(ActionEvent event) {
         try {
@@ -25,14 +29,8 @@ public class gameModeController {
             Parent root = loader.load();
 
             // Get the current stage from the event source
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setTitle("Initialize Game Vs Bot");
-            // Set the new scene on the current stage
-            stage.setScene(new Scene(root));
-            // Set full-screen mode
-            stage.setFullScreen(true);
-
-            stage.show();
+            MainPane.getChildren().clear();
+            MainPane.getChildren().add(root);
         } catch (IOException e) {
             e.printStackTrace(); // Handle the exception as appropriate
         }
@@ -46,12 +44,8 @@ public class gameModeController {
             Parent root = loader.load();
 
             // Get the current stage from the event source
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setTitle("Initialize Game");
-            // Set the new scene on the current stage
-            stage.setScene(new Scene(root));
-            stage.setFullScreen(true);
-            stage.show();
+            MainPane.getChildren().clear();
+            MainPane.getChildren().add(root);
         } catch (IOException e) {
             e.printStackTrace(); // Handle the exception as appropriate
         }

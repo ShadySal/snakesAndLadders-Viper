@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +23,7 @@ import javafx.stage.Stage;
 
 public class InitializeGame {
     @FXML
-    private Pane MainPane;
+    private BorderPane MainPane;
 
     @FXML
     public ComboBox<Integer> PlayersNum;
@@ -88,9 +89,8 @@ public class InitializeGame {
             players.add(player);
             playerSelectionController.setDifficulty(difficulty);
             playerSelectionController.setPlayerData(currentPlayerNumber, player, 1, numberOfPlayers);
-            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setFullScreen(true); // Maintain full screen across scenes
+            MainPane.getChildren().clear();
+            MainPane.setCenter(root);
         } catch (Exception e) {
             e.printStackTrace();
         }

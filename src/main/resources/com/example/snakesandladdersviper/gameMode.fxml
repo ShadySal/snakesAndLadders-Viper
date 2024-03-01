@@ -7,7 +7,7 @@
 <?import javafx.scene.paint.Stop?>
 
 <?import javafx.scene.layout.VBox?>
-<StackPane prefHeight="746.0" prefWidth="760.0" styleClass="root" stylesheets="@../src/CssStyles/HelloPageStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.gameModeController">
+<StackPane fx:id="MainPane" prefHeight="746.0" prefWidth="760.0" styleClass="root" stylesheets="@../src/CssStyles/HelloPageStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.gameModeController">
    <children>
       <VBox alignment="CENTER" spacing="20">
          <Text text="Please Choose Game Mode">
