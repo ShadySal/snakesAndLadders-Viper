@@ -66,6 +66,7 @@ public class InitializeGameBotController {
 // Get the current stage and set the new scene
             Stage currentStage = (Stage) BackButton.getScene().getWindow();
             currentStage.setScene(nextScene);
+            currentStage.setFullScreen(true);
         } catch (Exception e) {
             e.printStackTrace();
         }

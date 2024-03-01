@@ -46,6 +46,8 @@ public class GameBoardController {
     private Label LevelLabel;
     @FXML
     private Button MainMenuButton;
+    @FXML
+    private Pane diceImageContainer;
     private Timeline timeline;
     private long startTime;
     // Example values for probabilities
@@ -874,6 +876,56 @@ public class GameBoardController {
             if (isNumeric(finalOutcome)) {
                 // If it's a number, parse it and handle it as a dice number
                 int finalNumber = Integer.parseInt(finalOutcome);
+                if (finalNumber == 0) {
+                    Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpg"); // Replace with the path to your image
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(150); // Match the size of the diceImageContainer
+                    imageView.setFitWidth(150);
+
+                    // Clear previous content and add the new ImageView
+                    diceImageContainer.getChildren().clear();
+                    diceImageContainer.getChildren().add(imageView);
+                }
+                if (finalNumber == 1) {
+                    Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpg"); // Replace with the path to your image
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(150); // Match the size of the diceImageContainer
+                    imageView.setFitWidth(150);
+
+                    // Clear previous content and add the new ImageView
+                    diceImageContainer.getChildren().clear();
+                    diceImageContainer.getChildren().add(imageView);
+                }
+                if (finalNumber == 2) {
+                    Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpeg"); // Replace with the path to your image
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(150); // Match the size of the diceImageContainer
+                    imageView.setFitWidth(150);
+
+                    // Clear previous content and add the new ImageView
+                    diceImageContainer.getChildren().clear();
+                    diceImageContainer.getChildren().add(imageView);
+                }
+                if (finalNumber == 3) {
+                    Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpeg"); // Replace with the path to your image
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(150); // Match the size of the diceImageContainer
+                    imageView.setFitWidth(150);
+
+                    // Clear previous content and add the new ImageView
+                    diceImageContainer.getChildren().clear();
+                    diceImageContainer.getChildren().add(imageView);
+                }
+                if (finalNumber == 4) {
+                    Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpeg"); // Replace with the path to your image
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(150); // Match the size of the diceImageContainer
+                    imageView.setFitWidth(150);
+
+                    // Clear previous content and add the new ImageView
+                    diceImageContainer.getChildren().clear();
+                    diceImageContainer.getChildren().add(imageView);
+                }
                 // Handle the number outcome (e.g., move the player)
                 movePlayer(finalNumber);
             } else {
