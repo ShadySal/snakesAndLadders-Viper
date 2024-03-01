@@ -2,49 +2,41 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.shape.Box?>
 <?import javafx.scene.text.Font?>
+<AnchorPane fx:id="contentPane" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.GameBoardController">
+    <!-- Game Pane -->
+    <Pane fx:id="gamepane" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="200" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+        <GridPane fx:id="BoardGrid" hgap="5.0" vgap="5.0" style="-fx-background-color:white; -fx-padding: 10px 20px; -fx-border-radius: 10px;" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+            <!-- Column and Row Constraints Here -->
+            <!-- The following is an example for 7 columns, adjust as needed -->
+            <columnConstraints>
+                <ColumnConstraints percentWidth="14.2857" hgrow="SOMETIMES"/>
+                <!-- Repeat for the number of columns -->
+            </columnConstraints>
+            <!-- The following is an example for 7 rows, adjust as needed -->
+            <rowConstraints>
+                <RowConstraints percentHeight="14.2857" vgrow="SOMETIMES"/>
+                <!-- Repeat for the number of rows -->
+            </rowConstraints>
+        </GridPane>
+    </Pane>
 
-<Pane fx:id="contentPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.snakesandladdersviper.Controller.GameBoardController">
-   <children>
-      <Pane fx:id="gamepane" layoutX="177.0" layoutY="-1.0" prefHeight="800.0" prefWidth="622.0">
-         <children>
-            <GridPane fx:id="BoardGrid" hgap="5.0" prefHeight="800.0" prefWidth="622.0" style="-fx-background-color:white; -fx-padding: 10px 20px; -fx-border-radius: 10px;" vgap="5.0">
-              <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-            </GridPane>
-         </children>
-      </Pane>
-      <Pane fx:id="gameDataPane" prefHeight="793.0" prefWidth="185.0" style="-fx-background-color:white;">
-         <children>
-            <Label fx:id="timeLabel" layoutX="22.0" layoutY="87.0" prefHeight="17.0" prefWidth="136.0" textAlignment="CENTER" />
-            <Label fx:id="LevelLabel" layoutX="22.0" layoutY="137.0" text="Level: " />
-            <Button fx:id="MainMenuButton" defaultButton="true" layoutX="-1.0" layoutY="753.0" mnemonicParsing="false" onAction="#MainMenuFun" prefHeight="45.0" prefWidth="185.0" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-padding: 10px 20px; -fx-border-radius: 5px;" text="Exit Game" textAlignment="CENTER">
-               <font>
-                  <Font name="Arial Black" size="15.0" />
-               </font>
-            </Button>
-            <Box fx:id="dice" depth="100" height="100" layoutX="93.0" layoutY="490.0" width="100" />
-         </children></Pane>
-   </children>
-</Pane>
+    <!-- Game Data Pane -->
+    <Pane fx:id="gameDataPane" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
+        <Label fx:id="timeLabel" layoutX="20" layoutY="10" />
+        <Label fx:id="LevelLabel" layoutX="20" layoutY="40" text="Level: " />
+        <Button fx:id="MainMenuButton" layoutX="20" layoutY="70" defaultButton="true" mnemonicParsing="false" onAction="#MainMenuFun" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-padding: 10px 20px; -fx-border-radius: 5px;" text="Exit Game" textAlignment="CENTER">
+            <font>
+                <Font name="Arial Black" size="15.0" />
+            </font>
+        </Button>
+        <Pane fx:id="diceImageContainer" layoutX="20" layoutY="110" prefHeight="150.0" prefWidth="150.0" />
+        <Button fx:id="diceRollButton" layoutX="20" layoutY="270" mnemonicParsing="false" onAction="#onDiceRoll" text="Roll Dice" />
+        <Label fx:id="currentPlayerLabel" layoutX="20" layoutY="310" text="Label" />
+    </Pane>
+</AnchorPane>

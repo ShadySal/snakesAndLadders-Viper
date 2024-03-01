@@ -1096,7 +1096,7 @@ public class GameBoardController {
         }
     }
 }
-    //create 3d dice
+//create 3d dice
 //    private Box create3DDice() {
 //        double size = 100.0;
 //        Box dice = new Box(size, size, size);
@@ -1175,4 +1175,3 @@ public class GameBoardController {
 //
 //        return String.valueOf(rollResult);
 //    }
-

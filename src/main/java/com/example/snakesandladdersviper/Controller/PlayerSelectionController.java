@@ -117,9 +117,9 @@ public class PlayerSelectionController {
     private void updateUIForNextPlayer() {
         // Clear previous player's selections
 
-            PlayerName.clear();
-            ObjectSelect.getSelectionModel().clearSelection();
-            PlayerSelectionTurn.setText("Player " + currentPlayerNumber);
+        PlayerName.clear();
+        ObjectSelect.getSelectionModel().clearSelection();
+        PlayerSelectionTurn.setText("Player " + currentPlayerNumber);
 
         /* TO DO!!!!
           Name Check if it has been chosen or not
@@ -211,24 +211,24 @@ public class PlayerSelectionController {
     }
 
     //gets color of the player
-        private Color getColorFromString(String colorName) {
-            switch (colorName.toLowerCase()) {
-                case "red":
-                    return Color.RED;
-                case "blue":
-                    return Color.BLUE;
-                case "green":
-                    return Color.GREEN;
-                case "yellow":
-                    return Color.YELLOW;
-                case "orange":
-                    return Color.ORANGE;
-                case "white":
-                    return Color.WHITE;
-                default:
-                    return Color.BLACK; // Default color or throw an exception
-            }
+    private Color getColorFromString(String colorName) {
+        switch (colorName.toLowerCase()) {
+            case "red":
+                return Color.RED;
+            case "blue":
+                return Color.BLUE;
+            case "green":
+                return Color.GREEN;
+            case "yellow":
+                return Color.YELLOW;
+            case "orange":
+                return Color.ORANGE;
+            case "white":
+                return Color.WHITE;
+            default:
+                return Color.BLACK; // Default color or throw an exception
         }
+    }
 
     public int getBoardDifficulty(Difficulty diff){
         switch (difficulty) {
