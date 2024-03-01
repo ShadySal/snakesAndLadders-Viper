@@ -10,11 +10,15 @@ import javafx.scene.Scene;
 
 import javafx.scene.control.*;
 
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.HashMap;
 public class QuestionsPageController {
+
+    @FXML
+    private AnchorPane MainPane;
 
     @FXML
     private ListView<String> QuestionsView;
@@ -131,11 +135,15 @@ public class QuestionsPageController {
 
         EditQuestionController editQuestionController = loader.getController();
         editQuestionController.setQuestionDetails(selectedQuestion);
+        // Ensure MainPane is cleared and ready for new content
+        MainPane.getChildren().clear(); // Clear existing content
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(editQuestionRoot));
-        stage.setFullScreen(true);
-        stage.show();
+        // Set the new content as the only child of MainPane
+        AnchorPane.setTopAnchor(editQuestionRoot, 0.0);
+        AnchorPane.setRightAnchor(editQuestionRoot, 0.0);
+        AnchorPane.setBottomAnchor(editQuestionRoot, 0.0);
+        AnchorPane.setLeftAnchor(editQuestionRoot, 0.0);
+        MainPane.getChildren().add(editQuestionRoot);
     }
     private Question findQuestionByText(String questionText) {
         for (Question q : SysData.getInstance().getQuestions()) {
@@ -161,15 +169,15 @@ public class QuestionsPageController {
         // Load addQuestion.fxml
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/addQuestion.fxml"));
         Parent addQuestionParent = loader.load();
+        // Ensure MainPane is cleared and ready for new content
+        MainPane.getChildren().clear(); // Clear existing content
 
-        // Get the current stage using the event source
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-        // Set the scene with addQuestion.fxml
-        stage.setScene(new Scene(addQuestionParent));
-        stage.setFullScreen(true);
-        // Show the updated stage
-        stage.show();
+        // Set the new content as the only child of MainPane
+        AnchorPane.setTopAnchor(addQuestionParent, 0.0);
+        AnchorPane.setRightAnchor(addQuestionParent, 0.0);
+        AnchorPane.setBottomAnchor(addQuestionParent, 0.0);
+        AnchorPane.setLeftAnchor(addQuestionParent, 0.0);
+        MainPane.getChildren().add(addQuestionParent);
     }
     @FXML
     void onDeleteButtonClicked(ActionEvent event) {
