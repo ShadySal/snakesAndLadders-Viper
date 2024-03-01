@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 import javafx.scene.Node;
@@ -29,6 +30,8 @@ import javafx.scene.paint.Stop;
 
 
 public class MainController implements Initializable{
+    @FXML
+    private BorderPane MainPane;
 
     @FXML
     private VBox vboxContainer;
@@ -119,32 +122,21 @@ public class MainController implements Initializable{
 
 
     public void StartGame() throws IOException {
-        Stage currentStage = (Stage) StartGameBtn.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/gameMode.fxml"));
-        currentStage.setTitle("Select Game Mode");
-      currentStage.setScene(new Scene(root, 800, 800));
-
-        // Set full-screen mode
-        currentStage.setFullScreen(true);
-
-        // Show the stage
-        currentStage.show();
+        Stage stage = (Stage) MainPane.getScene().getWindow();
+        stage.setTitle("Game Mode");
+        MainPane.getChildren().clear();
+        MainPane.setCenter(root);
     }
 
     public void showGameHistory(ActionEvent event) {
         try {
             // Load the GameHistory.fxml file
             Parent gameHistoryPage = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/GameHistory.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-            // Set the scene with the GameHistory view, adjust size as needed
-            stage.setScene(new Scene(gameHistoryPage, 800, 600)); // Adjust the size according to your GameHistory view's requirement
-
-            // Optional: Set full-screen mode for the Game History page
-            stage.setFullScreen(true);
-
-            // Show the Game History page
-            stage.show();
+            Stage stage = (Stage) MainPane.getScene().getWindow();
+            stage.setTitle("Game History");
+            MainPane.getChildren().clear();
+            MainPane.setCenter(gameHistoryPage);
         } catch (IOException e) {
             // Handle the case where the FXML file couldn't be loaded
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -156,14 +148,10 @@ public class MainController implements Initializable{
     public void InstructionsOfGame(ActionEvent event) {
         try {
             Parent InstructionPage = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/Instructions.fxml"));
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(InstructionPage, 800, 800)); // Assuming you want 800x800 size
-
-            // Set full-screen mode for the instruction page
-            stage.setFullScreen(true);
-
-            // Show the instruction page
-            stage.show();
+            Stage stage = (Stage) MainPane.getScene().getWindow();
+            stage.setTitle("Game Instructions");
+            MainPane.getChildren().clear();
+            MainPane.setCenter(InstructionPage);
         } catch (IOException e) {
             Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             showError("Failed to load instructions.", currentStage);
