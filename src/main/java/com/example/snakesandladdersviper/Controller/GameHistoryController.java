@@ -57,23 +57,15 @@ public class GameHistoryController {
     }
     @FXML
     void BackButton(ActionEvent event) {
-        Stage stage = (Stage) BackButton.getScene().getWindow();
-
-        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationAlert.initOwner(stage);
-        confirmationAlert.setTitle("Confirmation");
-        confirmationAlert.setHeaderText("Are you sure you want to back to the Main Menu?");
-        confirmationAlert.setContentText("");
-        confirmationAlert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
-
-        // Show the alert and wait for user input
-        confirmationAlert.showAndWait().ifPresent(buttonType -> {
-            if (buttonType == ButtonType.OK) {
-                SceneUtils.changeScene(stage, "/com/example/snakesandladdersviper/hello-view.fxml", true);
-            }
-        });
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/hello-view.fxml"));
+            Parent root = loader.load();
+            Scene nextScene = new Scene(root);
+            Stage currentStage = (Stage) BackButton.getScene().getWindow();
+            currentStage.setScene(nextScene);
+            currentStage.setFullScreen(true); // Keep full screen
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
-
-
 }
