@@ -182,6 +182,10 @@ public class QuestionsPageController {
     @FXML
     void onDeleteButtonClicked(ActionEvent event) {
         String selectedQuestionText = QuestionsView.getSelectionModel().getSelectedItem();
+        if (selectedQuestionText == null) {
+            showAlert("No Question Selected", "Please select a question to delete.");
+            return;
+        }
         if (selectedQuestionText != null) {
             // Create a confirmation alert
             Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
