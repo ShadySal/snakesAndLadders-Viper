@@ -188,7 +188,9 @@ public class QuestionsPageController {
         }
         if (selectedQuestionText != null) {
             // Create a confirmation alert
+            Stage stage = (Stage) deleteButton.getScene().getWindow();
             Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationAlert.initOwner(stage);
             confirmationAlert.setTitle("Confirmation");
             confirmationAlert.setHeaderText("Are you sure you want to delete the selected question?");
             confirmationAlert.setContentText("This action cannot be undone.");
@@ -202,6 +204,7 @@ public class QuestionsPageController {
                     // User confirmed, proceed with deleting the question
                     sysData.removeQuestion(selectedQuestionText);
                     loadQuestions();
+                    answersView.getItems().clear();
                 }
             });
         }
