@@ -329,6 +329,162 @@
                 "By reducing the overall number of objects in the system"
             ],
             "correct_ans": 3
+        },
+        {
+            "questions": [
+                {
+                    "topic": "AGILE",
+                    "questions": [
+                        {
+                            "question": "What is the primary measure of progress in Agile methodologies?",
+                            "answers": [
+                                "Customer satisfaction",
+                                "Amount of completed documentation",
+                                "Number of completed tasks",
+                                "Delivery of working software"
+                            ],
+                            "correct_ans": 4
+                        },
+                        {
+                            "question": "Which of the following best describes an Agile approach to software development?",
+                            "answers": [
+                                "Sequential phases with little customer involvement",
+                                "Fixed requirements with flexible timelines",
+                                "Incremental development with customer collaboration",
+                                "Complete documentation before development"
+                            ],
+                            "correct_ans": 3
+                        }
+                    ]
+                },
+                {
+                    "topic": "Requirements",
+                    "questions": [
+                        {
+                            "question": "What is a key characteristic of a well-defined software requirement?",
+                            "answers": [
+                                "Vagueness to allow flexibility",
+                                "Technical jargon to ensure accuracy",
+                                "Clarity and conciseness",
+                                "Complexity to cover all scenarios"
+                            ],
+                            "correct_ans": 3
+                        },
+                        {
+                            "question": "In the context of software development, what does SRS stand for?",
+                            "answers": [
+                                "Software Requirement Specification",
+                                "System Review Session",
+                                "Software Review System",
+                                "System Requirement Software"
+                            ],
+                            "correct_ans": 1
+                        }
+                    ]
+                },
+                {
+                    "topic": "Surveys",
+                    "questions": [
+                        {
+                            "question": "How are surveys typically used in the software development process?",
+                            "answers": [
+                                "To gather user feedback on features",
+                                "To decide on the programming languages used",
+                                "To set the project budget",
+                                "To design the software architecture"
+                            ],
+                            "correct_ans": 1
+                        },
+                        {
+                            "question": "What is an important consideration when designing a survey for user feedback?",
+                            "answers": [
+                                "Using technical language",
+                                "Ensuring questions are open-ended",
+                                "Keeping questions neutral and unbiased",
+                                "Limiting the number of questions to five"
+                            ],
+                            "correct_ans": 3
+                        }
+                    ]
+                },
+                {
+                    "topic": "Architecture",
+                    "questions": [
+                        {
+                            "question": "What is the primary goal of software architecture?",
+                            "answers": [
+                                "To outline the best coding practices",
+                                "To define the system's structure and behavior",
+                                "To detail the user interface design",
+                                "To specify the hardware requirements"
+                            ],
+                            "correct_ans": 2
+                        },
+                        {
+                            "question": "Which pattern separates the system into three interconnected components?",
+                            "answers": [
+                                "Singleton Pattern",
+                                "Model-View-Controller (MVC)",
+                                "Factory Method",
+                                "Decorator Pattern"
+                            ],
+                            "correct_ans": 2
+                        }
+                    ]
+                },
+                {
+                    "topic": "Maintenance",
+                    "questions": [
+                        {
+                            "question": "What is the primary focus of software maintenance?",
+                            "answers": [
+                                "Adding new features to the system",
+                                "Correcting existing defects",
+                                "Both adding new features and correcting defects",
+                                "Redesigning the system architecture"
+                            ],
+                            "correct_ans": 3
+                        },
+                        {
+                            "question": "Which type of software maintenance involves making changes to improve system performance?",
+                            "answers": [
+                                "Corrective",
+                                "Adaptive",
+                                "Perfective",
+                                "Preventive"
+                            ],
+                            "correct_ans": 3
+                        }
+                    ]
+                },
+                {
+                    "topic": "Testing",
+                    "questions": [
+                        {
+                            "question": "What is the main purpose of regression testing?",
+                            "answers": [
+                                "To verify new features",
+                                "To check for performance issues",
+                                "To ensure that changes have not broken existing functionality",
+                                "To test the system on different platforms"
+                            ],
+                            "correct_ans": 3
+                        },
+                        {
+                            "question": "In unit testing, what is typically the scope of a test case?",
+                            "answers": [
+                                "A single function or method",
+                                "The entire application",
+                                "Integration between components",
+                                "User interface usability"
+                            ],
+                            "correct_ans": 1
+                        }
+                    ]
+                }
+            ]
         }
+
     ]
 }
+
