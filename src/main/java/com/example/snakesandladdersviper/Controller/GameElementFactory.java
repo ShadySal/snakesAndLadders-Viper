@@ -15,9 +15,9 @@ public class GameElementFactory {
         return new Snake(start, end, type);
     }
 
-    public static Ladder createLadder(int start, int end) {
+    public static Ladder createLadder(int start, int end, int length) {
         // Logic to create a new ladder
-        return new Ladder(start, end);
+        return new Ladder(start, end, length);
     }
 
 }

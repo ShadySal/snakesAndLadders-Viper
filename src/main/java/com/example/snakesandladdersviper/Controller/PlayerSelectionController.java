@@ -59,7 +59,7 @@ public class PlayerSelectionController {
     }
 
     public void initialize() {
-        ObjectSelect.getItems().addAll("Red", "Blue", "Black", "Yellow", "Orange", "Green");
+        ObjectSelect.getItems().addAll("Red", "Blue", "Pink", "Yellow", "Purple", "Green");
         players = new ArrayList<>();
         currentPlayerNumber = 1;
         PlayerSelectionTurn.setText("Player " + currentPlayerNumber);

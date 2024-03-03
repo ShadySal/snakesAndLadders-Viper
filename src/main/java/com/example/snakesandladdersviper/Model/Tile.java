@@ -13,15 +13,20 @@ public class Tile extends StackPane {
     private Question question;
 
     public Tile(int x, int y) {
-            this.x = x;
-            this.y = y;
-            this.occupied = false;
-            this.name ="Tile"+x+y;
-            this.type = TileType.Regular;
-            question = null;
+        this.x = x;
+        this.y = y;
+        this.occupied = false;
+        this.name ="Tile"+x+y;
+        this.type = TileType.Regular;
+        question = null;
 
     }
-
+public void setNumber(int number){
+        this.number = number;
+}
+public int getNumber(){
+        return this.number;
+}
     // Getters and setters...
 
     public int getX() {
@@ -35,6 +40,7 @@ public class Tile extends StackPane {
     public int getY() {
         return y;
     }
+
 
     public void setY(int y) {
         this.y = y;
@@ -77,6 +83,19 @@ public class Tile extends StackPane {
 
         return name.equals(tile.name);
     }
+    @Override
+    public String toString() {
+        return "Tile{" +
+                "number=" + number +
+                ", type=" + type +
+                ", x=" + x +
+                ", y=" + y +
+                ", occupied=" + occupied +
+                ", name='" + name + '\'' +
+                ", visited=" + visited +
+                ", question=" + question +
+                '}';
+    }
 
 //    @Override
 //    public int hashCode() {
@@ -95,4 +114,3 @@ public class Tile extends StackPane {
 //        return level;
 //    }
 }
-
