@@ -2,6 +2,7 @@ package com.example.snakesandladdersviper.Controller;
 import com.example.snakesandladdersviper.Enums.Difficulty;
 import com.example.snakesandladdersviper.Model.GameBoard;
 import com.example.snakesandladdersviper.Model.Player;
+import com.example.snakesandladdersviper.Model.PlayerCreator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -40,6 +41,7 @@ public class PlayerSelectionController {
     final double EASY_GAME_QUESTION_PROBABILITY = 0.1; // 10% chance for a question
     final double MEDIUM_GAME_QUESTION_PROBABILITY = EASY_GAME_QUESTION_PROBABILITY * 2; // 20% chance
     private GameBoard gameBoard;
+    private PlayerCreator playerCreator = new PlayerCreator.DefaultPlayerCreator();
 
 
     public List<Player> getPlayers() {
@@ -59,7 +61,7 @@ public class PlayerSelectionController {
     }
 
     public void initialize() {
-        ObjectSelect.getItems().addAll("Red", "Blue", "Pink", "Yellow", "Purple", "Green");
+        ObjectSelect.getItems().addAll("Red", "Blue", "Pink", "Yellow", "Orange", "Green");
         players = new ArrayList<>();
         currentPlayerNumber = 1;
         PlayerSelectionTurn.setText("Player " + currentPlayerNumber);
@@ -176,6 +178,9 @@ public class PlayerSelectionController {
             player = players.get(currentPlayerNumber - 1); // -1 because list is 0-indexed
         } else {
             // Create a new player if not already existent
+
+            Player p = playerCreator.createPlayer(playerName, currentPlayerNumber, selectedColorName);
+
             player = new Player(playerName, currentPlayerNumber, selectedColorName);
             players.add(player);
         }

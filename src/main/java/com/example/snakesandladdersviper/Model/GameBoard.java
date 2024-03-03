@@ -202,5 +202,31 @@ public class GameBoard implements GameSubject{
         // Logic to set player's position
         playerPositions.put(player, newPosition);
     }
+    public void checkForGameEnd() {
+        for (Player player : players) {
+            if (checkPlayerWin(player)) {
+                GameEvent event = new GameEvent(GameEventType.GAME_ENDED, player, playerPositions.get(player), "Player won the game");
+                notifyObservers(event);
+                break;
+            }
+        }
+    }
 
+    public boolean checkPlayerWin(Player player) {
+        int winningPosition = rows * columns;
+        if (playerPositions.get(player) >= winningPosition) {
+            GameEvent winEvent = new GameEvent(GameEventType.PLAYER_WON, player, winningPosition, "Player won the game");
+            notifyObservers(winEvent);
+            return true;
+        }
+        return false;
+    }
+
+    public void isPlayerOnSpecialTiles(Player player) {
+        Integer position = playerPositions.get(player);
+        if (specialTiles.containsKey(position)) {
+            GameEvent event = new GameEvent(GameEventType.PLAYER_ON_SPECIAL_TILE, player, position, "Player on special tile");
+            notifyObservers(event);
+        }
+    }
 }

@@ -6,5 +6,5 @@ public enum GameEventType {
     GAME_ENDED,
     DICE_ROLLED,
     PLAYER_WON,
-    SPECIAL_TILE_HIT // For landing on a snake, ladder, or special tile
+    PLAYER_ON_SPECIAL_TILE// For landing on a snake, ladder, or special tile
 }

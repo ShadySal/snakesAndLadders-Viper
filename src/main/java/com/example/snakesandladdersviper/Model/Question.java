@@ -1,29 +1,31 @@
 package com.example.snakesandladdersviper.Model;
 import java.util.HashMap;
 /**
- * A class representing a question for the KnightMove game.
  * It includes the question's level, text, and answer.
  */
 
 
 import java.util.HashMap;
 
-public class Question {
+public class Question implements IQuestion {
     private String questionText;
     private HashMap<Integer, String> answers;
     private int correctAns;
     private int difficulty;
     private String questionId;
 
-    public Question(String questionText, HashMap<Integer, String> answers, int correctAns, int difficulty) {
+    public Question(String questionText, HashMap<Integer, String> answers,
+                    int correctAns, int difficulty) {
         this.questionText = questionText;
         this.answers = answers;
         this.correctAns = correctAns;
         this.difficulty = difficulty;
-        this.questionId = questionText;
-
+        this.questionId = generateQuestionId(questionText); // Generate a unique ID based on questionText
     }
-
+    private String generateQuestionId(String questionText) {
+        // Logic to generate a unique ID
+        return questionText.hashCode() + "_" + System.currentTimeMillis();
+    }
     public String getQuestionText() {
         return questionText;
     }
