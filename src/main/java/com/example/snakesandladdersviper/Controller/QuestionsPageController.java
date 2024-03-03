@@ -70,7 +70,9 @@ public class QuestionsPageController {
     @FXML
     void BackButtonFunc(ActionEvent event) throws IOException {
         // Create a confirmation alert
+        Stage stage = (Stage) BackButton.getScene().getWindow();
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.initOwner(stage);
         confirmationAlert.setTitle("Confirmation");
         confirmationAlert.setHeaderText("Are you sure you want to back to the Main Menu?");
         confirmationAlert.setContentText("");
@@ -182,9 +184,15 @@ public class QuestionsPageController {
     @FXML
     void onDeleteButtonClicked(ActionEvent event) {
         String selectedQuestionText = QuestionsView.getSelectionModel().getSelectedItem();
+        if (selectedQuestionText == null) {
+            showAlert("No Question Selected", "Please select a question to delete.");
+            return;
+        }
         if (selectedQuestionText != null) {
             // Create a confirmation alert
+            Stage stage = (Stage) deleteButton.getScene().getWindow();
             Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationAlert.initOwner(stage);
             confirmationAlert.setTitle("Confirmation");
             confirmationAlert.setHeaderText("Are you sure you want to delete the selected question?");
             confirmationAlert.setContentText("This action cannot be undone.");
@@ -198,6 +206,7 @@ public class QuestionsPageController {
                     // User confirmed, proceed with deleting the question
                     sysData.removeQuestion(selectedQuestionText);
                     loadQuestions();
+                    answersView.getItems().clear();
                 }
             });
         }

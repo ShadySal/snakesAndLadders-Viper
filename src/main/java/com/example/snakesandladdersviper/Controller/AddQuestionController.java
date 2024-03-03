@@ -158,9 +158,11 @@ public class AddQuestionController {
     @FXML
     void BackButtonFunc(ActionEvent event) throws IOException {
         // Create a confirmation alert
+        Stage stage = (Stage) BackButton1.getScene().getWindow();
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.initOwner(stage);
         confirmationAlert.setTitle("Confirmation");
-        confirmationAlert.setHeaderText("Are you sure you want to back to Managing Questions?");
+        confirmationAlert.setHeaderText("Are you sure you want to back to the manging questions?");
         confirmationAlert.setContentText("");
 
         // Add OK and Cancel buttons to the alert
