@@ -1,6 +1,5 @@
 package com.example.snakesandladdersviper.Model;
 
-import com.example.snakesandladdersviper.Controller.QuestionFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -158,7 +157,7 @@ public class SysData {
         }
         int correctAns = questionJson.getInt("correct_ans");
         int difficulty = questionJson.getInt("difficulty");
-        return QuestionFactory.createQuestion(questionText, answers, correctAns, difficulty);
+        return new Question(questionText, answers, correctAns, difficulty);
     }
 
 

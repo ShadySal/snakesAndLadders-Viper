@@ -1,7 +1,7 @@
 {
     "questions": [
         {
-            "difficulty": 1,
+
             "question": "What is the core principle of Agile software development?",
             "answers": [
                 "To deliver complete software at the end of the project.",
@@ -9,10 +9,11 @@
                 "To build software incrementally with customer feedback.",
                 "To prioritize documentation over working software."
             ],
-            "correct_ans": 3
+            "correct_ans": 3,
+            "difficulty": 1
         },
         {
-            "difficulty": 2,
+
             "question": "In Agile, what is a user story?",
             "answers": [
                 "A detailed technical specification of a feature.",
@@ -20,10 +21,11 @@
                 "A feature described from an end-user perspective.",
                 "A test case for validating a feature."
             ],
-            "correct_ans": 3
+            "correct_ans": 3,
+            "difficulty": 2
         },
         {
-            "difficulty": 1,
+
             "question": "What is the primary role of the Product Owner in Scrum?",
             "answers": [
                 "To write software code.",
@@ -31,10 +33,11 @@
                 "To represent the customer's interest and prioritize the backlog.",
                 "To remove obstacles for the team."
             ],
-            "correct_ans": 3
+            "correct_ans": 3,
+            "difficulty": 1
         },
         {
-            "difficulty": 2,
+
             "question": "Which of these is a key Scrum ceremony?",
             "answers": [
                 "Release Planning.",
@@ -42,10 +45,11 @@
                 "Quality Assurance Testing.",
                 "Product Backlog Grooming."
             ],
-            "correct_ans": 2
+            "correct_ans": 2,
+            "difficulty": 2
         },
         {
-            "difficulty": 3,
+
             "question": "In Scrum, how is the work for a Sprint determined?",
             "answers": [
                 "The Scrum Master assigns tasks.",
@@ -53,10 +57,11 @@
                 "The team selects items from the Product Backlog during Sprint Planning.",
                 "Tasks are randomly chosen."
             ],
-            "correct_ans": 3
+            "correct_ans": 3,
+            "difficulty": 3
         },
         {
-            "difficulty": 2,
+
             "question": "What is an essential characteristic of a well-written SRS document according to IEEE standards?",
             "answers": [
                 "Ambiguity for flexibility.",
@@ -64,10 +69,11 @@
                 "Unambiguous and complete for clarity.",
                 "Brief to reduce documentation time."
             ],
-            "correct_ans": 3
+            "correct_ans": 3,
+            "difficulty": 2
         },
         {
-            "difficulty": 1,
+
             "question": "What is the main goal of a code review?",
             "answers": [
                 "To assess the project's budget.",
@@ -75,10 +81,11 @@
                 "To find and fix mistakes before they become part of the product.",
                 "To assign tasks to the development team."
             ],
-            "correct_ans": 3
+            "correct_ans": 3,
+            "difficulty": 1
         },
         {
-            "difficulty": 2,
+
             "question": "According to studies, what is a common outcome of implementing code reviews?",
             "answers": [
                 "Increased number of bugs in production.",
@@ -86,10 +93,11 @@
                 "Increased software development time.",
                 "Decreased software security."
             ],
-            "correct_ans": 2
+            "correct_ans": 2,
+            "difficulty": 2
         },
         {
-            "difficulty": 3,
+
             "question": "What role do unit tests play in Agile development?",
             "answers": [
                 "They replace the need for customer feedback.",
@@ -97,10 +105,11 @@
                 "They ensure individual components work as intended, facilitating continuous integration.",
                 "They are optional and rarely used in Agile development."
             ],
-            "correct_ans": 3
+            "correct_ans": 3,
+            "difficulty": 3
         },
         {
-            "difficulty": 1,
+
             "question": "What is the primary purpose of version control systems?",
             "answers": [
                 "To enhance software performance.",
@@ -108,10 +117,11 @@
                 "To reduce software development time.",
                 "To minimize collaboration among team members."
             ],
-            "correct_ans": 2
+            "correct_ans": 2,
+            "difficulty": 1
         },
         {
-            "difficulty": 1,
+
             "question": "What is the main purpose of the System Requirement Review (SRR)?",
             "answers": [
                 "To finalize the project's budget",
@@ -119,10 +129,11 @@
                 "To begin the software development phase",
                 "To assign tasks to the development team"
             ],
-            "correct_ans": 2
+            "correct_ans": 2,
+            "difficulty": 1
         },
         {
-            "difficulty": 2,
+
             "question": "What types of errors are commonly identified during requirement analysis?",
             "answers": [
                 "Syntax errors in the code",
@@ -130,10 +141,11 @@
                 "Errors in hardware configuration",
                 "Bugs in the software"
             ],
-            "correct_ans": 2
+            "correct_ans": 2,
+            "difficulty": 2
         },
         {
-            "difficulty": 1,
+
             "question": "What is a key goal of the SRR?",
             "answers": [
                 "To present the final software product",
@@ -141,10 +153,11 @@
                 "To train new team members",
                 "To conduct performance evaluations of the development team"
             ],
-            "correct_ans": 2
+            "correct_ans": 2,
+            "difficulty": 1
         },
         {
-            "difficulty": 2,
+
             "question": "What does the Model component represent in MVC architecture?",
             "answers": [
                 "The user interface and user experience",
@@ -152,10 +165,11 @@
                 "The handling of user input",
                 "The software's security protocols"
             ],
-            "correct_ans": 2
+            "correct_ans": 2,
+            "difficulty": 2
         },
         {
-            "difficulty": 2,
+
             "question": "What role does the View component play in MVC?",
             "answers": [
                 "It processes user input",
@@ -163,10 +177,11 @@
                 "It displays the user interface and presents data",
                 "It ensures the application's security"
             ],
-            "correct_ans": 3
+            "correct_ans": 3,
+            "difficulty": 2
         },
             {
-                "difficulty": 2,
+
                 "question": "In Git, what does a 'commit' represent?",
                 "answers": [
                     "A change in the project's documentation",
@@ -174,10 +189,11 @@
                     "A record of changes made to the repository",
                     "A backup of the entire project"
                 ],
-                "correct_ans": 3
+                "correct_ans": 3,
+                "difficulty": 2
             },
             {
-                "difficulty": 2,
+
                 "question": "What is the primary purpose of a code review?",
                 "answers": [
                     "To assess the project's budget",
@@ -185,10 +201,11 @@
                     "To assign tasks to the development team",
                     "To finalize the software design"
                 ],
-                "correct_ans": 2
+                "correct_ans": 2,
+                "difficulty": 2
             },
             {
-                "difficulty": 3,
+
                 "question": "How do code reviews contribute to software security?",
                 "answers": [
                     "By adding more features to the software",
@@ -196,10 +213,11 @@
                     "By finding and removing common vulnerabilities",
                     "By increasing the number of bugs"
                 ],
-                "correct_ans": 3
+                "correct_ans": 3,
+                "difficulty": 3
             },
             {
-                "difficulty": 1,
+
                 "question": "What is a key feature of distributed version control systems (DVCS)?",
                 "answers": [
                     "Centralized storage of all versions",
@@ -207,10 +225,11 @@
                     "Ability for every user to have a full backup of the repository",
                     "No offline work capability"
                 ],
-                "correct_ans": 3
+                "correct_ans": 3,
+                "difficulty": 1
             },
             {
-                "difficulty": 2,
+
                 "question": "What is a common outcome of code reviews according to industry case studies?",
                 "answers": [
                     "Increased number of bugs in production",
@@ -218,10 +237,11 @@
                     "Increased software development time",
                     "Decreased software security"
                 ],
-                "correct_ans": 2
+                "correct_ans": 2,
+                "difficulty": 2
             },
         {
-            "difficulty": 2,
+
             "question": "What is the primary goal of unit testing in software development?",
             "answers": [
                 "To validate the design of the software",
@@ -229,10 +249,11 @@
                 "To assess the performance of the software under load",
                 "To verify the final product meets customer requirements"
             ],
-            "correct_ans": 2
+            "correct_ans": 2,
+            "difficulty": 2
         },
         {
-            "difficulty": 2,
+
             "question": "What does JUnit provide for Java programming?",
             "answers": [
                 "A set of performance optimization tools",
@@ -240,10 +261,11 @@
                 "A framework for writing and running tests",
                 "An environment for version control"
             ],
-            "correct_ans": 3
+            "correct_ans": 3,
+            "difficulty": 2
         },
         {
-            "difficulty": 2,
+
             "question": "Which JUnit annotation is used to specify a method that should be executed before each test method?",
             "answers": [
                 "@BeforeClass",
@@ -251,10 +273,11 @@
                 "@Before",
                 "@AfterClass"
             ],
-            "correct_ans": 3
+            "correct_ans": 3,
+            "difficulty": 2
         },
         {
-            "difficulty": 3,
+
             "question": "What is the purpose of the @Ignore annotation in JUnit?",
             "answers": [
                 "To mark a test that should be executed first",
@@ -262,10 +285,11 @@
                 "To indicate that a test method is expecting an exception",
                 "To document the reason for test failure"
             ],
-            "correct_ans": 2
+            "correct_ans": 2,
+            "difficulty": 3
         },
         {
-            "difficulty": 3,
+
             "question": "How do stubs and drivers relate to unit testing?",
             "answers": [
                 "Stubs and drivers are alternative names for test cases and test suites",
@@ -273,10 +297,11 @@
                 "Stubs and drivers are dummy modules used in integration testing",
                 "They refer to types of assertions in JUnit"
             ],
-            "correct_ans": 3
+            "correct_ans": 3,
+            "difficulty": 3
         },
         {
-            "difficulty": 2,
+
             "question": "What is the main benefit of using design patterns in software development?",
             "answers": [
                 "To reduce the size of the codebase",
@@ -284,10 +309,11 @@
                 "To provide solutions to common software design problems",
                 "To eliminate the need for software testing"
             ],
-            "correct_ans": 3
+            "correct_ans": 3,
+            "difficulty": 2
         },
         {
-            "difficulty": 2,
+
             "question": "Which design pattern is primarily used to create an object while hiding the creation logic?",
             "answers": [
                 "Singleton",
@@ -295,10 +321,11 @@
                 "Adapter",
                 "Observer"
             ],
-            "correct_ans": 2
+            "correct_ans": 2,
+            "difficulty": 2
         },
         {
-            "difficulty": 3,
+
             "question": "In the context of the MVC pattern, what does the Controller component do?",
             "answers": [
                 "It handles data storage",
@@ -306,10 +333,11 @@
                 "It displays the application's user interface",
                 "It transforms data for the View component"
             ],
-            "correct_ans": 2
+            "correct_ans": 2,
+            "difficulty": 3
         },
         {
-            "difficulty": 2,
+
             "question": "What is the primary purpose of the Singleton pattern?",
             "answers": [
                 "To ensure a class has only one instance",
@@ -317,10 +345,11 @@
                 "To separate the construction of a complex object from its representation",
                 "To adapt an interface of a class into another interface clients expect"
             ],
-            "correct_ans": 1
+            "correct_ans": 1,
+            "difficulty": 2
         },
         {
-            "difficulty": 3,
+
             "question": "How does the Strategy pattern benefit software design?",
             "answers": [
                 "By providing a more efficient algorithm for sorting data",
@@ -328,163 +357,9 @@
                 "By enabling the definition of a family of algorithms and making them interchangeable",
                 "By reducing the overall number of objects in the system"
             ],
-            "correct_ans": 3
-        },
-        {
-            "questions": [
-                {
-                    "topic": "AGILE",
-                    "questions": [
-                        {
-                            "question": "What is the primary measure of progress in Agile methodologies?",
-                            "answers": [
-                                "Customer satisfaction",
-                                "Amount of completed documentation",
-                                "Number of completed tasks",
-                                "Delivery of working software"
-                            ],
-                            "correct_ans": 4
-                        },
-                        {
-                            "question": "Which of the following best describes an Agile approach to software development?",
-                            "answers": [
-                                "Sequential phases with little customer involvement",
-                                "Fixed requirements with flexible timelines",
-                                "Incremental development with customer collaboration",
-                                "Complete documentation before development"
-                            ],
-                            "correct_ans": 3
-                        }
-                    ]
-                },
-                {
-                    "topic": "Requirements",
-                    "questions": [
-                        {
-                            "question": "What is a key characteristic of a well-defined software requirement?",
-                            "answers": [
-                                "Vagueness to allow flexibility",
-                                "Technical jargon to ensure accuracy",
-                                "Clarity and conciseness",
-                                "Complexity to cover all scenarios"
-                            ],
-                            "correct_ans": 3
-                        },
-                        {
-                            "question": "In the context of software development, what does SRS stand for?",
-                            "answers": [
-                                "Software Requirement Specification",
-                                "System Review Session",
-                                "Software Review System",
-                                "System Requirement Software"
-                            ],
-                            "correct_ans": 1
-                        }
-                    ]
-                },
-                {
-                    "topic": "Surveys",
-                    "questions": [
-                        {
-                            "question": "How are surveys typically used in the software development process?",
-                            "answers": [
-                                "To gather user feedback on features",
-                                "To decide on the programming languages used",
-                                "To set the project budget",
-                                "To design the software architecture"
-                            ],
-                            "correct_ans": 1
-                        },
-                        {
-                            "question": "What is an important consideration when designing a survey for user feedback?",
-                            "answers": [
-                                "Using technical language",
-                                "Ensuring questions are open-ended",
-                                "Keeping questions neutral and unbiased",
-                                "Limiting the number of questions to five"
-                            ],
-                            "correct_ans": 3
-                        }
-                    ]
-                },
-                {
-                    "topic": "Architecture",
-                    "questions": [
-                        {
-                            "question": "What is the primary goal of software architecture?",
-                            "answers": [
-                                "To outline the best coding practices",
-                                "To define the system's structure and behavior",
-                                "To detail the user interface design",
-                                "To specify the hardware requirements"
-                            ],
-                            "correct_ans": 2
-                        },
-                        {
-                            "question": "Which pattern separates the system into three interconnected components?",
-                            "answers": [
-                                "Singleton Pattern",
-                                "Model-View-Controller (MVC)",
-                                "Factory Method",
-                                "Decorator Pattern"
-                            ],
-                            "correct_ans": 2
-                        }
-                    ]
-                },
-                {
-                    "topic": "Maintenance",
-                    "questions": [
-                        {
-                            "question": "What is the primary focus of software maintenance?",
-                            "answers": [
-                                "Adding new features to the system",
-                                "Correcting existing defects",
-                                "Both adding new features and correcting defects",
-                                "Redesigning the system architecture"
-                            ],
-                            "correct_ans": 3
-                        },
-                        {
-                            "question": "Which type of software maintenance involves making changes to improve system performance?",
-                            "answers": [
-                                "Corrective",
-                                "Adaptive",
-                                "Perfective",
-                                "Preventive"
-                            ],
-                            "correct_ans": 3
-                        }
-                    ]
-                },
-                {
-                    "topic": "Testing",
-                    "questions": [
-                        {
-                            "question": "What is the main purpose of regression testing?",
-                            "answers": [
-                                "To verify new features",
-                                "To check for performance issues",
-                                "To ensure that changes have not broken existing functionality",
-                                "To test the system on different platforms"
-                            ],
-                            "correct_ans": 3
-                        },
-                        {
-                            "question": "In unit testing, what is typically the scope of a test case?",
-                            "answers": [
-                                "A single function or method",
-                                "The entire application",
-                                "Integration between components",
-                                "User interface usability"
-                            ],
-                            "correct_ans": 1
-                        }
-                    ]
-                }
-            ]
+            "correct_ans": 3,
+            "difficulty": 3
         }
-
-    ]
+        ]
 }
 
