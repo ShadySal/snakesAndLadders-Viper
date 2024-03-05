@@ -11,6 +11,7 @@ public class Tile extends StackPane {
     private String name;
     private boolean visited;
     private Question question;
+    private String color;
 
     public Tile(int x, int y) {
         this.x = x;
@@ -28,6 +29,22 @@ public int getNumber(){
         return this.number;
 }
     // Getters and setters...
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 
     public int getX() {
         return x;

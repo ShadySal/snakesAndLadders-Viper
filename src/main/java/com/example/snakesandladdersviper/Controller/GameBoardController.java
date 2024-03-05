@@ -72,6 +72,7 @@ public class GameBoardController {
     private int globalSize;
     private Map<Integer, Integer> snakePositions = new HashMap<>();
     private Map<Integer, Integer> ladderPositions = new HashMap<>();
+    private Map<Integer, String> SpecialTiles = new HashMap<>();
 
 //    private void handlePlayerMove(GameEvent event) {
 //        Player player = event.getPlayer();
@@ -246,7 +247,6 @@ public class GameBoardController {
             gameBoard.setDice(new Dice(6, EASY_GAME_QUESTION_PROBABILITY));
         }
 
-        ;
         gameBoard.initializePlayerPositions(players);
         gamepane.setAlignment(Pos.CENTER);
 
@@ -649,8 +649,6 @@ public class GameBoardController {
         }
     }
 
-
-
     private Set<Integer> determineOccupiedPositions(Map<Integer, String> specialTiles, int boardSize) {
         Set<Integer> occupiedPositions = new HashSet<>();
 
@@ -686,8 +684,10 @@ public class GameBoardController {
             while (usedTiles.contains(tile)) {
                 tile = random.nextInt(size * size) + 1;
             }
+
             specialTiles.put(tile, questionColors[i]);
             usedTiles.add(tile);
+            SpecialTiles.put(tile,questionColors[i]);
         }
 
         if (difficulty != Difficulty.EASY) {
@@ -716,6 +716,7 @@ public class GameBoardController {
         String tileLabel = Integer.toString(number);
         tile.setNumber(number);
         if (!specialTileColor.isEmpty()) {
+            tile.setColor(specialTileColor);
             backgroundColor += specialTileColor;
             if (specialTileColor.equals("blue")) {
                 tileLabel = "Surprise";
@@ -811,8 +812,8 @@ public class GameBoardController {
             Pane tile = getTileForPlayer(player);
             if (tile != null && playerImage != null) {
                 tile.getChildren().add(playerImage);
-                playerImage.setFitHeight(40); // Increase height (e.g., 40)
-                playerImage.setFitWidth(40);
+                playerImage.setFitHeight(60); // Increase height (e.g., 40)
+                playerImage.setFitWidth(60);
                 int imageIndex = tile.getChildren().indexOf(playerImage);
                 double xOffset = (imageIndex - 0.8) * 10;
                 double yOffset = (imageIndex - 0.3) * 11;
@@ -826,7 +827,7 @@ public class GameBoardController {
 
     @FXML
     void MainMenuFun(ActionEvent event) throws IOException {
-        // Create a confirmation alert
+        // Create a confirmation aler
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.setTitle("Confirmation");
         confirmationAlert.setHeaderText("Are you sure you want to end the game and back to main menu?");
@@ -1187,47 +1188,101 @@ public class GameBoardController {
         int currentPosition = gameBoard.getPlayerPosition(currentPlayer);
         int newPosition = currentPosition + steps;
         int totalTiles = getTotalTilesForDifficulty(difficulty);
+
         // Check if the new position goes beyond the last tile
-        if (newPosition > totalTiles) {
-            // If it does, the player wins the game
-            handlePlayerWin(new GameEvent(currentPlayer));
+        if (newPosition >= totalTiles) {
+            handlePlayerWin(currentPlayer);
             return; // Return to prevent further execution
         }
 
-        // Check if the new position is the start of a snake
-        if (snakePositions.containsKey(newPosition)) {
-            newPosition = snakePositions.get(newPosition);
-            System.out.println("Player landed on a snake! Moved to position " + newPosition);
-        }
+        // Check if the new position is a special tile and trigger appropriate action
+        String tileColor = SpecialTiles.get(newPosition);
+        if (tileColor != null) {
+            switch (tileColor) {
+                case "green":
+                    askQuestion("easy", isCorrect -> handleQuestionOutcome(isCorrect, "easy"));
+                    break;
+                case "yellow":
+                    askQuestion("medium", isCorrect -> handleQuestionOutcome(isCorrect, "medium"));
+                    break;
+                case "red":
+                    askQuestion("hard", isCorrect -> handleQuestionOutcome(isCorrect, "hard"));
+                    break;
+            }
+        } else {
+            // Check if the new position is the start of a snake
+            if (snakePositions.containsKey(newPosition)) {
+                newPosition = snakePositions.get(newPosition);
+                System.out.println("Player landed on a snake! Moved to position " + newPosition);
+            }
 
-        // Check if the new position is the start of a ladder
-        if (ladderPositions.containsKey(newPosition)) {
-            newPosition = ladderPositions.get(newPosition);
-            System.out.println("Player landed on a ladder! Moved to position " + newPosition);
-        }
+            // Check if the new position is the start of a ladder
+            if (ladderPositions.containsKey(newPosition)) {
+                newPosition = ladderPositions.get(newPosition);
+                System.out.println("Player landed on a ladder! Moved to position " + newPosition);
+            }
 
-        // Update the position in the game board
-        gameBoard.setPlayerPosition(currentPlayer, newPosition);
+            // Update the position in the game board
+            gameBoard.setPlayerPosition(currentPlayer, newPosition);
 
-        // Update the UI to reflect the new position
-        updatePlayerPositionOnBoard(currentPlayer);
-
-        if (hasPlayerWon(currentPlayer)) {
-            // Handle player winning scenario
-            handlePlayerWin(new GameEvent(currentPlayer));
+            // Update the UI to reflect the new position
+            updatePlayerPositionOnBoard(currentPlayer);
         }
     }
+    private void handlePlayerWin(Player currentPlayer) {
+        // Get the game duration as a string
+        String gameDurationStr = SysData.getInstance().calculateGameDuration(startTime);
+        long gameDurationMillis = convertDurationToMillis(gameDurationStr);
+        // Difficulty of the match
+        String gameDifficulty = difficulty.toString(); // Assuming 'difficulty' is an enum or string variable in your class
+        // Add the game data to history.json
+        SysData.getInstance().addGameHistory(currentPlayer.getName(), gameDurationMillis, gameDifficulty);
+        Platform.runLater(() -> {
+            Alert winAlert = new Alert(Alert.AlertType.INFORMATION);
+            winAlert.setTitle("Congratulations!");
+            winAlert.setHeaderText(null);
+            winAlert.setContentText(currentPlayer.getName() + " has won the game!");
 
+            // Add a "Home Screen" button
+            ButtonType homeScreenButton = new ButtonType("End Game", ButtonBar.ButtonData.OK_DONE);
+            winAlert.getButtonTypes().setAll(homeScreenButton);
+
+            // Wait for user response
+            Optional<ButtonType> result = winAlert.showAndWait();
+
+            if (result.isPresent() && result.get() == homeScreenButton) {
+                // Load the home screen
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/hello-view.fxml"));
+                    Parent root = loader.load();
+                    Scene scene = new Scene(root);
+
+                    // Get the current stage and set the new scene
+                    Stage currentStage = (Stage) contentPane.getScene().getWindow();
+                    currentStage.setScene(scene);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+
+    private long convertDurationToMillis(String gameDuration) {
+        String[] parts = gameDuration.split(":");
+        long hours = Long.parseLong(parts[0]);
+        long minutes = Long.parseLong(parts[1]);
+        long seconds = Long.parseLong(parts[2]);
+        return (hours * 3600 + minutes * 60 + seconds) * 1000;
+    }
     private void handlePlayerWin(GameEvent event) {
         Player player = event.getPlayer(); // Assuming event.getPlayer() returns a Player object
-
         // Show a congratulatory message or dialog
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Game Over");
         alert.setHeaderText(null);
         alert.setContentText("Congratulations " + player.getName() + "! You have won the game.");
         alert.showAndWait();
-
         // Assuming the addGameHistory method in SysData requires the winner's name, start time, and difficulty
         // Here, you need to provide the correct difficulty level if required
         String difficulty = "Easy"; // Example, adjust based on your game's logic

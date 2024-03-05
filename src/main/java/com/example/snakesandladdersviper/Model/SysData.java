@@ -73,10 +73,9 @@ public class SysData {
     }
 
 
-
     public void addGameHistory(String winnerName, long startTimeMillis, String difficulty) {
-        String gameDuration = calculateGameDuration(startTimeMillis); // Ensure this method returns a duration in minutes as a string, e.g., "15 minutes"
-        JSONObject jsonObject = readJsonFile(HISTORY_FILE); // Implement this method to read the JSON file and return a JSONObject
+        String gameDuration = calculateGameDuration(startTimeMillis);  // This method returns a formatted string
+        JSONObject jsonObject = readJsonFile(HISTORY_FILE);
         JSONArray gameHistoryArray = jsonObject.optJSONArray("GameHistory");
         if (gameHistoryArray == null) {
             gameHistoryArray = new JSONArray();
@@ -85,14 +84,12 @@ public class SysData {
 
         JSONObject newGameHistoryJson = new JSONObject();
         newGameHistoryJson.put("winner", winnerName);
-        newGameHistoryJson.put("duration", gameDuration);
+        newGameHistoryJson.put("duration", gameDuration);  // Duration as a formatted string
         newGameHistoryJson.put("difficulty", difficulty);
 
         gameHistoryArray.put(newGameHistoryJson);
-        saveJsonToFile(jsonObject, HISTORY_FILE); // Implement this method to save the JSONObject back to the file
+        saveJsonToFile(jsonObject, HISTORY_FILE);
     }
-
-
 
     public String calculateGameDuration(long startTimeMillis) {
         long durationMillis = System.currentTimeMillis() - startTimeMillis;
@@ -102,6 +99,9 @@ public class SysData {
 
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
+
+
+
 
     /**
      * Imports history from JSON file.
@@ -183,7 +183,6 @@ public class SysData {
             return null;
         }
     }
-
 
     /**
      * Removes a question and updates the JSON file.
