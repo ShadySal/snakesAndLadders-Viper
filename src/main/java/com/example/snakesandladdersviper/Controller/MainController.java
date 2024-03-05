@@ -1,11 +1,15 @@
 package com.example.snakesandladdersviper.Controller;
 
+import com.example.snakesandladdersviper.Utils.SceneUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 import javafx.scene.Node;
@@ -19,6 +23,7 @@ import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.animation.ScaleTransition;
 import javafx.scene.text.Font;
@@ -121,116 +126,82 @@ public class MainController implements Initializable{
 
 
 
-    public void StartGame() throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/gameMode.fxml"));
-        Stage stage = (Stage) MainPane.getScene().getWindow();
-        stage.setTitle("Game Mode");
-        MainPane.getChildren().clear();
-        MainPane.setCenter(root);
+    public void StartGame(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        SceneUtils.changeScene(stage, "/com/example/snakesandladdersviper/gameMode.fxml", true);
     }
 
     public void showGameHistory(ActionEvent event) {
-        try {
-            // Load the GameHistory.fxml file
-            Parent gameHistoryPage = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/GameHistory.fxml"));
-            Stage stage = (Stage) MainPane.getScene().getWindow();
-            stage.setTitle("Game History");
-            MainPane.getChildren().clear();
-            MainPane.setCenter(gameHistoryPage);
-        } catch (IOException e) {
-            // Handle the case where the FXML file couldn't be loaded
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            showError("Failed to load game history.", currentStage);
-        }
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        SceneUtils.changeScene(stage, "/com/example/snakesandladdersviper/GameHistory.fxml", true);
     }
-
 
     public void InstructionsOfGame(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        SceneUtils.changeScene(stage, "/com/example/snakesandladdersviper/Instructions.fxml", true);
+    }
+
+
+    public void showError(String errorMessage, ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        SceneUtils.showAlert("Error", errorMessage, stage);
+    }
+
+
+
+    @FXML
+    void BackButton(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        SceneUtils.changeScene(stage, "/com/example/snakesandladdersviper/hello-view.fxml", true);
+    }
+
+
+
+    @FXML
+    private void onQuestionManagementBtnClicked(ActionEvent event) {
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Create and configure the login dialog
+        Dialog<Boolean> loginDialog = new Dialog<>();
+        loginDialog.initOwner(currentStage);
+        loginDialog.setTitle("Admin Login");
+
         try {
-            Parent InstructionPage = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/Instructions.fxml"));
-            Stage stage = (Stage) MainPane.getScene().getWindow();
-            stage.setTitle("Game Instructions");
-            MainPane.getChildren().clear();
-            MainPane.setCenter(InstructionPage);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/AdminLogin.fxml"));
+            loginDialog.getDialogPane().setContent(loader.load());
+
+            AdminLoginController controller = loader.getController();
+
+            loginDialog.setResultConverter(dialogButton -> {
+                if (dialogButton == ButtonType.OK) {
+                    return controller.isLoggedIn();
+                }
+                return false;
+            });
+
+            loginDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+            // Show dialog and wait for response
+            Optional<Boolean> result = loginDialog.showAndWait();
+
+            result.ifPresent(isLoggedIn -> {
+                if (isLoggedIn) {
+                    SceneUtils.changeScene(currentStage, "/com/example/snakesandladdersviper/QuestionsPage.fxml", true);
+                } else {
+                    SceneUtils.showAlert("Login Failed", "Incorrect username or password.", currentStage);
+                }
+            });
+
         } catch (IOException e) {
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            showError("Failed to load instructions.", currentStage);
-        }
-    }
-
-    public void showError(String errorMessage, Stage stage) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText(errorMessage);
-            alert.initOwner(stage);
-            alert.showAndWait();
-
-            // Check if full screen was exited and reapply if necessary
-            if (!stage.isFullScreen()) {
-                stage.setFullScreen(true);
-            }
-        });
-    }
-
-
-    @FXML
-    void BackButton(ActionEvent event) throws IOException {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/hello-view.fxml"));
-            Parent root = loader.load();
-            Scene nextScene = new Scene(root);
-// Get the current stage and set the new scene
-            Stage currentStage = (Stage) BackButton.getScene().getWindow();
-            currentStage.setScene(nextScene);
-        } catch (Exception e) {
             e.printStackTrace();
+            SceneUtils.showAlert("Error", "Failed to load login dialog.", currentStage);
         }
     }
 
 
-
-    @FXML
-    private void onQuestionManagementBtnClicked(ActionEvent event) throws IOException {
-        // Load AdminLogin.fxml
-        FXMLLoader adminLoader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/AdminLogin.fxml"));
-        Parent adminLoginParent = adminLoader.load();
-
-        // Get the controller to set up any necessary communication
-        AdminLoginController adminLoginController = adminLoader.getController();
-
-        // Create a new stage for the admin login dialog
-        Stage adminLoginStage = new Stage();
-        adminLoginStage.setScene(new Scene(adminLoginParent));
-        adminLoginStage.setTitle("Admin Login");
-        adminLoginStage.showAndWait(); // Show the login dialog and wait for it to close
-
-        // After login dialog is closed, check if the admin login was successful
-        if (adminLoginController.isLoggedIn()) {
-            // Admin successfully logged in, proceed to question management
-            Parent questionsPage = FXMLLoader.load(getClass().getResource("/com/example/snakesandladdersviper/QuestionsPage.fxml"));
-            Stage questionStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            questionStage.setScene(new Scene(questionsPage));
-
-            // Set full-screen mode for the question management page
-            questionStage.setFullScreen(true);
-
-            // Show the question management page
-            questionStage.show();
-        } else {
-            // Admin login unsuccessful, show an error message to the user
-            showAlert("Access Denied", "You must log in as an admin to access this feature.");
-        }
-    }
-
-
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+    public void showAlert(String title, String errorMessage, ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        SceneUtils.showAlert(title, errorMessage, stage);
     }
 
 
