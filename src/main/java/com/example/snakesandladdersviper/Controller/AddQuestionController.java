@@ -2,6 +2,7 @@ package com.example.snakesandladdersviper.Controller;
 
 import com.example.snakesandladdersviper.Model.Question;
 import com.example.snakesandladdersviper.Model.SysData;
+import com.example.snakesandladdersviper.Utils.SceneUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -90,9 +91,12 @@ public class AddQuestionController {
             // Save the updated data to the JSON file
             SysData.getInstance().saveQuestionsToJsonFile();
             // Show confirmation message
-            showConfirmationMessage("Question added successfully!");
+            Stage stage = (Stage) QuestionTextField.getScene().getWindow(); // Assuming you have access to the current Stage
+            SceneUtils.showAlert("Confirmation", "Question added successfully!", stage, true);
         }
     }
+
+
     private void showConfirmationMessage(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
@@ -111,7 +115,8 @@ public class AddQuestionController {
                 Answer4TextField.getText().isEmpty() ||
                 answersToggleGroup.getSelectedToggle() == null) {
 
-            showAlert("Error", "Please fill all fields and select the correct answer.");
+            Stage stage = (Stage) QuestionTextField.getScene().getWindow(); // Get the stage for positioning the alert
+            SceneUtils.showAlert("Error", "Please fill all fields and select the correct answer.", stage, true); // Assuming showAlert in SceneUtils is adapted to include a keepFullScreen parameter
             return false;
         }
         return true;
@@ -147,22 +152,14 @@ public class AddQuestionController {
         return 4; // Default to Answer4
     }
 
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
 
     @FXML
-    void BackButtonFunc(ActionEvent event) throws IOException {
-        // Create a confirmation alert
+    void BackButtonFunc(ActionEvent event) {
         Stage stage = (Stage) BackButton1.getScene().getWindow();
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.initOwner(stage);
         confirmationAlert.setTitle("Confirmation");
-        confirmationAlert.setHeaderText("Are you sure you want to back to the manging questions?");
+        confirmationAlert.setHeaderText("Are you sure you want to back to the managing questions?");
         confirmationAlert.setContentText("");
 
         // Add OK and Cancel buttons to the alert
@@ -171,24 +168,10 @@ public class AddQuestionController {
         // Show the alert and wait for user input
         confirmationAlert.showAndWait().ifPresent(buttonType -> {
             if (buttonType == ButtonType.OK) {
-                // User clicked OK, proceed with transferring to the main menu
-
-                try {
-                    // Back to the main menu
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/QuestionsPage.fxml"));
-                    Parent root = loader.load();
-                    Scene nextScene = new Scene(root);
-
-                    // Get the current stage and set the new scene
-                    Stage currentStage = (Stage) BackButton1.getScene().getWindow();
-                    currentStage.setScene(nextScene);
-                    currentStage.setFullScreen(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-                // User clicked Cancel, do nothing or handle accordingly
+                // User clicked OK, proceed with transferring to the question management page
+                SceneUtils.changeScene(stage, "/com/example/snakesandladdersviper/QuestionsPage.fxml", true);
             }
+            // If User clicked Cancel, no further action is needed
         });
     }
 }
