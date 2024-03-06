@@ -171,7 +171,6 @@ public class MainController implements Initializable{
         loginStage.setScene(new Scene(root));
 
         // Optionally set properties to ensure consistent appearance with fullscreen mode
-        loginStage.initStyle(StageStyle.UNDECORATED); // Optional: Remove window decorations
 
         loginStage.showAndWait(); // Wait until the login window is closed
 
