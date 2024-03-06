@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import java.net.URL;
 import java.util.Optional;
@@ -144,7 +145,7 @@ public class MainController implements Initializable{
 
     public void showError(String errorMessage, ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        SceneUtils.showAlert("Error", errorMessage, stage);
+        SceneUtils.showAlert("Error", errorMessage, stage,true);
     }
 
 
@@ -157,51 +158,36 @@ public class MainController implements Initializable{
 
 
 
+    // Assuming this is inside MainController or similar
     @FXML
-    private void onQuestionManagementBtnClicked(ActionEvent event) {
-        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private void onQuestionManagementBtnClicked(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/AdminLogin.fxml"));
+        Parent root = loader.load();
+        AdminLoginController loginController = loader.getController();
 
-        // Create and configure the login dialog
-        Dialog<Boolean> loginDialog = new Dialog<>();
-        loginDialog.initOwner(currentStage);
-        loginDialog.setTitle("Admin Login");
+        Stage loginStage = new Stage();
+        loginStage.initModality(Modality.APPLICATION_MODAL); // Ensure dialog appears on top without affecting fullscreen mode
+        loginStage.initOwner(((Node)event.getSource()).getScene().getWindow()); // Set owner to current stage
+        loginStage.setScene(new Scene(root));
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/AdminLogin.fxml"));
-            loginDialog.getDialogPane().setContent(loader.load());
+        // Optionally set properties to ensure consistent appearance with fullscreen mode
+        loginStage.initStyle(StageStyle.UNDECORATED); // Optional: Remove window decorations
 
-            AdminLoginController controller = loader.getController();
+        loginStage.showAndWait(); // Wait until the login window is closed
 
-            loginDialog.setResultConverter(dialogButton -> {
-                if (dialogButton == ButtonType.OK) {
-                    return controller.isLoggedIn();
-                }
-                return false;
-            });
-
-            loginDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-            // Show dialog and wait for response
-            Optional<Boolean> result = loginDialog.showAndWait();
-
-            result.ifPresent(isLoggedIn -> {
-                if (isLoggedIn) {
-                    SceneUtils.changeScene(currentStage, "/com/example/snakesandladdersviper/QuestionsPage.fxml", true);
-                } else {
-                    SceneUtils.showAlert("Login Failed", "Incorrect username or password.", currentStage);
-                }
-            });
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            SceneUtils.showAlert("Error", "Failed to load login dialog.", currentStage);
+        if (loginController.isLoggedIn()) {
+            // Ensure we're running changes on the JavaFX thread and maintaining fullscreen mode
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            SceneUtils.changeScene(currentStage, "/com/example/snakesandladdersviper/QuestionsPage.fxml", true);
         }
     }
 
 
+
+
     public void showAlert(String title, String errorMessage, ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        SceneUtils.showAlert(title, errorMessage, stage);
+        SceneUtils.showAlert(title, errorMessage, stage,true);
     }
 
 

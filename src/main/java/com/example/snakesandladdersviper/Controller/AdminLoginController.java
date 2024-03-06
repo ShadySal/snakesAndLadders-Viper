@@ -1,11 +1,15 @@
 package com.example.snakesandladdersviper.Controller;
 
+import com.example.snakesandladdersviper.Utils.SceneUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
+import javafx.stage.Stage;
+
+import static com.example.snakesandladdersviper.Utils.SceneUtils.showAlert;
 
 public class AdminLoginController {
 
@@ -20,12 +24,11 @@ public class AdminLoginController {
     private boolean loggedIn = false;
 
     @FXML
-    private Button loginButton; // You might not need to explicitly define this unless you're doing more than just the FXML's onAction
+    private Button loginButton;
 
     public boolean isLoggedIn() {
         return loggedIn;
     }
-
     @FXML
     public void loginButtonClicked(ActionEvent event) {
         String enteredUsername = usernameField.getText().trim();
@@ -33,24 +36,17 @@ public class AdminLoginController {
 
         if (ADMIN_USERNAME.equals(enteredUsername) && ADMIN_PASSWORD.equals(enteredPassword)) {
             loggedIn = true;
-            // Assuming you have some logic here to close the login window or dialog
-            closeWindow();
-        } else {
-            showLoginErrorAlert();
+            // Close the login window/dialog here
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            stage.close(); // Close the login window
+            // Optionally, notify the main application that the login was successful if needed
+        }
+        else {
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            // Assuming SceneUtils is accessible and showAlert has been properly defined
+            SceneUtils.showAlert("Login Error", "Incorrect username or password. Please try again.", stage, true);
         }
     }
 
-    private void closeWindow() {
-        // Close the login window. You might need a reference to the Stage.
-        // If this controller is used in a dialog, you don't need to manually close the window here.
-        // This is just a placeholder for whatever logic you need to execute after a successful login.
-    }
 
-    private void showLoginErrorAlert() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Login Error");
-        alert.setHeaderText(null);
-        alert.setContentText("Incorrect username or password. Please try again.");
-        alert.showAndWait();
-    }
 }
