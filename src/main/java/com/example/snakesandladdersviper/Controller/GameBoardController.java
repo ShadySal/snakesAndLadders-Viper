@@ -709,7 +709,7 @@ public class GameBoardController {
 
 
     private void createTile(int number, int col, int row, int size, String specialTileColor) {
-        System.out.println(number);
+        System.out.println("in CreateTile");
         Tile tile = new Tile(col, size - row - 1);
         String backgroundColor = "-fx-background-color: ";
         String textColor = "-fx-text-fill: black;";
@@ -727,31 +727,40 @@ public class GameBoardController {
         } else {
             backgroundColor += ((row + col) % 2 == 0) ? "green" : "white";
         }
-
         tile.setStyle(backgroundColor + "; -fx-border-color: black;");
-
         // Create a StackPane to hold the label
         StackPane stackPane = new StackPane();
         Label label = new Label(tileLabel);
         label.setStyle(textColor + " -fx-font-size: 12;");
-
         // Add label to StackPane and StackPane to Tile
         stackPane.getChildren().add(label);
         tile.getChildren().add(stackPane);
-
         // Set alignment for the label in the upper-left corner
        // StackPane.setAlignment(label, Pos.TOP_LEFT);
        // System.out.println(tile);
         int s = size - row -1 ;
         //System.out.println(col + s);
         BoardGrid.add(tile, col, size - row - 1);
+
+        Platform.runLater(() -> printTileCoordinates(tile));
     }
-
-
+    private void printTileCoordinates(Tile tile) {
+        // Ensure the tile is not null and is part of a scene
+        System.out.println("in printTileCoo");
+        if (tile != null && tile.getScene() != null) {
+            System.out.println("in IF statements");
+            Bounds boundsInScene = tile.localToScene(tile.getBoundsInLocal());
+            Bounds boundsInScreen = tile.localToScreen(tile.getBoundsInLocal());
+            System.out.println("Tile Number: " + tile.getNumber() +
+                    ", Scene Coordinates: X=" + boundsInScene.getMinX() +
+                    ", Y=" + boundsInScene.getMinY() +
+                    ", Screen Coordinates: X=" + boundsInScreen.getMinX() +
+                    ", Y=" + boundsInScreen.getMinY());
+        }
+    }
     private void setupGridConstraints(int size) {
         BoardGrid.getColumnConstraints().clear();
         BoardGrid.getRowConstraints().clear();
-
         // Define the static size for each tile based on difficulty
         double tileWidth;
         double tileHeight;
