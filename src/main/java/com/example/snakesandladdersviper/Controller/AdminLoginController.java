@@ -1,63 +1,52 @@
 package com.example.snakesandladdersviper.Controller;
 
-import javafx.event.ActionEvent;
+import com.example.snakesandladdersviper.Utils.SceneUtils;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import static com.example.snakesandladdersviper.Utils.SceneUtils.showAlert;
 
 public class AdminLoginController {
 
     @FXML
-    public TextField usernameField;
+    private TextField usernameField;
 
     @FXML
-    public PasswordField passwordField;
+    private PasswordField passwordField;
 
     private static final String ADMIN_USERNAME = "admin";
     private static final String ADMIN_PASSWORD = "admin123";
     private boolean loggedIn = false;
 
     @FXML
-    private Button BackButton;
-
-    // Existing methods...
-
+    private Button loginButton;
 
     public boolean isLoggedIn() {
         return loggedIn;
     }
     @FXML
-    public void loginButtonClicked() {
-        String enteredUsername = usernameField.getText();
-        String enteredPassword = passwordField.getText();
+    public void loginButtonClicked(ActionEvent event) {
+        String enteredUsername = usernameField.getText().trim();
+        String enteredPassword = passwordField.getText().trim();
 
         if (ADMIN_USERNAME.equals(enteredUsername) && ADMIN_PASSWORD.equals(enteredPassword)) {
-            loggedIn = true; // Set login status to true
-            closeStage();
-        } else {
-            showLoginErrorAlert(); // Display error alert for incorrect credentials
+            loggedIn = true;
+            // Close the login window/dialog here
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            stage.close(); // Close the login window
+            // Optionally, notify the main application that the login was successful if needed
+        }
+        else {
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            // Assuming SceneUtils is accessible and showAlert has been properly defined
+            SceneUtils.showAlert("Login Error", "Incorrect username or password. Please try again.", stage, true);
         }
     }
 
-
-    private void showLoginErrorAlert() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Login Error");
-        alert.setHeaderText(null);
-        alert.setContentText("Incorrect username or password. Please try again.");
-        alert.showAndWait();
-    }
-    private void closeStage() {
-        Stage stage = (Stage) usernameField.getScene().getWindow();
-        stage.close();
-    }
 
 }

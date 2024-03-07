@@ -1,6 +1,7 @@
 package com.example.snakesandladdersviper.Controller;
 import com.example.snakesandladdersviper.Model.Question;
 import com.example.snakesandladdersviper.Model.SysData;
+import com.example.snakesandladdersviper.Utils.SceneUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -69,7 +70,6 @@ public class QuestionsPageController {
     }
     @FXML
     void BackButtonFunc(ActionEvent event) throws IOException {
-        // Create a confirmation alert
         Stage stage = (Stage) BackButton.getScene().getWindow();
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationAlert.initOwner(stage);
@@ -84,25 +84,12 @@ public class QuestionsPageController {
         confirmationAlert.showAndWait().ifPresent(buttonType -> {
             if (buttonType == ButtonType.OK) {
                 // User clicked OK, proceed with transferring to the main menu
-
-                try {
-                    // Back to the main menu
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/hello-view.fxml"));
-                    Parent root = loader.load();
-                    Scene nextScene = new Scene(root);
-
-                    // Get the current stage and set the new scene
-                    Stage currentStage = (Stage) BackButton.getScene().getWindow();
-                    currentStage.setScene(nextScene);
-                    currentStage.setFullScreen(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-                // User clicked Cancel, do nothing or handle accordingly
+                SceneUtils.changeScene(stage, "/com/example/snakesandladdersviper/hello-view.fxml", true);
             }
+            // If User clicked Cancel, do nothing or handle accordingly
         });
     }
+
 
 
     private void displayAnswers(String selectedQuestion) {
@@ -127,7 +114,8 @@ public class QuestionsPageController {
     private void onEditButtonClicked(ActionEvent event) throws IOException {
         String selectedQuestionText = QuestionsView.getSelectionModel().getSelectedItem();
         if (selectedQuestionText == null) {
-            showAlert("No Question Selected", "Please select a question to edit.");
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            SceneUtils.showAlert("No Question Selected", "Please select a question to edit.", stage, true);
             return;
         }
         Question selectedQuestion = findQuestionByText(selectedQuestionText);
@@ -155,13 +143,7 @@ public class QuestionsPageController {
         }
         return null;
     }
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
+
 
 
 
@@ -185,8 +167,10 @@ public class QuestionsPageController {
     void onDeleteButtonClicked(ActionEvent event) {
         String selectedQuestionText = QuestionsView.getSelectionModel().getSelectedItem();
         if (selectedQuestionText == null) {
-            showAlert("No Question Selected", "Please select a question to delete.");
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            SceneUtils.showAlert("No Question Selected", "Please select a question to delete.", stage, true);
             return;
+
         }
         if (selectedQuestionText != null) {
             // Create a confirmation alert

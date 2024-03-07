@@ -11,21 +11,26 @@ import java.io.IOException;
 
 public class SceneUtils {
 
-    public static void changeScene(Stage stage, String fxmlPath, boolean fullScreen) {
+    // Updated to change the root of the current scene
+    public static void changeScene(Stage stage, String fxmlPath, boolean keepFullScreen) {
         Platform.runLater(() -> {
             try {
                 Parent root = FXMLLoader.load(SceneUtils.class.getResource(fxmlPath));
-                Scene scene = new Scene(root);
-                stage.setScene(scene);
-                stage.setFullScreen(fullScreen);
+                if (stage.getScene() != null) {
+                    stage.getScene().setRoot(root);
+                } else {
+                    stage.setScene(new Scene(root));
+                }
+                stage.setFullScreen(keepFullScreen);
             } catch (IOException e) {
                 e.printStackTrace();
-                showAlert("Error loading scene", "Failed to load the requested scene.", stage);
+                showAlert("Error loading scene", "Failed to load the requested scene.", stage, keepFullScreen);
             }
         });
     }
 
-    public static void showAlert(String title, String content, Stage stage) {
+    // Adjusted to include the keepFullScreen parameter for consistency
+    public static void showAlert(String title, String content, Stage stage, boolean keepFullScreen) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle(title);
@@ -33,7 +38,9 @@ public class SceneUtils {
             alert.setContentText(content);
             alert.initOwner(stage);
             alert.showAndWait();
-            if (!stage.isFullScreen()) {
+
+            // Reapply full-screen mode if necessary, based on the keepFullScreen parameter
+            if (keepFullScreen) {
                 stage.setFullScreen(true);
             }
         });

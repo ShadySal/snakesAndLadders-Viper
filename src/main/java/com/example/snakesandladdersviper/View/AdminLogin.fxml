@@ -13,6 +13,6 @@
     <Text text="please enter your upassword"/>
     <PasswordField fx:id="passwordField" />
     <HBox alignment="CENTER">
-        <Button onAction="#loginButtonClicked" layoutX="300.0" layoutY="300.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-border-radius: 5px;" text="Login" />
+        <Button fx:id="loginButton" onAction="#loginButtonClicked" layoutX="300.0" layoutY="300.0" prefHeight="40.0" prefWidth="80.0" style="-fx-background-color:linear-gradient(#7ed56f, #28b485); -fx-border-radius: 5px;" text="Login" />
     </HBox>
 </VBox>

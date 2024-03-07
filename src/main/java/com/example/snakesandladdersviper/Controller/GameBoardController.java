@@ -1,6 +1,7 @@
 package com.example.snakesandladdersviper.Controller;
 import com.example.snakesandladdersviper.Model.*;
 import com.example.snakesandladdersviper.Enums.Difficulty;
+import com.example.snakesandladdersviper.Utils.SceneUtils;
 import javafx.animation.KeyFrame;
 import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
@@ -835,11 +836,14 @@ public class GameBoardController {
     }
 
     @FXML
-    void MainMenuFun(ActionEvent event) throws IOException {
-        // Create a confirmation aler
+    void MainMenuFun(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Create a confirmation alert
         Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.initOwner(stage);
         confirmationAlert.setTitle("Confirmation");
-        confirmationAlert.setHeaderText("Are you sure you want to end the game and back to main menu?");
+        confirmationAlert.setHeaderText("Are you sure you want to end the game and back to the main menu?");
         confirmationAlert.setContentText("Any unsaved changes may be lost.");
 
         // Add OK and Cancel buttons to the alert
@@ -848,25 +852,14 @@ public class GameBoardController {
         // Show the alert and wait for user input
         confirmationAlert.showAndWait().ifPresent(buttonType -> {
             if (buttonType == ButtonType.OK) {
-                // User clicked OK, proceed with transferring to the main menu
-
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/hello-view.fxml"));
-                    Parent root = loader.load();
-                    Scene nextScene = new Scene(root);
-
-                    // Get the current stage and set the new scene
-                    Stage currentStage = (Stage) MainMenuButton.getScene().getWindow();
-                    currentStage.setScene(nextScene);
-                    currentStage.setFullScreen(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                // User clicked OK, proceed with transferring to the main menu using SceneUtils for a smooth transition
+                SceneUtils.changeScene(stage, "/com/example/snakesandladdersviper/hello-view.fxml", true);
             } else {
                 // User clicked Cancel, do nothing or handle accordingly
             }
         });
     }
+
 
     private Pane getTileForPlayer(Player player) {
         int size = determineBoardSize(difficulty);

@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -55,17 +56,11 @@ public class GameHistoryController {
         List<GameHistory> historyList = SysData.getInstance().getHistory();
         gameHistoryTable.setItems(FXCollections.observableArrayList(historyList));
     }
+
     @FXML
     void BackButton(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/hello-view.fxml"));
-            Parent root = loader.load();
-            Scene nextScene = new Scene(root);
-            Stage currentStage = (Stage) BackButton.getScene().getWindow();
-            currentStage.setScene(nextScene);
-            currentStage.setFullScreen(true); // Keep full screen
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        SceneUtils.changeScene(currentStage, "/com/example/snakesandladdersviper/hello-view.fxml", true);
     }
+
 }

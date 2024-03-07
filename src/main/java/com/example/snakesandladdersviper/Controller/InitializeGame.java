@@ -3,9 +3,11 @@ package com.example.snakesandladdersviper.Controller;
 import com.example.snakesandladdersviper.Enums.Difficulty;
 import com.example.snakesandladdersviper.Model.GameBoard;
 import com.example.snakesandladdersviper.Model.Player;
+import com.example.snakesandladdersviper.Utils.SceneUtils;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -62,16 +64,11 @@ public class InitializeGame {
 
     @FXML
     void BackButton(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/gameMode.fxml"));
-            Parent root = loader.load();
-            Scene nextScene = new Scene(root);
-            Stage currentStage = (Stage) BackButton.getScene().getWindow();
-            currentStage.setScene(nextScene);
-            currentStage.setFullScreen(true); // Keep full screen
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // Get the current stage from the event source
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Use SceneUtils to change the scene smoothly while keeping full screen
+        SceneUtils.changeScene(stage, "/com/example/snakesandladdersviper/gameMode.fxml", true);
     }
 
 
