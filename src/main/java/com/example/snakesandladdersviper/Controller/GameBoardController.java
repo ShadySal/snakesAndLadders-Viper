@@ -16,6 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Scene;
@@ -32,9 +33,9 @@ public class GameBoardController {
 
     private GridPane BoardGrid;
     @FXML
-    private AnchorPane contentPane;
+    private Pane contentPane;
     @FXML
-    private StackPane gamepane;
+    private Pane gamepane;
     @FXML
     private Pane gameDataPane;
     @FXML
@@ -75,51 +76,6 @@ public class GameBoardController {
     private Map<Integer, Integer> ladderPositions = new HashMap<>();
     private Map<Integer, String> SpecialTiles = new HashMap<>();
 
-//    private void handlePlayerMove(GameEvent event) {
-//        Player player = event.getPlayer();
-//        int newPosition = event.getNewPosition();
-//
-//        // Find the corresponding tile Pane for the new position
-//        Pane newTile = getTileForPosition(newPosition);
-//
-//        if (newTile != null) {
-//            ImageView playerImage = playerImages.get(player);
-//
-//            // Remove player image from the old position
-//            Pane oldTile = getTileForPlayer(player);
-//            oldTile.getChildren().remove(playerImage);
-//
-//            // Add player image to the new position
-//            newTile.getChildren().add(playerImage);
-//
-//            // Adjust the position of the image in the tile
-//            // You might want to animate this movement for a better UX
-//            int imageIndex = newTile.getChildren().indexOf(playerImage);
-//            double xOffset = (imageIndex - 0.8) * 40;
-//            double yOffset = (imageIndex - 0.3) * 40;
-//            playerImage.setTranslateX(xOffset);
-//            playerImage.setTranslateY(yOffset);
-//        }
-//    }
-//    private void handleSpecialTile(GameEvent event) {
-//        Player player = event.getPlayer();
-//        int tilePosition = event.getTilePosition();
-//        String tileType = event.getTileType();
-//
-//        // Based on tileType, you can show a dialog, animate movement, etc.
-//        switch (tileType) {
-//            case "snake":
-//                // Handle snake logic
-//                break;
-//            case "ladder":
-//                // Handle ladder logic
-//                break;
-//            case "question":
-//                // Show a question dialog and wait for the answer
-//                break;
-//            // Handle other special tile types...
-//        }
-//    }
 
     public void initialize() {
         startTime = System.currentTimeMillis();
@@ -130,6 +86,7 @@ public class GameBoardController {
         playerImages = new HashMap<>();
         occupiedPositions = new HashSet<>();
         BoardGrid = new GridPane();
+        gamepane = new Pane();
         setupDiceRollAnimation();
         if (players != null) {
             loadPlayerImages();
@@ -230,7 +187,7 @@ public class GameBoardController {
         int size = determineBoardSize(difficulty);
         this.globalSize = size;
         this.bsize = size*size;
-        System.out.println(bsize);
+
         gameBoard = new GameBoard(size, size);
         List<Snake> snakes = new ArrayList<>(); // List to store snakes
         List<Ladder> ladders = new ArrayList<>();
@@ -249,27 +206,28 @@ public class GameBoardController {
         }
 
         gameBoard.initializePlayerPositions(players);
-        gamepane.setAlignment(Pos.CENTER);
+//        gamepane.setAlignment(Pos.CENTER);
 
         setupGridConstraints(size);
         LevelLabel.setText("Level: " + difficulty);
-        BoardGrid.getChildren().clear();
-        gameBoard.initializePlayerPositions(players);
+
+
         gamepane.getChildren().add(BoardGrid);
         LevelLabel.setText("Level: " + difficulty);
-        BoardGrid.getChildren().clear();
+//        BoardGrid.getChildren().clear();
 
         BoardGrid.prefWidthProperty().bind(gamepane.widthProperty());
         BoardGrid.prefHeightProperty().bind(gamepane.heightProperty());
         gamepane.setPadding(new Insets(0, 0, 0, 0));
         GridPane.setMargin(BoardGrid, new Insets(0));
 
-        for (int row = size - 1; row >= 0; row--) {
+        for (int row= 0; row< size; row++) {
             for (int col = 0; col < size; col++) {
                 int number = calculateTileNumber(row, col, size);
                 createTile(number, col, row, size, specialTiles.getOrDefault(number, ""));
             }
         }
+        gameBoard.initializePlayerPositions(players);
         switch (difficulty) {
             case EASY:
                 generateSnakesAndLaddersForEasy(snakes, ladders, occupiedPositions, 48);
@@ -283,15 +241,15 @@ public class GameBoardController {
             default:
                 throw new IllegalArgumentException("Unrecognized difficulty level");
         }
-
-        // Place the snakes and ladders on the board
-        placeSnakesAndLadders(snakes, ladders);
-
-        setPlayers(players);
-        updatePlayerTurn();
-
+//
+//        // Place the snakes and ladders on the board
+//        placeSnakesAndLadders(snakes, ladders);
+//
+          setPlayers(players);
+//        updatePlayerTurn();
+           Platform.runLater(() -> drawLinesForSnakes(snakes));
+        Platform.runLater(()->drawLadderOnBoard(ladders));
     }
-    // Generate snakes and ladders for the easy difficulty
     private void generateSnakesAndLaddersForEasy(List<Snake> snakes, List<Ladder> ladders, Set<Integer> occupiedPosition, int maxPosition) {
         int minPositionForYellow = 8; // Second row onwards in a 7x7 board
         int minPositionForGreen = 15; // Third row onwards
@@ -307,51 +265,47 @@ public class GameBoardController {
         }
     }
 
+    private void createTile(int number, int col, int row, int size, String specialTileColor) {
+        Tile tile = new Tile(col, size - row - 1);
+        tile.setNumber(number);
+        double tileWidth = 100;  // Width of the tile
+        double tileHeight = 100; // Height of the tile
+        tile.setWidth(tileWidth);
+        tile.setHeight(tileHeight);
+        tile.setX(col * tileWidth); // Position the tile based on column
+        tile.setY(row * tileHeight); // Position the tile based on row
 
-    // Generate snakes and ladders for the medium difficulty
-    private void generateSnakesAndLaddersForMedium(List<Snake> snakes, List<Ladder> ladders, Set<Integer> occupiedPositions, int maxPosition) {
-        // Min start positions for snake types
-        int minPositionForYellow = 11;
-        int minPositionForGreen = 21;
-        int minPositionForBlue = 31;
-        // No restriction for red snakes
-
-        // Generate 6 snakes
-        for (int i = 0; i < 2; i++) {
-            generateSnake(snakes, occupiedPositions, 99, "red", 2);
-            generateSnake(snakes, occupiedPositions, 99, "green", minPositionForGreen);
+        String backgroundColor;
+        if (!specialTileColor.isEmpty()) {
+            tile.setColor(specialTileColor);
+            backgroundColor = specialTileColor;
+        } else {
+            backgroundColor = ((row + col) % 2 == 0) ? "green" : "white";
         }
-        generateSnake(snakes, occupiedPositions, 99, "blue", minPositionForBlue);
-        generateSnake(snakes, occupiedPositions, 99, "yellow", minPositionForYellow);
+        tile.setFill(Color.web(backgroundColor)); // Set the color of the rectangle
+        tile.setStroke(Color.BLACK); // Set border color
 
-        // Generate 6 ladders of lengths 1 to 6
-        for (int i = 1; i <= 6; i++) {
-            generateLadder(ladders, occupiedPositions, maxPosition, i);
+        // Create a text object for the tile number or special text
+        Text text = new Text();
+        if (specialTileColor.equals("blue")) {
+            text.setText("Surprise");
+        } else if (!specialTileColor.isEmpty()) {
+            text.setText("?");
+        } else {
+            text.setText(Integer.toString(number)); // Set the tile number
         }
+        text.setStyle("-fx-fill: black; -fx-font-size: 12;");
+        text.setX(tile.getX() + tileWidth / 2 - text.getLayoutBounds().getWidth() / 2);
+        text.setY(tile.getY() + tileHeight / 2 + text.getLayoutBounds().getHeight() / 4);
+
+        // Add the tile and text to the gamepane
+        contentPane.getChildren().addAll(tile, text);
+
+        // Print the tile coordinates later
+        Platform.runLater(() -> printTileCoordinates(tile));
     }
+    // Generate snakes and ladders for the easy difficulty
 
-    // Generate snakes and ladders for the hard difficulty
-    private void generateSnakesAndLaddersForHard(List<Snake> snakes, List<Ladder> ladders, Set<Integer> occupiedPositions, int maxPosition) {
-        int minPositionForYellow = 14;
-        int minPositionForGreen = 27;
-        int minPositionForBlue = 40;
-        // No restriction for red snakes
-
-        // Generate 8 snakes (2 of each type)
-        for (int i = 0; i < 2; i++) {
-            generateSnake(snakes, occupiedPositions, 168, "red", 2);
-            generateSnake(snakes, occupiedPositions, 168, "green", minPositionForGreen);
-            generateSnake(snakes, occupiedPositions, 168, "blue", minPositionForBlue);
-            generateSnake(snakes, occupiedPositions, 168, "yellow", minPositionForYellow);
-        }
-
-        // Generate 8 ladders of lengths 1 to 8
-        for (int i = 1; i <= 8; i++) {
-            generateLadder(ladders, occupiedPositions, maxPosition, i);
-        }
-    }
-
-    // Helper method to generate a single snake
     private void generateSnake(List<Snake> snakes, Set<Integer> occupiedPositions, int maxPosition, String type, int minPosition) {
         Random random = new Random();
         int start = -1, end;
@@ -399,6 +353,101 @@ public class GameBoardController {
             occupiedPositions.add(end);
         }
     }
+    // Generate snakes and ladders for the medium difficulty
+    private void generateSnakesAndLaddersForMedium(List<Snake> snakes, List<Ladder> ladders, Set<Integer> occupiedPositions, int maxPosition) {
+        // Min start positions for snake types
+        int minPositionForYellow = 11;
+        int minPositionForGreen = 21;
+        int minPositionForBlue = 31;
+        // No restriction for red snakes
+
+        // Generate 6 snakes
+        for (int i = 0; i < 2; i++) {
+            generateSnake(snakes, occupiedPositions, 99, "red", 2);
+            generateSnake(snakes, occupiedPositions, 99, "green", minPositionForGreen);
+        }
+        generateSnake(snakes, occupiedPositions, 99, "blue", minPositionForBlue);
+        generateSnake(snakes, occupiedPositions, 99, "yellow", minPositionForYellow);
+
+        // Generate 6 ladders of lengths 1 to 6
+        for (int i = 1; i <= 6; i++) {
+            generateLadder(ladders, occupiedPositions, maxPosition, i);
+        }
+    }
+    // Generate snakes and ladders for the hard difficulty
+    private void generateSnakesAndLaddersForHard(List<Snake> snakes, List<Ladder> ladders, Set<Integer> occupiedPositions, int maxPosition) {
+        int minPositionForYellow = 14;
+        int minPositionForGreen = 27;
+        int minPositionForBlue = 40;
+        // No restriction for red snakes
+
+        // Generate 8 snakes (2 of each type)
+        for (int i = 0; i < 2; i++) {
+            generateSnake(snakes, occupiedPositions, 168, "red", 2);
+            generateSnake(snakes, occupiedPositions, 168, "green", minPositionForGreen);
+            generateSnake(snakes, occupiedPositions, 168, "blue", minPositionForBlue);
+            generateSnake(snakes, occupiedPositions, 168, "yellow", minPositionForYellow);
+        }
+
+        // Generate 8 ladders of lengths 1 to 8
+        for (int i = 1; i <= 8; i++) {
+            generateLadder(ladders, occupiedPositions, maxPosition, i);
+        }
+    }
+
+    // Helper method to generate a single snake
+    private void drawLinesForSnakes(List<Snake> snakes) {
+        for (Snake snake : snakes) {
+            // Retrieve the start and end tiles for the snake
+            Tile startTile = getTileByNumber(snake.getStart());
+            Tile endTile = getTileByNumber(snake.getEndPosition());
+
+            if (startTile != null && (endTile != null || snake.getType().equals("red"))) {
+                // Get the bounds in the scene for start tile
+                Bounds startBounds = startTile.getBoundsInParent();
+                double startX = startBounds.getMinX() + startBounds.getWidth() / 2;
+                double startY = startBounds.getMinY() + startBounds.getHeight() / 2;
+
+                double endX, endY;
+                if (!snake.getType().equals("red")) {
+                    // Get the bounds in the scene for end tile for non-red snakes
+                    Bounds endBounds = endTile.getBoundsInParent();
+                    endX = endBounds.getMinX() + endBounds.getWidth() / 2;
+                    endY = endBounds.getMinY() + endBounds.getHeight() / 2;
+                } else {
+                    // For red snakes, the end point is the start point (since it occupies one tile)
+                    endX = startX;
+                    endY = startY;
+                }
+
+                // Create and configure the line
+                Line Snakeline = new Line(startX, startY, endX, endY);
+                // Set the line color based on the snake type
+                switch (snake.getType()) {
+                    case "yellow":
+                        Snakeline.setStroke(Color.YELLOW);
+                        break;
+                    case "green":
+                        Snakeline.setStroke(Color.GREEN);
+                        break;
+                    case "blue":
+                        Snakeline.setStroke(Color.BLUE);
+                        break;
+                    case "red":
+                        Snakeline.setStroke(Color.RED);
+                        break;
+                    default:
+                        Snakeline.setStroke(Color.BLACK); // Default color
+                        break;
+                }
+                Snakeline.setStrokeWidth(3); // Thickness of the line
+
+                // Add the line to the contentPane or appropriate parent container
+                contentPane.getChildren().add(Snakeline);
+            }
+        }
+    }
+
 
     private HashMap<Integer, List<Integer>> createRowToTilesMap(int boardSize) {
         HashMap<Integer, List<Integer>> rowToTilesMap = new HashMap<>();
@@ -412,7 +461,7 @@ public class GameBoardController {
             }
             rowToTilesMap.put(row, tilesInRow);
         }
-        System.out.println(rowToTilesMap);
+
         return rowToTilesMap;
     }
     // Helper method to generate a single ladder
@@ -486,60 +535,21 @@ public class GameBoardController {
         }
     }
     private void placeSnakeOnBoard(Snake snake) {
-        Pane startTile = getTileByNumber(snake.getStart());
-        if (startTile != null) {
-            ImageView startSnakeImage = loadSnakeImage(snake.getType());
-            startTile.getChildren().add(startSnakeImage);
-        }
-
-        // If the snake is not red, place the end image as well
-        if (!snake.getType().equals("red")) {
-            Pane endTile = getTileByNumber(snake.getEndPosition());
-            if (endTile != null) {
-                ImageView endSnakeImage = loadSnakeImage(snake.getType());
-                endTile.getChildren().add(endSnakeImage);
-            }
-        }
-    }
-
-    private Pane getTileByNumber(int tileNumber) {
-        for (Node node : BoardGrid.getChildren()) {
-            if (node instanceof Tile && ((Tile)node).getNumber() == tileNumber) {
-                return (Pane) node;
-            }
-        }
-        return null; // If no matching tile is found
-    }
-//        int startRow = getRowForPosition(snake.getStartPosition());
-//        int startColumn = getColumnForPosition(snake.getStartPosition());
-//        int endRow = getRowForPosition(snake.getEndPosition());
-//        int endColumn = getColumnForPosition(snake.getEndPosition());
-//
-//        // Load snake image
-//        String snakeImageName = chooseSnakeImage(snake.getType());
-//        InputStream is = getClass().getResourceAsStream("/com/example/snakesandladdersviper/Images/" + snakeImageName);
-//        if (is != null) {
-//            Image snakeImage = new Image(is);
-//            ImageView snakeImageView = new ImageView(snakeImage);
-//
-//            // Calculate GridPane spans
-//            int columnSpan = Math.abs(endColumn - startColumn) + 1;
-//            int rowSpan = Math.abs(endRow - startRow) + 1;
-//
-//            // Adjust ImageView size and position
-//            snakeImageView.fitWidthProperty().bind(BoardGrid.widthProperty().divide(globalSize).multiply(columnSpan));
-//            snakeImageView.fitHeightProperty().bind(BoardGrid.heightProperty().divide(globalSize).multiply(rowSpan));
-//            snakeImageView.setPreserveRatio(true);
-//
-//            // Add snake image to the GridPane at the calculated position and span
-//            GridPane.setRowIndex(snakeImageView, Math.min(startRow, endRow));
-//            GridPane.setColumnIndex(snakeImageView, Math.min(startColumn, endColumn));
-//            GridPane.setRowSpan(snakeImageView, rowSpan);
-//            GridPane.setColumnSpan(snakeImageView, columnSpan);
-//            BoardGrid.getChildren().add(snakeImageView);
-//        } else {
-//            System.out.println("Image file not found: " + snakeImageName);
+//        Pane startTile = getTileByNumber(snake.getStart());
+//        if (startTile != null) {
+//            ImageView startSnakeImage = loadSnakeImage(snake.getType());
+//            startTile.getChildren().add(startSnakeImage);
 //        }
+//
+//        // If the snake is not red, place the end image as well
+//        if (!snake.getType().equals("red")) {
+//            Pane endTile = getTileByNumber(snake.getEndPosition());
+//            if (endTile != null) {
+//                ImageView endSnakeImage = loadSnakeImage(snake.getType());
+//                endTile.getChildren().add(endSnakeImage);
+//            }
+//        }
+    }
 
     private ImageView loadSnakeImage(String snakeType) {
         String snakeImageName = chooseSnakeImage(snakeType);
@@ -614,40 +624,74 @@ public class GameBoardController {
 
 
 
+        private void drawLadderOnBoard(List<Ladder> ladders) {
+            for (Ladder ladder : ladders) {
+                Tile startTile = getTileByNumber(ladder.getStart());
+                Tile endTile = getTileByNumber(ladder.getEnd());
+
+                if (startTile != null && endTile != null) {
+                    // Get the bounds in the scene for start and end tiles
+                    Bounds startBounds = startTile.getBoundsInParent();
+                    Bounds endBounds = endTile.getBoundsInParent();
+
+                    // Calculate the start and end points for the ladder sides
+                    double startX = startBounds.getMinX() + startBounds.getWidth() / 2;
+                    double startY = startBounds.getMinY() + startBounds.getHeight() / 2;
+                    double endX = endBounds.getMinX() + endBounds.getWidth() / 2;
+                    double endY = endBounds.getMinY() + endBounds.getHeight() / 2;
+
+                    // Draw two vertical lines for the sides of the ladder
+                    Line leftSide = new Line(startX - 5, startY, endX - 5, endY);
+                    Line rightSide = new Line(startX + 5, startY, endX + 5, endY);
+
+                    // Add the lines to the contentPane or appropriate parent container
+                    contentPane.getChildren().addAll(leftSide, rightSide);
+
+                    // Draw rungs between the two sides
+                    int rungsCount = 5; // Define the number of rungs
+                    for (int i = 0; i < rungsCount; i++) {
+                        double rungY = startY + i * (endY - startY) / rungsCount;
+                        Line rung = new Line(startX - 5, rungY, startX + 5, rungY);
+                        contentPane.getChildren().add(rung);
+                    }
+                }
+            }
+        }
+
 
     private void placeLadderOnBoard(Ladder ladder) {
-        // Load ladder images based on the ladder's length
-        String ladderImageName = "ladder" + ladder.getLength() + ".png";
-        InputStream is = getClass().getResourceAsStream("/com/example/snakesandladdersviper/Images/" + ladderImageName);
-        if (is != null) {
-            Image ladderImage = new Image(is);
-            ImageView startLadderImage = new ImageView(ladderImage);
-            ImageView endLadderImage = new ImageView(ladderImage);
-
-            // Adjust the size of the ladder image to fit the tile
-            double tileWidth = BoardGrid.getColumnConstraints().get(0).getPrefWidth();
-            double tileHeight = BoardGrid.getRowConstraints().get(0).getPrefHeight();
-            startLadderImage.setFitWidth(tileWidth);
-            startLadderImage.setFitHeight(tileHeight);
-            startLadderImage.setPreserveRatio(true);
-            endLadderImage.setFitWidth(tileWidth);
-            endLadderImage.setFitHeight(tileHeight);
-            endLadderImage.setPreserveRatio(true);
-
-            // Place ladder image at the start position
-            Pane startTile = getTileByNumber(ladder.getStart());
-            if (startTile != null) {
-                startTile.getChildren().add(startLadderImage);
-            }
-
-            // Place ladder image at the end position
-            Pane endTile = getTileByNumber(ladder.getEnd());
-            if (endTile != null) {
-                endTile.getChildren().add(endLadderImage);
-            }
-        } else {
-            System.out.println("Image file not found: " + ladderImageName);
-        }
+//        // Load ladder images based on the ladder's length
+//        String ladderImageName = "ladder" + ladder.getLength() + ".png";
+//        InputStream is = getClass().getResourceAsStream("/com/example/snakesandladdersviper/Images/" + ladderImageName);
+//        if (is != null) {
+//            Image ladderImage = new Image(is);
+//            ImageView startLadderImage = new ImageView(ladderImage);
+//            ImageView endLadderImage = new ImageView(ladderImage);
+//
+//            // Adjust the size of the ladder image to fit the tile
+//            double tileWidth = BoardGrid.getColumnConstraints().get(0).getPrefWidth();
+//            double tileHeight = BoardGrid.getRowConstraints().get(0).getPrefHeight();
+//            startLadderImage.setFitWidth(tileWidth);
+//            startLadderImage.setFitHeight(tileHeight);
+//            startLadderImage.setPreserveRatio(true);
+//            endLadderImage.setFitWidth(tileWidth);
+//            endLadderImage.setFitHeight(tileHeight);
+//            endLadderImage.setPreserveRatio(true);
+//
+//            // Place ladder image at the start position
+//            Pane startTile = getTileByNumber(ladder.getStart());
+//            if (startTile != null) {
+//                startTile.getChildren().add(startLadderImage);
+//            }
+//
+//            // Place ladder image at the end position
+//            Pane endTile = getTileByNumber(ladder.getEnd());
+//            if (endTile != null) {
+//                endTile.getChildren().add(endLadderImage);
+//            }
+//        } else {
+//            System.out.println("Image file not found: " + ladderImageName);
+//        }
     }
 
     private Set<Integer> determineOccupiedPositions(Map<Integer, String> specialTiles, int boardSize) {
@@ -666,10 +710,13 @@ public class GameBoardController {
     }
 
     private int calculateTileNumber(int row, int col, int size) {
-        if (row % 2 == 0) {
-            return (size * row) + col + 1;
+        int bottomRow = size - 1 - row; // Flip the row index so it starts from the bottom
+        if (bottomRow % 2 == 0) {
+            // For even rows (from the bottom), numbering goes from left to right
+            return (bottomRow * size) + col + 1;
         } else {
-            return (size * (row + 1)) - col;
+            // For odd rows (from the bottom), numbering goes from right to left
+            return (bottomRow * size) + (size - 1 - col) + 1;
         }
     }
 
@@ -708,57 +755,18 @@ public class GameBoardController {
         return specialTiles;
     }
 
-
-    private void createTile(int number, int col, int row, int size, String specialTileColor) {
-        System.out.println("in CreateTile");
-        Tile tile = new Tile(col, size - row - 1);
-        String backgroundColor = "-fx-background-color: ";
-        String textColor = "-fx-text-fill: black;";
-        String tileLabel = Integer.toString(number);
-        tile.setNumber(number);
-        if (!specialTileColor.isEmpty()) {
-            tile.setColor(specialTileColor);
-            backgroundColor += specialTileColor;
-            if (specialTileColor.equals("blue")) {
-                tileLabel = "Surprise";
-            } else {
-                tileLabel = "?";
-            }
-            textColor = "-fx-text-fill: white;";
-        } else {
-            backgroundColor += ((row + col) % 2 == 0) ? "green" : "white";
-        }
-        tile.setStyle(backgroundColor + "; -fx-border-color: black;");
-        // Create a StackPane to hold the label
-        StackPane stackPane = new StackPane();
-        Label label = new Label(tileLabel);
-        label.setStyle(textColor + " -fx-font-size: 12;");
-        // Add label to StackPane and StackPane to Tile
-        stackPane.getChildren().add(label);
-        tile.getChildren().add(stackPane);
-        // Set alignment for the label in the upper-left corner
-       // StackPane.setAlignment(label, Pos.TOP_LEFT);
-       // System.out.println(tile);
-        int s = size - row -1 ;
-        //System.out.println(col + s);
-        BoardGrid.add(tile, col, size - row - 1);
-
-        Platform.runLater(() -> printTileCoordinates(tile));
-    }
-    private void printTileCoordinates(Tile tile) {
-        // Ensure the tile is not null and is part of a scene
-        System.out.println("in printTileCoo");
-        if (tile != null && tile.getScene() != null) {
-            System.out.println("in IF statements");
-            Bounds boundsInScene = tile.localToScene(tile.getBoundsInLocal());
-            Bounds boundsInScreen = tile.localToScreen(tile.getBoundsInLocal());
-            System.out.println("Tile Number: " + tile.getNumber() +
-                    ", Scene Coordinates: X=" + boundsInScene.getMinX() +
-                    ", Y=" + boundsInScene.getMinY() +
-                    ", Screen Coordinates: X=" + boundsInScreen.getMinX() +
-                    ", Y=" + boundsInScreen.getMinY());
-        }
-    }
+   private void printTileCoordinates(Tile tile) {
+//        // Ensure the tile is not null and is part of a scene
+//
+//        if (tile != null && tile.getScene() != null) {
+//            Bounds boundsInScene = tile.localToScene(tile.getBoundsInLocal());
+//            Bounds boundsInScreen = tile.localToScreen(tile.getBoundsInLocal());
+//
+//            tile.setBoundsInScene(boundsInScene);
+//            tile.setBoundsInScreen(boundsInScreen);
+//        }
+//
+   }
     private void setupGridConstraints(int size) {
         BoardGrid.getColumnConstraints().clear();
         BoardGrid.getRowConstraints().clear();
@@ -801,11 +809,8 @@ public class GameBoardController {
     private int determineBoardSize(Difficulty difficulty) {
         switch (difficulty) {
             case EASY:
-                // Create a die instance for an easy game
-                Dice easyGameDice = new Dice(6, EASY_GAME_QUESTION_PROBABILITY);
                 return 7;
             case MEDIUM:
-                Dice mediumGameDice = new Dice(9, MEDIUM_GAME_QUESTION_PROBABILITY); // 0-6 for movement, 7-9 for questions
                 return 10;
             case HARD:
                 return 13;
@@ -814,25 +819,36 @@ public class GameBoardController {
         }
     }
 
-
     //display players on Gameboard
-    public void displayPlayers(List<Player> players) {
-        for (Player player : players) {
-            ImageView playerImage = playerImages.get(player);
-            Pane tile = getTileForPlayer(player);
-            if (tile != null && playerImage != null) {
-                tile.getChildren().add(playerImage);
-                playerImage.setFitHeight(60); // Increase height (e.g., 40)
-                playerImage.setFitWidth(60);
-                int imageIndex = tile.getChildren().indexOf(playerImage);
-                double xOffset = (imageIndex - 0.8) * 10;
-                double yOffset = (imageIndex - 0.3) * 11;
-                playerImage.setTranslateX(xOffset);
-                playerImage.setTranslateY(yOffset);
-            } else {
-                System.out.println("Tile or Player Image is null for player: " + player.getName());
+
+        public void displayPlayers(List<Player> players) {
+            for (Player player : players) {
+                ImageView playerImage = playerImages.get(player);
+                Tile startingTile = getTileByNumber(1); // Assuming player starts at tile 1
+
+                if (startingTile != null && playerImage != null) {
+                    playerImage.setFitHeight(60); // Set player image size
+                    playerImage.setFitWidth(60);
+                    playerImage.setX(startingTile.getX() + startingTile.getWidth() / 2 - playerImage.getFitWidth() / 2);
+                    playerImage.setY(startingTile.getY() + startingTile.getHeight() / 2 - playerImage.getFitHeight() / 2);
+
+                    contentPane.getChildren().add(playerImage); // Add player image to the contentPane
+                } else {
+                    System.out.println("Starting Tile or Player Image is null for player: " + player.getName());
+                }
             }
         }
+
+    private Tile getTileByNumber(int tileNumber) {
+        for (Node node : contentPane.getChildren()) { // If tiles are directly added to the gamepane
+            if (node instanceof Tile) {
+                Tile tile = (Tile) node;
+                if (tile.getNumber() == tileNumber) {
+                    return tile;
+                }
+            }
+        }
+        return null; // Return null if no matching tile is found
     }
 
     @FXML
@@ -1377,6 +1393,17 @@ public class GameBoardController {
                 throw new IllegalArgumentException("Unrecognized difficulty level");
         }
     }
+
+
+    private Tile getTileByNumbers(int tileNumber) {
+        for (Node node : BoardGrid.getChildren()) {
+            if (node instanceof Tile && ((Tile) node).getNumber() == tileNumber) {
+                return (Tile) node; // Cast and return the node as Tile
+            }
+        }
+        return null; // Return null if no matching Tile is found
+    }
+
 
 }
 

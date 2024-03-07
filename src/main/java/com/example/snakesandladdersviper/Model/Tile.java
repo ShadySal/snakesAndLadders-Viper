@@ -1,9 +1,10 @@
 package com.example.snakesandladdersviper.Model;
 import com.example.snakesandladdersviper.Enums.TileType;
+import javafx.geometry.Bounds;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 
-
-public class Tile extends StackPane {
+public class Tile extends Rectangle {
     private int number;
     private TileType type;
     private int x,y;
@@ -12,6 +13,9 @@ public class Tile extends StackPane {
     private boolean visited;
     private Question question;
     private String color;
+    private Bounds boundsInScene;
+    private Bounds boundsInScreen;
+
 
     public Tile(int x, int y) {
         this.x = x;
@@ -22,7 +26,24 @@ public class Tile extends StackPane {
         question = null;
 
     }
-public void setNumber(int number){
+
+    public Bounds getBoundsInScene() {
+        return boundsInScene;
+    }
+
+    public void setBoundsInScene(Bounds boundsInScene) {
+        this.boundsInScene = boundsInScene;
+    }
+
+    public Bounds getBoundsInScreen() {
+        return boundsInScreen;
+    }
+
+    public void setBoundsInScreen(Bounds boundsInScreen) {
+        this.boundsInScreen = boundsInScreen;
+    }
+
+    public void setNumber(int number){
         this.number = number;
 }
 public int getNumber(){
@@ -46,17 +67,11 @@ public int getNumber(){
         this.color = color;
     }
 
-    public int getX() {
-        return x;
-    }
 
     public void setX(int x) {
         this.x = x;
     }
 
-    public int getY() {
-        return y;
-    }
 
 
     public void setY(int y) {
