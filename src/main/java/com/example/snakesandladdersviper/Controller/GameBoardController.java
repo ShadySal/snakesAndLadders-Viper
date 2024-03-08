@@ -94,33 +94,33 @@ public class GameBoardController {
             System.out.println("Players list is null.");
         }
     }
-    private void setupGameDataPane() {
-        // Create a VBox for the game data pane
-        VBox gameDataPane = new VBox(10); // 10 is the spacing between elements
-        gameDataPane.setPadding(new Insets(10)); // Padding around the pane
-
-        // Create the UI elements (labels, button, etc.) as per your data
-
-        Label levelLabel = new Label("Level: " + difficulty);
-        Button mainMenuButton = new Button("Exit Game");
-        Pane diceImageContainer = new Pane();
-        Button diceRollButton = new Button("Roll Dice");
-        Label currentPlayerLabel = new Label("Current Player");
-
-        // Set preferred sizes for the pane and elements, if needed
-        gameDataPane.setPrefWidth(200); // Example width, adjust as needed
-        diceImageContainer.setPrefSize(150, 150); // Example size for dice image container
-
-        // Add elements to the game data pane
-        gameDataPane.getChildren().addAll(timeLabel, levelLabel, currentPlayerLabel, diceRollButton, diceImageContainer, mainMenuButton);
-
-        // Position the game data pane to the right of the board
-        HBox rootContainer = new HBox();
-        rootContainer.getChildren().addAll(BoardGrid, gameDataPane); // Assuming BoardGrid is your game board
-
-        // Set the main game scene or container to include this new layout
-        gamepane.getChildren().add(rootContainer); // Assuming gamepane is the parent container
-    }
+//    private void setupGameDataPane() {
+//        // Create a VBox for the game data pane
+//        VBox gameDataPane = new VBox(10); // 10 is the spacing between elements
+//        gameDataPane.setPadding(new Insets(10)); // Padding around the pane
+//
+//        // Create the UI elements (labels, button, etc.) as per your data
+//
+//        Label levelLabel = new Label("Level: " + difficulty);
+//        Button mainMenuButton = new Button("Exit Game");
+//        Pane diceImageContainer = new Pane();
+//        Button diceRollButton = new Button("Roll Dice");
+//        Label currentPlayerLabel = new Label("Current Player");
+//
+//        // Set preferred sizes for the pane and elements, if needed
+//        gameDataPane.setPrefWidth(200); // Example width, adjust as needed
+//        diceImageContainer.setPrefSize(150, 150); // Example size for dice image container
+//
+//        // Add elements to the game data pane
+//        gameDataPane.getChildren().addAll(timeLabel, levelLabel, currentPlayerLabel, diceRollButton, diceImageContainer, mainMenuButton);
+//
+//        // Position the game data pane to the right of the board
+//        HBox rootContainer = new HBox();
+//        rootContainer.getChildren().addAll(BoardGrid, gameDataPane); // Assuming BoardGrid is your game board
+//
+//        // Set the main game scene or container to include this new layout
+//        gamepane.getChildren().add(rootContainer); // Assuming gamepane is the parent container
+//    }
 
     private void loadPlayerImages() {
         for (Player player : players) {
@@ -219,6 +219,7 @@ public class GameBoardController {
         List<Ladder> ladders = new ArrayList<>();
         Map<Integer, String> specialTiles = generateSpecialTiles(difficulty, size);
         Set<Integer> occupiedPositions = determineOccupiedPositions(specialTiles, size); // Determine occupied positions
+
         // Initialize special tiles (questions and surprise)
 
         contentPane.setPrefWidth(screenWidth * 0.75);
@@ -239,16 +240,12 @@ public class GameBoardController {
         // Create game data elements
 
         Label levelLabel = new Label("Level: " + difficulty);
-        Button mainMenuButton = new Button("Exit Game");
-        Pane diceImageContainer = new Pane();
+
         diceImageContainer.setPrefHeight(150);
         diceImageContainer.setPrefWidth(150);
-        Button diceRollButton = new Button("Roll Dice");
-        Label currentPlayerLabel = new Label("Player's Turn"); // Update text programmatically as needed
-
         // Add elements to the VBox
-        gameDataVBox.getChildren().addAll(timeLabel, levelLabel, diceRollButton, diceImageContainer, currentPlayerLabel, mainMenuButton);
-
+        System.out.println(levelLabel);
+        System.out.println(currentPlayerLabel);
         // Add the VBox to the root pane
         contentPane.getChildren().add(gameDataVBox);
         int tilesInRow = difficulty == Difficulty.EASY ? 7 : (difficulty == Difficulty.MEDIUM ? 10 : 13);
@@ -288,8 +285,10 @@ public class GameBoardController {
                 throw new IllegalArgumentException("Unrecognized difficulty level");
         }
           setPlayers(players);
-//        updatePlayerTurn();
-           Platform.runLater(() -> drawLinesForSnakes(snakes));
+           updatePlayerTurn();
+        gameDataVBox.getChildren().addAll(timeLabel, levelLabel, diceRollButton, diceImageContainer, currentPlayerLabel, MainMenuButton);
+
+        Platform.runLater(() -> drawLinesForSnakes(snakes));
         Platform.runLater(()->drawLadderOnBoard(ladders));
     }
     private void generateSnakesAndLaddersForEasy(List<Snake> snakes, List<Ladder> ladders, Set<Integer> occupiedPosition, int maxPosition) {
@@ -584,7 +583,7 @@ public class GameBoardController {
             Collections.shuffle(possibleStartPositions);
 
             for (int possibleStart : possibleStartPositions) {
-                if (!occupiedPositions.contains(possibleStart) && possibleStart!=1) {
+                if (!occupiedPositions.contains(possibleStart) && possibleStart != 1 && !SpecialTiles.containsKey(possibleStart)) {
                     start = possibleStart;
                     validStartFound = true;
                     break;
@@ -722,9 +721,6 @@ public class GameBoardController {
         double y = row * 125 + 125 / 2;
         return new Point2D(x, y);
     }
-
-
-
 
     private void drawLadderOnBoard(List<Ladder> ladders) {
         for (Ladder ladder : ladders) {
@@ -873,24 +869,11 @@ public class GameBoardController {
                 }
                 specialTiles.put(tile, "blue");
                 usedTiles.add(tile);
+               // occupiedPositions.add(tile);
             }
         }
         return specialTiles;
     }
-
-   private void printTileCoordinates(Tile tile) {
-//        // Ensure the tile is not null and is part of a scene
-//
-//        if (tile != null && tile.getScene() != null) {
-//            Bounds boundsInScene = tile.localToScene(tile.getBoundsInLocal());
-//            Bounds boundsInScreen = tile.localToScreen(tile.getBoundsInLocal());
-//
-//            tile.setBoundsInScene(boundsInScene);
-//            tile.setBoundsInScreen(boundsInScreen);
-//        }
-//
-   }
-
 
     private int determineBoardSize(Difficulty difficulty) {
         switch (difficulty) {
@@ -1083,7 +1066,7 @@ public class GameBoardController {
         dialog.setHeaderText(question.getQuestionText());
 
         // Setting the owner of the dialog
-        Stage primaryStage = (Stage) BoardGrid.getScene().getWindow(); // Replace 'BoardGrid' with an actual component from your primary stage
+        Stage primaryStage = (Stage) contentPane.getScene().getWindow(); // Replace 'BoardGrid' with an actual component from your primary stage
         dialog.initOwner(primaryStage);
 
         // Set up the buttons
@@ -1394,7 +1377,6 @@ public class GameBoardController {
 
         // You can also add animations or sounds here to celebrate the win
     }
-
     private void updatePlayerPositionOnBoard(Player player) {
         // Get the player's new position
         int newPosition = gameBoard.getPlayerPosition(player);
@@ -1425,17 +1407,12 @@ public class GameBoardController {
         }
     }
 
-    private Circle getPlayerCircle(Player player) {
-        return playerCircles.get(player);
-    }
-
 
     private void updatePlayerTurn() {
         if (players == null || players.isEmpty()) {
             System.out.println("Player list is empty or not initialized.");
             return;
         }
-
         // Increment the currentPlayerIndex and wrap around if it exceeds the size of the players list
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
 
@@ -1449,7 +1426,6 @@ public class GameBoardController {
             System.out.println("Current player is null.");
         }
     }
-
     public void setPlayers(List<Player> players) {
         this.players = players;
         playerImages = new HashMap<>();
@@ -1481,14 +1457,6 @@ public class GameBoardController {
     }
 
 
-    private Tile getTileByNumbers(int tileNumber) {
-        for (Node node : BoardGrid.getChildren()) {
-            if (node instanceof Tile && ((Tile) node).getNumber() == tileNumber) {
-                return (Tile) node; // Cast and return the node as Tile
-            }
-        }
-        return null; // Return null if no matching Tile is found
-    }
 
 
 }
