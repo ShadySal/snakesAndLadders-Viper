@@ -20,6 +20,7 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Scene;
@@ -85,7 +86,6 @@ public class GameBoardController {
         playerCircles = new HashMap<>();
         playerImages = new HashMap<>();
         occupiedPositions = new HashSet<>();
-        BoardGrid = new GridPane();
         gamepane = new Pane();
         setupDiceRollAnimation();
         if (players != null) {
@@ -93,6 +93,33 @@ public class GameBoardController {
         } else {
             System.out.println("Players list is null.");
         }
+    }
+    private void setupGameDataPane() {
+        // Create a VBox for the game data pane
+        VBox gameDataPane = new VBox(10); // 10 is the spacing between elements
+        gameDataPane.setPadding(new Insets(10)); // Padding around the pane
+
+        // Create the UI elements (labels, button, etc.) as per your data
+
+        Label levelLabel = new Label("Level: " + difficulty);
+        Button mainMenuButton = new Button("Exit Game");
+        Pane diceImageContainer = new Pane();
+        Button diceRollButton = new Button("Roll Dice");
+        Label currentPlayerLabel = new Label("Current Player");
+
+        // Set preferred sizes for the pane and elements, if needed
+        gameDataPane.setPrefWidth(200); // Example width, adjust as needed
+        diceImageContainer.setPrefSize(150, 150); // Example size for dice image container
+
+        // Add elements to the game data pane
+        gameDataPane.getChildren().addAll(timeLabel, levelLabel, currentPlayerLabel, diceRollButton, diceImageContainer, mainMenuButton);
+
+        // Position the game data pane to the right of the board
+        HBox rootContainer = new HBox();
+        rootContainer.getChildren().addAll(BoardGrid, gameDataPane); // Assuming BoardGrid is your game board
+
+        // Set the main game scene or container to include this new layout
+        gamepane.getChildren().add(rootContainer); // Assuming gamepane is the parent container
     }
 
     private void loadPlayerImages() {
@@ -133,7 +160,6 @@ public class GameBoardController {
         }));
         diceRollAnimation.setCycleCount(10); // Adjust the cycle count to control the speed of the animation
     }
-
     //number generation
     private String generateRandomNumber(Difficulty difficulty) {
         Random random = new Random();
@@ -171,7 +197,6 @@ public class GameBoardController {
         return "Invalid difficulty"; // Default case
     }
 
-
     private void updateClock() {
         long now = System.currentTimeMillis();
         long elapsedMillis = now - startTime;
@@ -183,11 +208,12 @@ public class GameBoardController {
     }
 
     public void initializeBoard(Difficulty difficulty, List<Player> players) {
-        BoardGrid = new GridPane();
         int size = determineBoardSize(difficulty);
         this.globalSize = size;
         this.bsize = size*size;
-
+        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+        double screenWidth = screenBounds.getWidth();
+        double screenHeight = screenBounds.getHeight();
         gameBoard = new GameBoard(size, size);
         List<Snake> snakes = new ArrayList<>(); // List to store snakes
         List<Ladder> ladders = new ArrayList<>();
@@ -195,6 +221,38 @@ public class GameBoardController {
         Set<Integer> occupiedPositions = determineOccupiedPositions(specialTiles, size); // Determine occupied positions
         // Initialize special tiles (questions and surprise)
 
+        contentPane.setPrefWidth(screenWidth * 0.75);
+        contentPane.setPrefHeight(screenHeight);
+        double gameDataVBoxWidth = screenWidth * 0.25 * 0.75; // Adjust the proportion as needed
+        double gamePaneWidth = contentPane.getPrefWidth() - gameDataVBoxWidth;
+        gamepane.setPrefWidth(gamePaneWidth);
+        gamepane.setPrefHeight(contentPane.getPrefHeight());
+
+        VBox gameDataVBox = new VBox();
+        gameDataVBox.setLayoutX(gamePaneWidth); // Position next to the gamepane
+        gameDataVBox.setPrefHeight(contentPane.getPrefHeight());
+        gameDataVBox.setPrefWidth(gameDataVBoxWidth); // Set the preferred width for the game data VBox
+        gameDataVBox.setStyle("-fx-background-color: white;"); // Set the background color
+        gameDataVBox.setSpacing(10); // Set spacing between elements
+        gameDataVBox.setPadding(new Insets(10, 20, 10, 20)); // Add padding
+
+        // Create game data elements
+
+        Label levelLabel = new Label("Level: " + difficulty);
+        Button mainMenuButton = new Button("Exit Game");
+        Pane diceImageContainer = new Pane();
+        diceImageContainer.setPrefHeight(150);
+        diceImageContainer.setPrefWidth(150);
+        Button diceRollButton = new Button("Roll Dice");
+        Label currentPlayerLabel = new Label("Player's Turn"); // Update text programmatically as needed
+
+        // Add elements to the VBox
+        gameDataVBox.getChildren().addAll(timeLabel, levelLabel, diceRollButton, diceImageContainer, currentPlayerLabel, mainMenuButton);
+
+        // Add the VBox to the root pane
+        contentPane.getChildren().add(gameDataVBox);
+        int tilesInRow = difficulty == Difficulty.EASY ? 7 : (difficulty == Difficulty.MEDIUM ? 10 : 13);
+        double tileSize = gamePaneWidth / tilesInRow;
         this.difficulty = difficulty;
         if (difficulty == Difficulty.MEDIUM) {
             gameBoard.setDice(new Dice(6, MEDIUM_GAME_QUESTION_PROBABILITY));
@@ -204,27 +262,15 @@ public class GameBoardController {
             // Handle other difficulties or default case
             gameBoard.setDice(new Dice(6, EASY_GAME_QUESTION_PROBABILITY));
         }
-
         gameBoard.initializePlayerPositions(players);
-//        gamepane.setAlignment(Pos.CENTER);
-
-        setupGridConstraints(size);
         LevelLabel.setText("Level: " + difficulty);
 
-
-        gamepane.getChildren().add(BoardGrid);
-        LevelLabel.setText("Level: " + difficulty);
-//        BoardGrid.getChildren().clear();
-
-        BoardGrid.prefWidthProperty().bind(gamepane.widthProperty());
-        BoardGrid.prefHeightProperty().bind(gamepane.heightProperty());
         gamepane.setPadding(new Insets(0, 0, 0, 0));
-        GridPane.setMargin(BoardGrid, new Insets(0));
 
-        for (int row= 0; row< size; row++) {
-            for (int col = 0; col < size; col++) {
+        for (int row= 0; row< tilesInRow; row++) {
+            for (int col = 0; col < tilesInRow; col++) {
                 int number = calculateTileNumber(row, col, size);
-                createTile(number, col, row, size, specialTiles.getOrDefault(number, ""));
+                createTile(number, col, row, size, specialTiles.getOrDefault(number, ""), tileSize);
             }
         }
         gameBoard.initializePlayerPositions(players);
@@ -241,10 +287,6 @@ public class GameBoardController {
             default:
                 throw new IllegalArgumentException("Unrecognized difficulty level");
         }
-//
-//        // Place the snakes and ladders on the board
-//        placeSnakesAndLadders(snakes, ladders);
-//
           setPlayers(players);
 //        updatePlayerTurn();
            Platform.runLater(() -> drawLinesForSnakes(snakes));
@@ -265,62 +307,56 @@ public class GameBoardController {
         }
     }
 
-    private void createTile(int number, int col, int row, int size, String specialTileColor) {
-        Tile tile = new Tile(col, size - row - 1);
-        tile.setNumber(number);
-        double tileWidth = 100;  // Width of the tile
-        double tileHeight = 100; // Height of the tile
-        tile.setWidth(tileWidth);
-        tile.setHeight(tileHeight);
-        tile.setX(col * tileWidth); // Position the tile based on column
-        tile.setY(row * tileHeight); // Position the tile based on row
+        private void createTile(int number, int col, int row, int size, String specialTileColor, double tileSize) {
+            Tile tile = new Tile(col, size - row - 1);
+            tile.setNumber(number);
+            tile.setWidth(tileSize);
+            tile.setHeight(tileSize);
+            tile.setX(col * tileSize); // Position the tile based on column
+            tile.setY(row * tileSize); // Position the tile based on row
 
-        String backgroundColor;
-        if (!specialTileColor.isEmpty()) {
-            tile.setColor(specialTileColor);
-            backgroundColor = specialTileColor;
-        } else {
-            // Adjusting tile colors here. You can choose a specific light green color that matches your UI theme.
-            backgroundColor = ((row + col) % 2 == 0) ? "#90ee90" : "#f0fff0"; // LightGreen and Honeydew colors for a subtle variation
-        }
-        tile.setFill(Color.web(backgroundColor)); // Set the color of the rectangle
-        tile.setStroke(Color.BLACK); // Set border color
+            String backgroundColor;
+            if (!specialTileColor.isEmpty()) {
+                tile.setColor(specialTileColor);
+                backgroundColor = specialTileColor;
+            } else {
+                // Adjusting tile colors here. You can choose a specific light green color that matches your UI theme.
+                backgroundColor = ((row + col) % 2 == 0) ? "#90ee90" : "#f0fff0"; // LightGreen and Honeydew colors for a subtle variation
+            }
+            tile.setFill(Color.web(backgroundColor)); // Set the color of the rectangle
+            tile.setStroke(Color.BLACK); // Set border color
 
-        // Create a text object for the tile number or special text
-        Text text = new Text();
-        if (specialTileColor.equals("blue")) {
-            text.setText("Surprise");
-        } else if (!specialTileColor.isEmpty()) {
-            text.setText("?");
-        } else {
-            text.setText(Integer.toString(number)); // Set the tile number
+            // Create a text object for the tile number or special text
+            Text text = new Text();
+            if (specialTileColor.equals("blue")) {
+                text.setText("Surprise");
+            } else if (!specialTileColor.isEmpty()) {
+                text.setText("?");
+            } else {
+                text.setText(Integer.toString(number)); // Set the tile number
+            }
+    // Positioning the text at the upper left corner of the tile with a small margin
+            double margin = 5; // Margin from the tile edges
+            text.setStyle("-fx-font-size: " + tileSize / 5 + ";"); // Font size relative to tile size
+            text.setLayoutX(tile.getX() + tileSize / 2 - text.getLayoutBounds().getWidth() / 2); // Center text horizontally
+            text.setLayoutY(tile.getY() + tileSize / 2 + text.getLayoutBounds().getHeight() / 4); // Center text vertically// Align with the top edge plus margin
+            // Add the tile and text to the game pane
+            contentPane.getChildren().addAll(tile, text);
         }
-// Positioning the text at the upper left corner of the tile with a small margin
-        double margin = 5; // Margin from the tile edges
-        text.setX(tile.getX() + margin); // Align with the left edge plus margin
-        text.setY(tile.getY() + margin + text.getLayoutBounds().getHeight() / 4); // Align with the top edge plus margin
-        // Add the tile and text to the game pane
-        contentPane.getChildren().addAll(tile, text);
-    }
 
     // Generate snakes and ladders for the easy difficulty
 
-    private void generateSnake(List<Snake> snakes, Set<Integer> occupiedPositions, int maxPosition, String type, int minPosition) {
+    private void generateSnake(List<Snake> snakes, Set<Integer> occupiedP, int maxPosition, String type, int minPosition) {
         Random random = new Random();
         int start = -1, end;
         int rowsBack = type.equals("yellow") ? 1 : (type.equals("green") ? 2 : 3);
         int startRow = -1; // Declare startRow outside of the loop
         int boardSize = globalSize;
-        System.out.println(boardSize + "boardSize");
         HashMap<Integer, List<Integer>> rowToTilesMap = createRowToTilesMap(boardSize);
         boolean validStartFound = false;
-
         while (!validStartFound) {
             // Randomly select a start row based on the snake type
             startRow = random.nextInt(boardSize - rowsBack) + rowsBack + 1;  // +1 to adjust row index to start from 1
-
-
-
             List<Integer> possibleStartPositions = rowToTilesMap.get(startRow);
 
             // Shuffle the list for randomness
@@ -334,18 +370,15 @@ public class GameBoardController {
                 }
             }
         }
-
         // Determine the end row
         int endRow = startRow - rowsBack;
         List<Integer> possibleEndPositions = rowToTilesMap.get(endRow);
         // Select a random end position from the possible end positions
         end = possibleEndPositions.get(random.nextInt(possibleEndPositions.size()));
-
         // Add the snake with the determined start and end positions
         Snake newSnake = new Snake(start, end, type);
         snakes.add(newSnake);
         snakePositions.put(start, end);
-
         System.out.println("Added " + type + " snake: Start=" + start + ", End=" + end);
         occupiedPositions.add(start);
         if (start != end) {
@@ -536,7 +569,7 @@ public class GameBoardController {
         return rowToTilesMap;
     }
     // Helper method to generate a single ladder
-    private void generateLadder(List<Ladder> ladders, Set<Integer> occupiedPositions, int maxPosition, int length) {
+    private void generateLadder(List<Ladder> ladders, Set<Integer> occupiedPosition, int maxPosition, int length) {
         Random random = new Random();
         int start = -1, end;
         int startRow=-1, endRow;
@@ -547,25 +580,22 @@ public class GameBoardController {
         while (!validStartFound) {
             // Randomly select a start row
             startRow = random.nextInt(boardSize - length) + 1;
-
             List<Integer> possibleStartPositions = rowToTilesMap.get(startRow);
             Collections.shuffle(possibleStartPositions);
 
             for (int possibleStart : possibleStartPositions) {
-                if (!occupiedPositions.contains(possibleStart)) {
+                if (!occupiedPositions.contains(possibleStart) && possibleStart!=1) {
                     start = possibleStart;
                     validStartFound = true;
                     break;
                 }
             }
         }
-
         // Determine the end row
         endRow = startRow + length;
         List<Integer> possibleEndPositions = rowToTilesMap.get(endRow);
         // Select a random end position from the possible end positions
         end = possibleEndPositions.get(random.nextInt(possibleEndPositions.size()));
-
         // Add the ladder with the determined start, end positions, and length
         Ladder newLadder = new Ladder(start, end, length);
         ladders.add(newLadder);
@@ -822,19 +852,18 @@ public class GameBoardController {
         // Define colors for question tiles
         String[] questionColors = {"red", "green", "yellow"};
         for (int i = 0; i < questionColors.length; i++) {
-            int tile = random.nextInt(size * size) + 1;
-            while (usedTiles.contains(tile)) {
-                tile = random.nextInt(size * size) + 1;
+            int tile = random.nextInt(size * size - 1) + 2; // Start from 2 to avoid the first tile
+            while (usedTiles.contains(tile) || tile == size * size) { // Avoid the last tile
+                tile = random.nextInt(size * size - 1) + 2;
             }
-
             specialTiles.put(tile, questionColors[i]);
             usedTiles.add(tile);
-            SpecialTiles.put(tile,questionColors[i]);
+            SpecialTiles.put(tile, questionColors[i]);
         }
 
         if (difficulty != Difficulty.EASY) {
             int startTile = (size * size) - 10;
-            int endTile = size * size;
+            int endTile = size * size - 1; // Avoid the last tile
             int surpriseTilesCount = (difficulty == Difficulty.MEDIUM) ? 1 : 2;
 
             for (int i = 0; i < surpriseTilesCount; i++) {
@@ -861,44 +890,7 @@ public class GameBoardController {
 //        }
 //
    }
-    private void setupGridConstraints(int size) {
-        BoardGrid.getColumnConstraints().clear();
-        BoardGrid.getRowConstraints().clear();
-        // Define the static size for each tile based on difficulty
-        double tileWidth;
-        double tileHeight;
 
-        switch (difficulty) {
-            case EASY:
-                tileWidth = 125; // Width in pixels for easy difficulty
-                tileHeight = 125; // Height in pixels for easy difficulty
-                break;
-            case MEDIUM:
-                tileWidth = 100; // Width in pixels for medium difficulty
-                tileHeight = 100; // Height in pixels for medium difficulty
-                break;
-            case HARD:
-                tileWidth = 75; // Width in pixels for hard difficulty
-                tileHeight = 75; // Height in pixels for hard difficulty
-                break;
-            default:
-                throw new IllegalArgumentException("Unrecognized difficulty level");
-        }
-        // Apply constraints to each column and row
-        for (int i = 0; i < size; i++) {
-            ColumnConstraints columnConstraints = new ColumnConstraints();
-            columnConstraints.setMaxWidth(tileWidth);
-            columnConstraints.setPrefWidth(tileWidth);
-            columnConstraints.setMaxWidth(tileWidth);
-            BoardGrid.getColumnConstraints().add(columnConstraints);
-
-            RowConstraints rowConstraints = new RowConstraints();
-            rowConstraints.setMinHeight(tileHeight);
-            rowConstraints.setPrefHeight(tileHeight);
-            rowConstraints.setMaxHeight(tileWidth);
-            BoardGrid.getRowConstraints().add(rowConstraints);
-        }
-    }
 
     private int determineBoardSize(Difficulty difficulty) {
         switch (difficulty) {
