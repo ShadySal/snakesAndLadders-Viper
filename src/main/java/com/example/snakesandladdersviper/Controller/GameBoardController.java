@@ -3,7 +3,6 @@ import com.example.snakesandladdersviper.Model.*;
 import com.example.snakesandladdersviper.Enums.Difficulty;
 import com.example.snakesandladdersviper.Utils.SceneUtils;
 import javafx.animation.KeyFrame;
-import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -12,17 +11,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.Scene;
-import javafx.scene.paint.PhongMaterial;
-import javafx.scene.transform.Rotate;
-import javafx.util.Pair;
 import javafx.scene.paint.Color;
 import java.io.IOException;
 import java.io.InputStream;
@@ -280,7 +280,8 @@ public class GameBoardController {
             tile.setColor(specialTileColor);
             backgroundColor = specialTileColor;
         } else {
-            backgroundColor = ((row + col) % 2 == 0) ? "green" : "white";
+            // Adjusting tile colors here. You can choose a specific light green color that matches your UI theme.
+            backgroundColor = ((row + col) % 2 == 0) ? "#90ee90" : "#f0fff0"; // LightGreen and Honeydew colors for a subtle variation
         }
         tile.setFill(Color.web(backgroundColor)); // Set the color of the rectangle
         tile.setStroke(Color.BLACK); // Set border color
@@ -294,16 +295,14 @@ public class GameBoardController {
         } else {
             text.setText(Integer.toString(number)); // Set the tile number
         }
-        text.setStyle("-fx-fill: black; -fx-font-size: 12;");
-        text.setX(tile.getX() + tileWidth / 2 - text.getLayoutBounds().getWidth() / 2);
-        text.setY(tile.getY() + tileHeight / 2 + text.getLayoutBounds().getHeight() / 4);
-
-        // Add the tile and text to the gamepane
+// Positioning the text at the upper left corner of the tile with a small margin
+        double margin = 5; // Margin from the tile edges
+        text.setX(tile.getX() + margin); // Align with the left edge plus margin
+        text.setY(tile.getY() + margin + text.getLayoutBounds().getHeight() / 4); // Align with the top edge plus margin
+        // Add the tile and text to the game pane
         contentPane.getChildren().addAll(tile, text);
-
-        // Print the tile coordinates later
-        Platform.runLater(() -> printTileCoordinates(tile));
     }
+
     // Generate snakes and ladders for the easy difficulty
 
     private void generateSnake(List<Snake> snakes, Set<Integer> occupiedPositions, int maxPosition, String type, int minPosition) {
@@ -398,55 +397,127 @@ public class GameBoardController {
     // Helper method to generate a single snake
     private void drawLinesForSnakes(List<Snake> snakes) {
         for (Snake snake : snakes) {
-            // Retrieve the start and end tiles for the snake
             Tile startTile = getTileByNumber(snake.getStart());
             Tile endTile = getTileByNumber(snake.getEndPosition());
 
-            if (startTile != null && (endTile != null || snake.getType().equals("red"))) {
-                // Get the bounds in the scene for start tile
-                Bounds startBounds = startTile.getBoundsInParent();
+            if (startTile != null && endTile != null) {
+                Bounds startBounds = startTile.localToParent(startTile.getBoundsInLocal());
+                Bounds endBounds = endTile.localToParent(endTile.getBoundsInLocal());
+
                 double startX = startBounds.getMinX() + startBounds.getWidth() / 2;
                 double startY = startBounds.getMinY() + startBounds.getHeight() / 2;
+                double endX = endBounds.getMinX() + endBounds.getWidth() / 2;
+                double endY = endBounds.getMinY() + endBounds.getHeight() / 2;
 
-                double endX, endY;
-                if (!snake.getType().equals("red")) {
-                    // Get the bounds in the scene for end tile for non-red snakes
-                    Bounds endBounds = endTile.getBoundsInParent();
-                    endX = endBounds.getMinX() + endBounds.getWidth() / 2;
-                    endY = endBounds.getMinY() + endBounds.getHeight() / 2;
-                } else {
-                    // For red snakes, the end point is the start point (since it occupies one tile)
-                    endX = startX;
-                    endY = startY;
-                }
+                Path snakePath = new Path();
+                snakePath.setStrokeWidth(4); // Adjusted for visual clarity
+                snakePath.getElements().add(new MoveTo(startX, startY));
 
-                // Create and configure the line
-                Line Snakeline = new Line(startX, startY, endX, endY);
-                // Set the line color based on the snake type
+                // Intermediate points for the curves
+                double quarterX = (startX * 3 + endX) / 4;
+                double quarterY = (startY * 3 + endY) / 4;
+                double threeQuarterX = (startX + endX * 3) / 4;
+                double threeQuarterY = (startY + endY * 3) / 4;
+
+                // Adjust these values to change the magnitude and direction of the curves
+                double curveMagnitude = 220; // Adjust for curve depth
+
+                // First curve to the left
+                double ctrlX1 = quarterX;
+                double ctrlY1 = quarterY - curveMagnitude;
+                // Second curve to the right
+                double ctrlX2 = threeQuarterX;
+                double ctrlY2 = threeQuarterY + curveMagnitude;
+
+                snakePath.getElements().add(new CubicCurveTo(ctrlX1, ctrlY1, ctrlX2, ctrlY2, endX, endY));
+
+                Color snakeColor;
                 switch (snake.getType()) {
                     case "yellow":
-                        Snakeline.setStroke(Color.YELLOW);
+                        snakeColor = Color.YELLOW;
                         break;
                     case "green":
-                        Snakeline.setStroke(Color.GREEN);
+                        snakeColor = Color.GREEN;
                         break;
                     case "blue":
-                        Snakeline.setStroke(Color.BLUE);
+                        snakeColor = Color.BLUE;
                         break;
                     case "red":
-                        Snakeline.setStroke(Color.RED);
+                        snakeColor = Color.RED;
                         break;
                     default:
-                        Snakeline.setStroke(Color.BLACK); // Default color
+                        snakeColor = Color.BLACK; // Default color
                         break;
                 }
-                Snakeline.setStrokeWidth(3); // Thickness of the line
 
-                // Add the line to the contentPane or appropriate parent container
-                contentPane.getChildren().add(Snakeline);
+                snakePath.setStroke(snakeColor);
+                snakePath.setFill(null); // Do not fill the path
+
+                contentPane.getChildren().add(snakePath);
+
+                // Add a more detailed snake head at the start position
+                addDetailedSnakeHead(startX, startY, snakeColor);
             }
         }
     }
+
+
+    private void addDetailedSnakeHead(double x, double y, Color bodyColor) {
+        double headRadius = 7; // Adjust size as needed
+        Circle head = new Circle(x, y, headRadius);
+        head.setFill(bodyColor);
+
+        // Eyes
+        Circle eye1 = new Circle(x - headRadius / 3, y - headRadius / 2, 1.5, Color.WHITE);
+        Circle eye2 = new Circle(x + headRadius / 3, y - headRadius / 2, 1.5, Color.WHITE);
+
+        // Tongue
+        Path tongue = new Path();
+        tongue.getElements().add(new MoveTo(x, y + headRadius / 2));
+        tongue.getElements().add(new LineTo(x - headRadius / 4, y + headRadius / 2 + 2));
+        tongue.getElements().add(new MoveTo(x, y + headRadius / 2));
+        tongue.getElements().add(new LineTo(x + headRadius / 4, y + headRadius / 2 + 2));
+        tongue.setStroke(Color.RED);
+        tongue.setStrokeWidth(1);
+
+        contentPane.getChildren().addAll(head, eye1, eye2, tongue);
+    }
+
+
+
+
+    private void addSnakeHead(double x, double y, Color color) {
+        // Assuming headSize is relative to your grid/tile size
+        double headSize = 10;
+
+        // Create the head shape with SVGPath for more complexity and control
+        SVGPath headShape = new SVGPath();
+        // This path data should represent a snake head; adjust as needed
+        headShape.setContent("M " + (x - headSize) + " " + y +
+                " Q " + (x - headSize / 2) + " " + (y - headSize) +
+                " " + x + " " + y +
+                " Q " + (x + headSize / 2) + " " + (y - headSize) +
+                " " + (x + headSize) + " " + y +
+                " Q " + (x + headSize / 2) + " " + (y + headSize / 2) +
+                " " + x + " " + y +
+                " Q " + (x - headSize / 2) + " " + (y + headSize / 2) +
+                " " + (x - headSize) + " " + y + " Z");
+        headShape.setFill(color);
+
+        // Add eyes to the snake head
+        Circle leftEye = new Circle(x - headSize / 3, y - headSize / 2, 1, Color.WHITE);
+        Circle rightEye = new Circle(x + headSize / 3, y - headSize / 2, 1, Color.WHITE);
+
+        // Add a tongue if desired
+        SVGPath tongue = new SVGPath();
+        tongue.setContent("M " + x + " " + y + " L " + (x - 2) + " " + (y + 4) + " L " + x + " " + (y + 2) + " L " + (x + 2) + " " + (y + 4) + " Z");
+        tongue.setFill(Color.RED);
+
+        contentPane.getChildren().addAll(headShape, leftEye, rightEye, tongue);
+    }
+
+
+
 
 
     private HashMap<Integer, List<Integer>> createRowToTilesMap(int boardSize) {
@@ -624,13 +695,13 @@ public class GameBoardController {
 
 
 
+
     private void drawLadderOnBoard(List<Ladder> ladders) {
         for (Ladder ladder : ladders) {
             Tile startTile = getTileByNumber(ladder.getStart());
             Tile endTile = getTileByNumber(ladder.getEnd());
 
             if (startTile != null && endTile != null) {
-                // Calculate start and end positions for the ladder line
                 Bounds startBounds = startTile.localToScene(startTile.getBoundsInLocal());
                 Bounds endBounds = endTile.localToScene(endTile.getBoundsInLocal());
 
@@ -639,12 +710,44 @@ public class GameBoardController {
                 double endX = endBounds.getMinX() + endBounds.getWidth() / 2;
                 double endY = endBounds.getMinY() + endBounds.getHeight() / 2;
 
-                // Create a line representing the ladder
-                Line ladderLine = new Line(startX, startY, endX, endY);
-                ladderLine.setStroke(Color.BROWN); // Set color
-                ladderLine.setStrokeWidth(2); // Set thickness
+                double ladderWidth = 8; // Adjust for desired visual appearance
 
-                Platform.runLater(() -> contentPane.getChildren().add(ladderLine)); // Add the line to the pane
+                // Creating a gradient effect for the ladder sides
+                LinearGradient ladderGradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE,
+                        new Stop(0, Color.BROWN.darker()), new Stop(1, Color.BROWN.brighter()));
+
+                // Ladder sides with gradient effect
+                Line leftSide = new Line(startX - ladderWidth, startY, endX - ladderWidth, endY);
+                Line rightSide = new Line(startX + ladderWidth, startY, endX + ladderWidth, endY);
+                leftSide.setStroke(ladderGradient);
+                rightSide.setStroke(ladderGradient);
+                leftSide.setStrokeWidth(4);
+                rightSide.setStrokeWidth(4);
+
+                // Shadow effect for 3D appearance
+                DropShadow shadow = new DropShadow();
+                shadow.setOffsetY(3.0);
+                shadow.setColor(Color.color(0, 0, 0, 0.5));
+                leftSide.setEffect(shadow);
+                rightSide.setEffect(shadow);
+
+                contentPane.getChildren().addAll(leftSide, rightSide);
+
+                // Determine the number of rungs based on ladder height
+                double distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+                int rungsCount = (int) (distance / 20); // Example calculation for rung count
+
+                for (int i = 1; i <= rungsCount; i++) {
+                    double fraction = (double) i / (rungsCount + 1);
+                    double rungX = startX - ladderWidth + (endX - startX) * fraction;
+                    double rungY = startY + (endY - startY) * fraction;
+
+                    Line rung = new Line(rungX, rungY, rungX + 2 * ladderWidth, rungY);
+                    rung.setStrokeWidth(2);
+                    rung.setStroke(ladderGradient); // Apply gradient effect to rungs as well
+                    rung.setEffect(shadow); // Apply shadow effect for 3D appearance
+                    contentPane.getChildren().add(rung);
+                }
             }
         }
     }
