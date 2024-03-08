@@ -624,39 +624,30 @@ public class GameBoardController {
 
 
 
-        private void drawLadderOnBoard(List<Ladder> ladders) {
-            for (Ladder ladder : ladders) {
-                Tile startTile = getTileByNumber(ladder.getStart());
-                Tile endTile = getTileByNumber(ladder.getEnd());
+    private void drawLadderOnBoard(List<Ladder> ladders) {
+        for (Ladder ladder : ladders) {
+            Tile startTile = getTileByNumber(ladder.getStart());
+            Tile endTile = getTileByNumber(ladder.getEnd());
 
-                if (startTile != null && endTile != null) {
-                    // Get the bounds in the scene for start and end tiles
-                    Bounds startBounds = startTile.getBoundsInParent();
-                    Bounds endBounds = endTile.getBoundsInParent();
+            if (startTile != null && endTile != null) {
+                // Calculate start and end positions for the ladder line
+                Bounds startBounds = startTile.localToScene(startTile.getBoundsInLocal());
+                Bounds endBounds = endTile.localToScene(endTile.getBoundsInLocal());
 
-                    // Calculate the start and end points for the ladder sides
-                    double startX = startBounds.getMinX() + startBounds.getWidth() / 2;
-                    double startY = startBounds.getMinY() + startBounds.getHeight() / 2;
-                    double endX = endBounds.getMinX() + endBounds.getWidth() / 2;
-                    double endY = endBounds.getMinY() + endBounds.getHeight() / 2;
+                double startX = startBounds.getMinX() + startBounds.getWidth() / 2;
+                double startY = startBounds.getMinY() + startBounds.getHeight() / 2;
+                double endX = endBounds.getMinX() + endBounds.getWidth() / 2;
+                double endY = endBounds.getMinY() + endBounds.getHeight() / 2;
 
-                    // Draw two vertical lines for the sides of the ladder
-                    Line leftSide = new Line(startX - 5, startY, endX - 5, endY);
-                    Line rightSide = new Line(startX + 5, startY, endX + 5, endY);
+                // Create a line representing the ladder
+                Line ladderLine = new Line(startX, startY, endX, endY);
+                ladderLine.setStroke(Color.BROWN); // Set color
+                ladderLine.setStrokeWidth(2); // Set thickness
 
-                    // Add the lines to the contentPane or appropriate parent container
-                    contentPane.getChildren().addAll(leftSide, rightSide);
-
-                    // Draw rungs between the two sides
-                    int rungsCount = 5; // Define the number of rungs
-                    for (int i = 0; i < rungsCount; i++) {
-                        double rungY = startY + i * (endY - startY) / rungsCount;
-                        Line rung = new Line(startX - 5, rungY, startX + 5, rungY);
-                        contentPane.getChildren().add(rung);
-                    }
-                }
+                Platform.runLater(() -> contentPane.getChildren().add(ladderLine)); // Add the line to the pane
             }
         }
+    }
 
 
     private void placeLadderOnBoard(Ladder ladder) {
