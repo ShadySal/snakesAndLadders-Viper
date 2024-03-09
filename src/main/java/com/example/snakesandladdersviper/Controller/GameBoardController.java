@@ -244,8 +244,8 @@ public class GameBoardController {
         diceImageContainer.setPrefHeight(150);
         diceImageContainer.setPrefWidth(150);
         // Add elements to the VBox
-        System.out.println(levelLabel);
-        System.out.println(currentPlayerLabel);
+
+
         // Add the VBox to the root pane
         contentPane.getChildren().add(gameDataVBox);
         int tilesInRow = difficulty == Difficulty.EASY ? 7 : (difficulty == Difficulty.MEDIUM ? 10 : 13);
@@ -362,7 +362,7 @@ public class GameBoardController {
             Collections.shuffle(possibleStartPositions);
 
             for (int possibleStart : possibleStartPositions) {
-                if (!occupiedPositions.contains(possibleStart) && possibleStart <= maxPosition) {
+                if (!occupiedPositions.contains(possibleStart) && possibleStart <= maxPosition && !SpecialTiles.containsKey(possibleStart)) {
                     start = possibleStart;
                     validStartFound = true;
                     break;
@@ -547,10 +547,6 @@ public class GameBoardController {
 
         contentPane.getChildren().addAll(headShape, leftEye, rightEye, tongue);
     }
-
-
-
-
 
     private HashMap<Integer, List<Integer>> createRowToTilesMap(int boardSize) {
         HashMap<Integer, List<Integer>> rowToTilesMap = new HashMap<>();
@@ -997,11 +993,11 @@ public class GameBoardController {
 
     private void processDiceOutcome(String outcome) {
         if (outcome.equals("EASY_QUESTION")) {
-            askQuestion("easy", isCorrect -> handleQuestionOutcome(isCorrect, "easy"));
+            askQuestion("easy", isCorrect -> movePlayer(isCorrect ? 0 : -1));
         } else if (outcome.equals("MEDIUM_QUESTION")) {
-            askQuestion("medium", isCorrect -> handleQuestionOutcome(isCorrect, "medium"));
+            askQuestion("medium", isCorrect -> movePlayer(isCorrect ? 0 : -2));
         } else if (outcome.equals("HARD_QUESTION")) {
-            askQuestion("hard", isCorrect -> handleQuestionOutcome(isCorrect, "hard"));
+            askQuestion("hard", isCorrect -> movePlayer(isCorrect ? 1 : -3));
         } else {
             int steps = Integer.parseInt(outcome);
             movePlayer(steps);
@@ -1049,7 +1045,7 @@ public class GameBoardController {
 
         if (question == null) {
             showAlert("No Questions", "No questions available for this difficulty.");
-            callback.accept(false); // Assuming false for no question available
+            callback.accept(false); // No question available, treat as incorrect
             return;
         }
 
@@ -1058,6 +1054,7 @@ public class GameBoardController {
             callback.accept(isCorrect);
         });
     }
+
 
 
     private boolean showQuestionDialog(Question question, String difficultyLevel) {
@@ -1121,7 +1118,7 @@ public class GameBoardController {
         }
 
         // Setting the owner of the alert
-        Stage primaryStage = (Stage) BoardGrid.getScene().getWindow(); // Replace 'BoardGrid' with an actual component from your primary stage
+        Stage primaryStage = (Stage) contentPane.getScene().getWindow(); // Replace 'BoardGrid' with an actual component from your primary stage
         alert.initOwner(primaryStage);
 
         alert.showAndWait();
@@ -1271,49 +1268,55 @@ public class GameBoardController {
     private void movePlayer(int steps) {
         Player currentPlayer = players.get(currentPlayerIndex);
 
-        // Update the player's position on the game board
         int currentPosition = gameBoard.getPlayerPosition(currentPlayer);
         int newPosition = currentPosition + steps;
+
         int totalTiles = getTotalTilesForDifficulty(difficulty);
-
-        // Check if the new position goes beyond the last tile
-        if (newPosition >= totalTiles) {
-            handlePlayerWin(currentPlayer);
-            return; // Return to prevent further execution
+        if(steps ==0){
+            newPosition = currentPosition;
+            updatePlayerTurn();
         }
+        else {
+            if (steps < 0) {
+                if (newPosition < 0) {
+                    newPosition = 1;
+                }
 
-        // Check if the new position is a special tile and trigger appropriate action
-        String tileColor = SpecialTiles.get(newPosition);
-        if (tileColor != null) {
-            switch (tileColor) {
-                case "green":
-                    askQuestion("easy", isCorrect -> handleQuestionOutcome(isCorrect, "easy"));
-                    break;
-                case "yellow":
-                    askQuestion("medium", isCorrect -> handleQuestionOutcome(isCorrect, "medium"));
-                    break;
-                case "red":
-                    askQuestion("hard", isCorrect -> handleQuestionOutcome(isCorrect, "hard"));
-                    break;
             }
-        } else {
-            // Check if the new position is the start of a snake
-            if (snakePositions.containsKey(newPosition)) {
-                newPosition = snakePositions.get(newPosition);
-                System.out.println("Player landed on a snake! Moved to position " + newPosition);
+            if (newPosition >= totalTiles) {
+                newPosition = totalTiles; // Ensure players do not exceed the board
             }
-
-            // Check if the new position is the start of a ladder
-            if (ladderPositions.containsKey(newPosition)) {
-                newPosition = ladderPositions.get(newPosition);
-                System.out.println("Player landed on a ladder! Moved to position " + newPosition);
+            // Check if the new position is a special tile and trigger appropriate action
+            String tileColor = SpecialTiles.get(newPosition);
+            if (tileColor != null) {
+                switch (tileColor) {
+                    case "green":
+                        askQuestion("easy", isCorrect -> movePlayer(isCorrect ? 0 : -1));
+                        break;
+                    case "yellow":
+                        askQuestion("medium", isCorrect -> movePlayer(isCorrect ? 0 : -2));
+                        break;
+                    case "red":
+                        askQuestion("hard", isCorrect -> movePlayer(isCorrect ? 1 : -3));
+                        break;
+                }
+            } else {
+                // Check if the new position is the start of a snake
+                if (snakePositions.containsKey(newPosition)) {
+                    newPosition = snakePositions.get(newPosition);
+                    System.out.println("Player landed on a snake! Moved to position " + newPosition);
+                }
+                // Check if the new position is the start of a ladder
+                if (ladderPositions.containsKey(newPosition)) {
+                    newPosition = ladderPositions.get(newPosition);
+                    System.out.println("Player landed on a ladder! Moved to position " + newPosition);
+                }
+                // Update the position in the game board
+                gameBoard.setPlayerPosition(currentPlayer, newPosition);
+                // Update the UI to reflect the new position
+                updatePlayerPositionOnBoard(currentPlayer);
+                updatePlayerTurn();
             }
-
-            // Update the position in the game board
-            gameBoard.setPlayerPosition(currentPlayer, newPosition);
-
-            // Update the UI to reflect the new position
-            updatePlayerPositionOnBoard(currentPlayer);
         }
     }
     private void handlePlayerWin(Player currentPlayer) {
@@ -1378,32 +1381,26 @@ public class GameBoardController {
         // You can also add animations or sounds here to celebrate the win
     }
     private void updatePlayerPositionOnBoard(Player player) {
-        // Get the player's new position
         int newPosition = gameBoard.getPlayerPosition(player);
-
         // Convert this position to row and column on the grid
         int size = determineBoardSize(difficulty);
         int row = size - 1 - (newPosition / size);
         int column = (row % 2 == size % 2) ? size - 1 - (newPosition % size) : newPosition % size;
 
-        // Get the tile Pane for the new position
-        Pane newTile = getTileForPlayer(player);
+        // Find the corresponding tile
+        Tile newTile = getTileByNumber(newPosition);
 
         if (newTile != null) {
             ImageView playerImage = playerImages.get(player);
 
-            // Check if the ImageView is already on the tile
-            if (!newTile.getChildren().contains(playerImage)) {
-                // If not, add it to the tile
-                newTile.getChildren().add(playerImage);
-            }
+            // Position the player image in the center of the tile
+            playerImage.setX(newTile.getX() + newTile.getWidth() / 2 - playerImage.getFitWidth() / 2);
+            playerImage.setY(newTile.getY() + newTile.getHeight() / 2 - playerImage.getFitHeight() / 2);
 
-            // Adjust the position of the image in the tile
-            int imageIndex = newTile.getChildren().indexOf(playerImage);
-            double xOffset = (imageIndex - 0.8) * 40; // Adjust based on image size
-            double yOffset = (imageIndex - 0.3) * 40;
-            playerImage.setTranslateX(xOffset);
-            playerImage.setTranslateY(yOffset);
+            // Add or update player's image in the contentPane
+            if (!contentPane.getChildren().contains(playerImage)) {
+                contentPane.getChildren().add(playerImage);
+            }
         }
     }
 
@@ -1415,13 +1412,13 @@ public class GameBoardController {
         }
         // Increment the currentPlayerIndex and wrap around if it exceeds the size of the players list
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-
+        System.out.println(currentPlayerIndex);
         // Get the current player based on the updated index
         Player currentPlayer = players.get(currentPlayerIndex);
 
         // Update the currentPlayerLabel with the current player's name
         if (currentPlayer != null) {
-            currentPlayerLabel.setText("Player " + currentPlayer.getName() + "'s Turn");
+            currentPlayerLabel.setText("Player " + currentPlayer.getPlayerColor() + "'s Turn " + "player in position: " + currentPlayer.getPosition());
         } else {
             System.out.println("Current player is null.");
         }

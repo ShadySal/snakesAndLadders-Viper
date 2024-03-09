@@ -82,7 +82,8 @@ public class InitializeGame {
             Parent root = loader.load();
             PlayerSelectionController playerSelectionController = loader.getController();
             Player player = new Player("Player " + currentPlayerNumber);
-            player.setPlayerNumber(currentPlayerNumber);
+            player.setPlayerNumber(1);
+            System.out.println("in initializegame" + currentPlayerNumber);
             players.add(player);
             playerSelectionController.setDifficulty(difficulty);
             playerSelectionController.setPlayerData(currentPlayerNumber, player, 1, numberOfPlayers);
