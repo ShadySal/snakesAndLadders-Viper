@@ -1,0 +1,20 @@
+
+.game-data-vbox {
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #333;
+    -fx-border-width: 2px;
+}
+.game-data-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+.game-data-button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.exit-game-button {
+    -fx-background-color: #f44336;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}

@@ -213,7 +213,7 @@ public class GameBoardController {
         this.bsize = size*size;
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         double screenWidth = screenBounds.getWidth();
-        double screenHeight = screenBounds.getHeight();
+        double screenHeight = screenBounds.getHeight() * 0.95;
         gameBoard = new GameBoard(size, size);
         List<Snake> snakes = new ArrayList<>(); // List to store snakes
         List<Ladder> ladders = new ArrayList<>();
@@ -221,6 +221,7 @@ public class GameBoardController {
         Set<Integer> occupiedPositions = determineOccupiedPositions(specialTiles, size); // Determine occupied positions
 
         // Initialize special tiles (questions and surprise)
+        contentPane.setLayoutY(contentPane.getLayoutY() - 20); // Move up by 20 units
 
         contentPane.setPrefWidth(screenWidth * 0.75);
         contentPane.setPrefHeight(screenHeight);
@@ -229,21 +230,32 @@ public class GameBoardController {
         gamepane.setPrefWidth(gamePaneWidth);
         gamepane.setPrefHeight(contentPane.getPrefHeight());
 
-        VBox gameDataVBox = new VBox();
-        gameDataVBox.setLayoutX(gamePaneWidth); // Position next to the gamepane
+        VBox gameDataVBox = new VBox(10); // Include spacing between elements
+        gameDataVBox.setLayoutX(gamePaneWidth);
+        gameDataVBox.setPrefWidth(gameDataVBoxWidth);
         gameDataVBox.setPrefHeight(contentPane.getPrefHeight());
-        gameDataVBox.setPrefWidth(gameDataVBoxWidth); // Set the preferred width for the game data VBox
-        gameDataVBox.setStyle("-fx-background-color: white;"); // Set the background color
-        gameDataVBox.setSpacing(10); // Set spacing between elements
-        gameDataVBox.setPadding(new Insets(10, 20, 10, 20)); // Add padding
+        gameDataVBox.setPadding(new Insets(10, 20, 10, 20));
 
-        // Create game data elements
-
+        // Initialize your components here (only showing a subset for brevity)
         Label levelLabel = new Label("Level: " + difficulty);
+        diceImageContainer.setPrefHeight(150);
+        diceImageContainer.setPrefWidth(150);
+
+        // Spacer to push the "Exit Game" button to the bottom
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+
+        Button exitGameButton = new Button("Exit Game");
+        exitGameButton.setOnAction(event -> MainMenuFun(event));
+
+        // Now, add your components to the VBox without duplication
+
+
 
         diceImageContainer.setPrefHeight(150);
         diceImageContainer.setPrefWidth(150);
         // Add elements to the VBox
+        // Add elements to the VBox, including the spacer before the exit button
 
 
         // Add the VBox to the root pane
@@ -286,11 +298,12 @@ public class GameBoardController {
         }
           setPlayers(players);
            updatePlayerTurn();
-        gameDataVBox.getChildren().addAll(timeLabel, levelLabel, diceRollButton, diceImageContainer, currentPlayerLabel, MainMenuButton);
+        gameDataVBox.getChildren().addAll(timeLabel, levelLabel, diceRollButton, diceImageContainer, currentPlayerLabel, spacer, exitGameButton);
 
         Platform.runLater(() -> drawLinesForSnakes(snakes));
         Platform.runLater(()->drawLadderOnBoard(ladders));
     }
+
     private void generateSnakesAndLaddersForEasy(List<Snake> snakes, List<Ladder> ladders, Set<Integer> occupiedPosition, int maxPosition) {
         int minPositionForYellow = 8; // Second row onwards in a 7x7 board
         int minPositionForGreen = 15; // Third row onwards
