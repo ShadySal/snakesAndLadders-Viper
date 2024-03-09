@@ -221,7 +221,7 @@ public class GameBoardController {
         Set<Integer> occupiedPositions = determineOccupiedPositions(specialTiles, size); // Determine occupied positions
 
         // Initialize special tiles (questions and surprise)
-        contentPane.setLayoutY(contentPane.getLayoutY() - 20); // Move up by 20 units
+        //contentPane.setLayoutY(contentPane.getLayoutY() - 20); // Move up by 20 units
 
         contentPane.setPrefWidth(screenWidth * 0.75);
         contentPane.setPrefHeight(screenHeight);
