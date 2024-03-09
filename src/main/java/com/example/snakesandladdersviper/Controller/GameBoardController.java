@@ -4,6 +4,7 @@ import com.example.snakesandladdersviper.Enums.Difficulty;
 import com.example.snakesandladdersviper.Utils.SceneUtils;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -1415,8 +1416,10 @@ public class GameBoardController {
 
         // You can also add animations or sounds here to celebrate the win
     }
+
     private void updatePlayerPositionOnBoard(Player player) {
         int newPosition = gameBoard.getPlayerPosition(player);
+
         // Convert this position to row and column on the grid
         int size = determineBoardSize(difficulty);
         int row = size - 1 - (newPosition / size);
@@ -1427,14 +1430,20 @@ public class GameBoardController {
 
         if (newTile != null) {
             ImageView playerImage = playerImages.get(player);
+            double newX = newTile.getX() + newTile.getWidth() / 2 - playerImage.getFitWidth() / 2;
+            double newY = newTile.getY() + newTile.getHeight() / 2 - playerImage.getFitHeight() / 2;
 
-            // Position the player image in the center of the tile
-            playerImage.setX(newTile.getX() + newTile.getWidth() / 2 - playerImage.getFitWidth() / 2);
-            playerImage.setY(newTile.getY() + newTile.getHeight() / 2 - playerImage.getFitHeight() / 2);
-
-            // Add or update player's image in the contentPane
+            // If playerImage is not already in the scene, add it first to avoid null reference during animation
             if (!contentPane.getChildren().contains(playerImage)) {
+                playerImage.setX(newX); // Set initial position to new position to prevent it from popping elsewhere
+                playerImage.setY(newY);
                 contentPane.getChildren().add(playerImage);
+            } else {
+                // Create and play the animation
+                TranslateTransition transition = new TranslateTransition(Duration.seconds(1), playerImage);
+                transition.setToX(newX - playerImage.getX());
+                transition.setToY(newY - playerImage.getY());
+                transition.play();
             }
         }
     }
