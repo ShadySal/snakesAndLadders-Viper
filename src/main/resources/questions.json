@@ -328,16 +328,5 @@
             "By increasing the number of bugs"
         ],
         "correct_ans": 3
-    },
-    {
-        "difficulty": 1,
-        "question": "dsfgfd",
-        "answers": [
-            "gsf",
-            "fdh",
-            "fdbdfb",
-            "dfgn"
-        ],
-        "correct_ans": 1
     }
 ]}

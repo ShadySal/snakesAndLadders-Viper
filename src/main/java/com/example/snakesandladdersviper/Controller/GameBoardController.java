@@ -244,6 +244,21 @@ public class GameBoardController {
         // Spacer to push the "Exit Game" button to the bottom
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
+        // Create a container for the dice roll button and image
+        VBox diceContainer = new VBox(10); // Spacing between the dice roll button and the image
+        diceContainer.setAlignment(Pos.CENTER); // Center these components within the container
+
+        // Add the dice roll button and dice image to the diceContainer
+
+
+        // Adjust the dice image container size if necessary
+        diceImageContainer.setPrefSize(150, 150); // Example size, adjust as needed
+
+        // Spacer to push elements to their positions
+        Region spacerTop = new Region();
+        VBox.setVgrow(spacerTop, Priority.ALWAYS);
+        Region spacerBottom = new Region();
+        VBox.setVgrow(spacerBottom, Priority.ALWAYS);
 
         Button exitGameButton = new Button("Exit Game");
         exitGameButton.setOnAction(event -> MainMenuFun(event));
@@ -298,7 +313,14 @@ public class GameBoardController {
         }
           setPlayers(players);
            updatePlayerTurn();
-        gameDataVBox.getChildren().addAll(timeLabel, levelLabel, diceRollButton, diceImageContainer, currentPlayerLabel, spacer, exitGameButton);
+        // Assuming you've created and configured diceContainer as shown in your snippet
+        diceContainer.getChildren().addAll(diceRollButton, diceImageContainer);
+
+// Now add components to gameDataVBox in a way that centers the dice components vertically
+        gameDataVBox.getChildren().clear(); // Clear to ensure it's empty before adding components
+        gameDataVBox.getChildren().addAll(timeLabel, levelLabel, spacerTop, diceContainer, spacerBottom, currentPlayerLabel, exitGameButton);
+
+
 
         Platform.runLater(() -> drawLinesForSnakes(snakes));
         Platform.runLater(()->drawLadderOnBoard(ladders));
