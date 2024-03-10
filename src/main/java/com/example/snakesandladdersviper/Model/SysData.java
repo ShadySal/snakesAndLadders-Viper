@@ -73,8 +73,7 @@ public class SysData {
     }
 
 
-    public void addGameHistory(String winnerName, long startTimeMillis, String difficulty) {
-        String gameDuration = calculateGameDuration(startTimeMillis);  // This method returns a formatted string
+    public void addGameHistory(String winnerName, String gameDuration, String difficulty) {
         JSONObject jsonObject = readJsonFile(HISTORY_FILE);
         JSONArray gameHistoryArray = jsonObject.optJSONArray("GameHistory");
         if (gameHistoryArray == null) {

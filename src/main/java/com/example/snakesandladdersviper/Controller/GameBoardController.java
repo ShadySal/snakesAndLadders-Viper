@@ -1009,13 +1009,22 @@ public class GameBoardController {
 
     private void processDiceOutcome(String outcome) {
         if (outcome.equals("EASY_QUESTION")) {
-            askQuestion("easy", isCorrect -> movePlayer(isCorrect ? 0 : -1));
+            askQuestion("easy", isCorrect -> movePlayerAndUpdateTurn(isCorrect ? 0 : -1));
         } else if (outcome.equals("MEDIUM_QUESTION")) {
-            askQuestion("medium", isCorrect -> movePlayer(isCorrect ? 0 : -2));
+            askQuestion("medium", isCorrect -> movePlayerAndUpdateTurn(isCorrect ? 0 : -2));
         } else if (outcome.equals("HARD_QUESTION")) {
-            askQuestion("hard", isCorrect -> movePlayer(isCorrect ? 1 : -3));
+            askQuestion("hard", isCorrect -> movePlayerAndUpdateTurn(isCorrect ? 1 : -3));
         } else {
             int steps = Integer.parseInt(outcome);
+            movePlayer(steps);
+        }
+    }
+    private void movePlayerAndUpdateTurn(int steps) {
+
+        if (steps == 0) {
+            updatePlayerTurn();
+        }
+        else{
             movePlayer(steps);
         }
     }
@@ -1274,76 +1283,179 @@ public class GameBoardController {
         }
     }
 
-    private void movePlayer(int steps) {
+    private void moveB(int steps){
         Player currentPlayer = players.get(currentPlayerIndex);
-        System.out.println(currentPlayerIndex + " in movePlayer");
+        System.out.println(currentPlayer + " in movePlayer");
         int newPosition = gameBoard.getPlayerPosition(currentPlayer) + steps;
         int totalTiles = getTotalTilesForDifficulty(difficulty);
-        boolean moved = true;
+        int temp = newPosition;
         if(steps == 0){
             updatePlayerTurn();
         }
         else {
-            while (moved) {
-                moved = false;
-                // Check for negative movement or going beyond the board
-                if (newPosition < 1) {
-                    newPosition = 1;
-                } else if (newPosition > totalTiles) {
-                    newPosition = totalTiles;
-                }
-
-                // Check for special tiles, snakes, and ladders
-                String tileColor = SpecialTiles.get(newPosition);
-                if (tileColor != null) {
-                    // Special tile logic (questions, etc.)
-                    handleSpecialTile(newPosition, tileColor);
-                } else if (snakePositions.containsKey(newPosition)) {
-                    newPosition = snakePositions.get(newPosition);
-                    System.out.println("Player landed on a snake! Moved to position " + newPosition);
-                    moved = true;
-                } else if (ladderPositions.containsKey(newPosition)) {
-                    newPosition = ladderPositions.get(newPosition);
-                    System.out.println("Player landed on a ladder! Moved to position " + newPosition);
-                    moved = true;
-                }
-
-                // Update the position in the game board and UI
-                gameBoard.setPlayerPosition(currentPlayer, newPosition);
-                updatePlayerPositionOnBoard(currentPlayer);
-
-                if (newPosition >= totalTiles) {
-                    handlePlayerWin(currentPlayer);
-                } else {
-                    updatePlayerTurn();
-                }
+            if (newPosition < 1) {
+                newPosition = 1;
+            } else if (newPosition > totalTiles) {
+                newPosition = totalTiles;
+                handlePlayerWin(currentPlayer);
+            }
+            String tileColor = SpecialTiles.get(newPosition);
+            if (tileColor != null) {
+                // Special tile logic (questions, etc.)
+                handleSpecialTile(newPosition, tileColor);
+            } else if (snakePositions.containsKey(newPosition)) {
+                newPosition = snakePositions.get(newPosition);
+                System.out.println("Player landed on a snake! Moved to position " + newPosition);
+                temp = checkNewPosition(newPosition);
+            } else if (ladderPositions.containsKey(newPosition)) {
+                newPosition = ladderPositions.get(newPosition);
+                System.out.println("Player landed on a ladder! Moved to position " + newPosition);
+                temp = checkNewPosition(newPosition);
             }
         }
+        if (temp != newPosition){
+            newPosition = temp;
+        }
+        gameBoard.setPlayerPosition(currentPlayer, newPosition);
+        updatePlayerPositionOnBoard(currentPlayer);
+        if (newPosition >= totalTiles) {
+            handlePlayerWin(currentPlayer);
+        } else {
+            updatePlayerTurn();
+        }
     }
+    public int checkNewPosition(int newPosition){
+        boolean temp = true;
+        while(temp) {
+            temp = false;
+            String tileColor = SpecialTiles.get(newPosition);
+            if (tileColor != null) {
+                // Special tile logic (questions, etc.)
+                handleSpecialTile(newPosition, tileColor);
+                break;
+            }
+           else if (snakePositions.containsKey(newPosition)) {
+                System.out.println("Player landed on a snake! Moved to position " + newPosition);
+                newPosition = snakePositions.get(newPosition);
+                temp = true;
+            }
+           else if (ladderPositions.containsKey(newPosition)) {
+                newPosition = ladderPositions.get(newPosition);
+                System.out.println("Player landed on a ladder! Moved to position " + newPosition);
+                temp = true;
+        }
+    }
+        return newPosition;
+    }
+    private void movePlayer(int steps) {
 
+        Player currentPlayer = players.get(currentPlayerIndex);
+        System.out.println(currentPlayerIndex + " in movePlayer");
+        int newPosition = gameBoard.getPlayerPosition(currentPlayer) + steps;
+        int totalTiles = getTotalTilesForDifficulty(difficulty);
+        int temp = newPosition;
+        if(steps == 0){
+            updatePlayerTurn();
+        }
+        else {
+            if (newPosition < 1) {
+                newPosition = 1;
+            } else if (newPosition > totalTiles) {
+                newPosition = totalTiles;
+                handlePlayerWin(currentPlayer);
+            }
+            String tileColor = SpecialTiles.get(newPosition);
+            if (tileColor != null) {
+                // Special tile logic (questions, etc.)
+                handleSpecialTile(newPosition, tileColor);
+            } else if (snakePositions.containsKey(newPosition)) {
+                newPosition = snakePositions.get(newPosition);
+                System.out.println("Player landed on a snake! Moved to position " + newPosition);
+                temp = checkNewPosition(newPosition);
+            } else if (ladderPositions.containsKey(newPosition)) {
+                newPosition = ladderPositions.get(newPosition);
+                System.out.println("Player landed on a ladder! Moved to position " + newPosition);
+                temp = checkNewPosition(newPosition);
+            }
+        }
+        if (temp != newPosition){
+            newPosition = temp;
+        }
+        gameBoard.setPlayerPosition(currentPlayer, newPosition);
+        updatePlayerPositionOnBoard(currentPlayer);
+        if (newPosition >= totalTiles) {
+            handlePlayerWin(currentPlayer);
+        } else {
+            updatePlayerTurn();
+        }
+
+//        Player currentPlayer = players.get(currentPlayerIndex);
+//        System.out.println(currentPlayerIndex + " in movePlayer");
+//        int newPosition = gameBoard.getPlayerPosition(currentPlayer) + steps;
+//        int totalTiles = getTotalTilesForDifficulty(difficulty);
+//        boolean moved = true;
+//        if(steps == 0){
+//            updatePlayerTurn();
+//        }
+//        else {
+//            while (moved) {
+//                moved = false;
+//                // Check for negative movement or going beyond the board
+//                if (newPosition < 1) {
+//                    newPosition = 1;
+//                } else if (newPosition > totalTiles) {
+//                    newPosition = totalTiles;
+//                }
+//
+//                // Check for special tiles, snakes, and ladders
+//                String tileColor = SpecialTiles.get(newPosition);
+//                if (tileColor != null) {
+//                    // Special tile logic (questions, etc.)
+//                    handleSpecialTile(newPosition, tileColor);
+//                } else if (snakePositions.containsKey(newPosition)) {
+//                    newPosition = snakePositions.get(newPosition);
+//                    System.out.println("Player landed on a snake! Moved to position " + newPosition);
+//                    moved = true;
+//                } else if (ladderPositions.containsKey(newPosition)) {
+//                    newPosition = ladderPositions.get(newPosition);
+//                    System.out.println("Player landed on a ladder! Moved to position " + newPosition);
+//                    moved = true;
+//                }
+//
+//                // Update the position in the game board and UI
+//                gameBoard.setPlayerPosition(currentPlayer, newPosition);
+//                updatePlayerPositionOnBoard(currentPlayer);
+//
+//                if (newPosition >= totalTiles) {
+//                    handlePlayerWin(currentPlayer);
+//                } else {
+//                    updatePlayerTurn();
+//                }
+//            }
+//        }
+    }
     private void handleSpecialTile(int position, String tileColor) {
         switch (tileColor) {
             case "green":
-                askQuestion("easy", isCorrect -> movePlayer(isCorrect ? 0 : -1));
+                askQuestion("easy", isCorrect -> movePlayerAndUpdateTurn(isCorrect ? 0 : -1));
                 break;
             case "yellow":
-                askQuestion("medium", isCorrect -> movePlayer(isCorrect ? 0 : -2));
+                askQuestion("medium", isCorrect -> movePlayerAndUpdateTurn(isCorrect ? 0 : -2));
                 break;
             case "red":
-                askQuestion("hard", isCorrect -> movePlayer(isCorrect ? 1 : -3));
+                askQuestion("hard", isCorrect -> movePlayerAndUpdateTurn(isCorrect ? 1 : -3));
                 break;
             // Add other cases if there are more special tiles
         }
     }
-
     private void handlePlayerWin(Player currentPlayer) {
         // Get the game duration as a string
-        String gameDurationStr = SysData.getInstance().calculateGameDuration(startTime);
+        String gameDurationStr = timeLabel.getText();
         long gameDurationMillis = convertDurationToMillis(gameDurationStr);
         // Difficulty of the match
         String gameDifficulty = difficulty.toString();
         // Add the game data to history.json
-        SysData.getInstance().addGameHistory(currentPlayer.getName(), gameDurationMillis, gameDifficulty);
+        SysData.getInstance().addGameHistory(currentPlayer.getName(), gameDurationStr, difficulty.toString());
 
         Platform.runLater(() -> {
             // Capture the current full screen state
@@ -1380,21 +1492,6 @@ public class GameBoardController {
         long minutes = Long.parseLong(parts[1]);
         long seconds = Long.parseLong(parts[2]);
         return (hours * 3600 + minutes * 60 + seconds) * 1000;
-    }
-    private void handlePlayerWin(GameEvent event) {
-        Player player = event.getPlayer(); // Assuming event.getPlayer() returns a Player object
-        // Show a congratulatory message or dialog
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Game Over");
-        alert.setHeaderText(null);
-        alert.setContentText("Congratulations " + player.getName() + "! You have won the game.");
-        alert.showAndWait();
-        // Assuming the addGameHistory method in SysData requires the winner's name, start time, and difficulty
-        // Here, you need to provide the correct difficulty level if required
-        String difficulty = "Easy"; // Example, adjust based on your game's logic
-        SysData.getInstance().addGameHistory(player.getName(), startTime, difficulty);
-
-        // You can also add animations or sounds here to celebrate the win
     }
 
     private void updatePlayerPositionOnBoard(Player player) {
