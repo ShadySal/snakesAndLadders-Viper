@@ -20,14 +20,18 @@
 
 
 .custom-table-view {
-    -fx-pref-width: 300px; /* Table width */
-    -fx-pref-height: 300px; /* Table height */
-    -fx-max-height: 300px; /* To match preferred height */
-    -fx-max-width: 500px; /* To match preferred width */
-    -fx-border-color: black;
-    -fx-table-cell-border-color: transparent;
-    -fx-alignment: center; /* This will center the content within the TableView */
-
+    -fx-pref-width: 700px; /* Increase table width */
+    -fx-pref-height: 450px; /* Increase table height */
+    -fx-max-height: 450px; /* Adjust max height to match preferred */
+    -fx-max-width: 700px; /* Adjust max width to match preferred */
+    -fx-background-color: #f7f7f7; /* Soft background color */
+    -fx-opacity: 0.95; /* Slightly increase opacity for better readability */
+    -fx-background-radius: 15; /* Increase the radius for more rounded corners */
+    -fx-border-color: #d3d3d3; /* Lighter border color */
+    -fx-border-width: 2px; /* Adjust border width */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.16), 10, 0, 0, 10); /* Subtle shadow for depth */
+    -fx-alignment: center; /* Center content */
+    -fx-table-cell-border-color: transparent; /* Hide cell borders for a cleaner look */
 }
 
 
@@ -76,3 +80,55 @@
 .stack-pane {
     -fx-alignment: center;
 }
+/* GameHistory.css */
+
+/* ... existing styles ... */
+
+.custom-table-view {
+    -fx-background-color: #f7f7f7; /* Soft background color */
+    -fx-opacity: 0.9;
+    /* ... existing styles ... */
+}
+
+.custom-table-column {
+    -fx-font-family: 'PlayfulFont', sans-serif; /* A playful font matching your theme */
+    -fx-font-size: 16px; /* Adjust font size */
+    /* ... existing styles ... */
+}
+
+/* ... existing styles ... */
+
+.table-row-cell:even {
+    -fx-background-color: #e8f5e9; /* Light green for even rows, like a ladder */
+}
+
+.table-row-cell:odd {
+    -fx-background-color: white; /* White for odd rows */
+}
+
+.table-row-cell:hover {
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 5, 0, 0, 0);
+}
+
+/* Buttons styled like game squares */
+.action-button {
+    -fx-font-family: 'PlayfulFont', sans-serif;
+    -fx-background-color: #b5e7a0; /* Color of ladders */
+    -fx-border-color: #6b8e23; /* Darker shade for the border */
+    -fx-border-width: 3px;
+    -fx-border-radius: 5px;
+    /* ... existing styles ... */
+}
+
+.action-button:hover {
+    -fx-background-color: #8fbc8f; /* A darker shade when hovered */
+    /* ... existing styles ... */
+}
+
+/* Icons in Difficulty column */
+.difficulty-icon {
+}
+
+/* ... additional styles ... */

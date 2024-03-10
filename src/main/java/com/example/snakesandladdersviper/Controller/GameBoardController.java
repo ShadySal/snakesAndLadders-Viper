@@ -261,8 +261,9 @@ public class GameBoardController {
         exitGameButton.setOnAction(event -> MainMenuFun(event));
 
 // Style the dice roll button if needed
-        diceRollButton.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
-
+        diceRollButton.setStyle("-fx-font-weight: bold; -fx-font-size: 8px;");
+        diceRollButton.setWrapText(true); // Allows text to wrap if it's too long
+        diceRollButton.setMaxWidth(400); // Set a max width to ensure text wrapping; adjust as needed
 
         diceImageContainer.setPrefHeight(150);
         diceImageContainer.setPrefWidth(150);
