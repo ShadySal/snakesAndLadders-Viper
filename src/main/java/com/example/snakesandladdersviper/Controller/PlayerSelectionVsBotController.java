@@ -36,7 +36,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 public class PlayerSelectionVsBotController {
-
         @FXML
         private Pane contentPane;
 
@@ -60,25 +59,21 @@ public class PlayerSelectionVsBotController {
         private GameBoard gameBoard;
         private int numberOfBots;
 
-
     public List<Player> getPlayers() {
             return players;
         }
         public TextField getPlayerName() {
-            // Implement the logic to return the player name TextField
             return PlayerName;
         }
         public ComboBox<String> getObjectSelect() {
-            // Implement the logic to return the ObjectSelect ComboBox
             return ObjectSelect;
         }
         public Text getPlayerSelectionTurn() {
-            // Implement the logic to return the PlayerSelectionTurn Text
             return PlayerSelectionTurn;
         }
 
         public void initialize() {
-            ObjectSelect.getItems().addAll("Red", "Blue", "Black", "Yellow", "Orange", "Green");
+            ObjectSelect.getItems().addAll("Red", "Blue", "Pink", "Yellow", "Purple", "Green");
             players = new ArrayList<>();
             currentPlayerNumber = 1;
             PlayerSelectionTurn.setText("Player " + currentPlayerNumber);
@@ -106,7 +101,6 @@ public class PlayerSelectionVsBotController {
 
         // Add OK and Cancel buttons to the alert
         confirmationAlert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
-
         // Show the alert and wait for user input
         confirmationAlert.showAndWait().ifPresent(buttonType -> {
             if (buttonType == ButtonType.OK) {
@@ -116,7 +110,6 @@ public class PlayerSelectionVsBotController {
                 if (!players.isEmpty()) {
                     players.remove(players.size() - 1);
                 }
-
                 // Use SceneUtils to change the scene smoothly
                 SceneUtils.changeScene(stage, "/com/example/snakesandladdersviper/hello-view.fxml", true);
             } else {
@@ -126,10 +119,9 @@ public class PlayerSelectionVsBotController {
     }
 
 
-
     private void startGame() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/Gameboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/GameboardBot.fxml"));
             Parent gameBoardRoot = loader.load();
             GameBoardController gameBoardController = loader.getController();
             gameBoardController.initializeBoard(difficulty, players);
@@ -144,12 +136,10 @@ public class PlayerSelectionVsBotController {
 
                 String playerName = PlayerName.getText();
                 String selectedColorName = ObjectSelect.getValue();
-
                 if (playerName.isEmpty() || selectedColorName == null) {
                     showAlert("Error", "Please enter a username and select a color.");
                     return;
                 }
-
                 // Create real player
                 Player realPlayer = new Player(playerName, 1, selectedColorName);
                 players.add(realPlayer);
@@ -201,9 +191,6 @@ public class PlayerSelectionVsBotController {
                     return Color.BLACK; // Default color or throw an exception
             }
         }
-
-
-
 
     public void setNumOfBots(int numberOfPlayers) {
             this.numberOfBots = numberOfPlayers;

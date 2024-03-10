@@ -420,11 +420,15 @@ public class GameBoardController {
         Snake newSnake = new Snake(start, end, type);
         snakes.add(newSnake);
         snakePositions.put(start, end);
-        System.out.println("Added " + type + " snake: Start=" + start + ", End=" + end);
+
         occupiedPositions.add(start);
+        if("red".equals(type)){
+            newSnake.setEndPosition(1);
+        }
         if (start != end) {
             occupiedPositions.add(end);
         }
+        System.out.println("Added " + type + " snake: Start=" + start + ", End=" + end);
     }
     // Generate snakes and ladders for the medium difficulty
     private void generateSnakesAndLaddersForMedium(List<Snake> snakes, List<Ladder> ladders, Set<Integer> occupiedPositions, int maxPosition) {
@@ -1192,6 +1196,8 @@ public class GameBoardController {
                     // Clear previous content and add the new ImageView
                     diceImageContainer.getChildren().clear();
                     diceImageContainer.getChildren().add(imageView);
+                    updatePlayerTurn();
+
                 }
                 if (finalNumber == 1) {
                     Image image = new Image("/com/example/snakesandladdersviper/Images/" + finalNumber + ".jpg");
@@ -1435,6 +1441,7 @@ public class GameBoardController {
 //        }
     }
     private void handleSpecialTile(int position, String tileColor) {
+        Random random = new Random();
         switch (tileColor) {
             case "green":
                 askQuestion("easy", isCorrect -> movePlayerAndUpdateTurn(isCorrect ? 0 : -1));
@@ -1444,6 +1451,10 @@ public class GameBoardController {
                 break;
             case "red":
                 askQuestion("hard", isCorrect -> movePlayerAndUpdateTurn(isCorrect ? 1 : -3));
+                break;
+            case "blue":
+                int movesteps = random.nextBoolean() ? 10: -10;
+                movePlayerAndUpdateTurn(movesteps);
                 break;
             // Add other cases if there are more special tiles
         }
