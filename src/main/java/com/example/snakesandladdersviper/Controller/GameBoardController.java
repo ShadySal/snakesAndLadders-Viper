@@ -941,6 +941,52 @@ public class GameBoardController {
                 }
             }
         }
+//    public void displayPlayers(List<Player> players) {
+//        for (Player player : players) {
+//            // Define colors and gradients
+//            Color color = Color.web(player.getPlayerColor());
+//            LinearGradient gradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE,
+//                    new Stop(0, color.darker()), new Stop(1, color.brighter()));
+//
+//            // Head of the pawn, using an ellipse to create a 3D effect
+//            Circle head = new Circle(10); // Adjust size as needed
+//            head.setFill(gradient);
+//
+//            // Body of the pawn, using an ellipse for a 3D bulbous effect
+//            Ellipse body = new Ellipse(15, 20); // Adjust width and height as needed
+//            body.setFill(gradient);
+//
+//            // Base of the pawn, to give a solid standing effect
+//            Ellipse base = new Ellipse(20, 5); // Adjust width and height for a flatter ellipse
+//            base.setFill(gradient.darker());
+//
+//            // Positioning and adjustments
+//            head.setCenterX(0);
+//            head.setCenterY(-30); // Position the head above the body
+//            body.setCenterX(0);
+//            body.setCenterY(0); // Center body
+//            base.setCenterX(0);
+//            base.setCenterY(20); // Position base below the body
+//
+//            // Adding shadow for a more lifelike 3D effect
+//            DropShadow shadow = new DropShadow();
+//            shadow.setRadius(5.0);
+//            shadow.setColor(Color.color(0.4, 0.4, 0.4));
+//
+//            Group pawn = new Group(head, body, base);
+//            pawn.setEffect(shadow); // Apply shadow to the whole pawn
+//
+//            // Adjust group position based on player's current tile or starting position
+//            Tile startingTile = getTileByNumber(1); // Example, replace with actual logic
+//            if (startingTile != null) {
+//                pawn.setLayoutX(startingTile.getX() + startingTile.getWidth() / 2);
+//                pawn.setLayoutY(startingTile.getY() + startingTile.getHeight() / 2 - 20); // Adjust Y offset as needed
+//                contentPane.getChildren().add(pawn); // Add the pawn to the content pane
+//            } else {
+//                System.out.println("Starting Tile is null for player: " + player.getName());
+//            }
+//        }
+//    }
     private Tile getTileByNumber(int tileNumber) {
         for (Node node : contentPane.getChildren()) { // If tiles are directly added to the gamepane
             if (node instanceof Tile) {
