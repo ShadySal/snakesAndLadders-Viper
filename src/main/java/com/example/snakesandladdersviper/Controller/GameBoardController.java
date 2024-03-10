@@ -649,14 +649,7 @@ public class GameBoardController {
     }
 
 
-    private void placeSnakesAndLadders(List<Snake> snakes, List<Ladder> ladders) {
-        for (Snake snake : snakes) {
-            placeSnakeOnBoard(snake);
-        }
-        for (Ladder ladder : ladders) {
-            placeLadderOnBoard(ladder);
-        }
-    }
+
     private int getRowForPosition(int position) {
         int size = determineBoardSize(difficulty); // Assuming this returns the size of one side of the board
         return (position - 1) / size; // Row index, starts from 0

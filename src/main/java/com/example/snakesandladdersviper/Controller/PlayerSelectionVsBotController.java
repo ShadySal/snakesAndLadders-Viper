@@ -73,7 +73,7 @@ public class PlayerSelectionVsBotController {
         }
 
         public void initialize() {
-            ObjectSelect.getItems().addAll("Red", "Blue", "Pink", "Yellow", "Purple", "Green");
+            ObjectSelect.getItems().addAll("Red", "Blue", "Green", "Yellow", "Orange", "White");
             players = new ArrayList<>();
             currentPlayerNumber = 1;
             PlayerSelectionTurn.setText("Player " + currentPlayerNumber);
@@ -121,9 +121,12 @@ public class PlayerSelectionVsBotController {
 
     private void startGame() {
         try {
+
+
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/GameboardBot.fxml"));
             Parent gameBoardRoot = loader.load();
-            GameBoardController gameBoardController = loader.getController();
+            GameBoardBotController gameBoardController = loader.getController();
             gameBoardController.initializeBoard(difficulty, players);
             contentPane.getChildren().setAll(gameBoardRoot);
         } catch (Exception e) {
