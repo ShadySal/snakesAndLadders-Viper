@@ -21,6 +21,7 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -231,11 +232,11 @@ public class GameBoardController {
         gamepane.setPrefWidth(gamePaneWidth);
         gamepane.setPrefHeight(contentPane.getPrefHeight());
 
-        VBox gameDataVBox = new VBox(10); // Include spacing between elements
+        VBox gameDataVBox = new VBox(13); // Include spacing between elements
         gameDataVBox.setLayoutX(gamePaneWidth);
         gameDataVBox.setPrefWidth(gameDataVBoxWidth);
         gameDataVBox.setPrefHeight(contentPane.getPrefHeight());
-        gameDataVBox.setPadding(new Insets(10, 20, 10, 20));
+        gameDataVBox.setPadding(new Insets(10, 70, 10, 20));
 
         // Initialize your components here (only showing a subset for brevity)
         Label levelLabel = new Label("Level: " + difficulty);
@@ -246,15 +247,10 @@ public class GameBoardController {
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
         // Create a container for the dice roll button and image
-        VBox diceContainer = new VBox(10); // Spacing between the dice roll button and the image
-        diceContainer.setAlignment(Pos.CENTER); // Center these components within the container
-
-        // Add the dice roll button and dice image to the diceContainer
-
-
+        VBox diceContainer = new VBox(12); // Spacing between the dice roll button and the image
+        //diceContainer.setAlignment(Pos.CENTER); // Center these components within the container
         // Adjust the dice image container size if necessary
         diceImageContainer.setPrefSize(150, 150); // Example size, adjust as needed
-
         // Spacer to push elements to their positions
         Region spacerTop = new Region();
         VBox.setVgrow(spacerTop, Priority.ALWAYS);
@@ -264,15 +260,24 @@ public class GameBoardController {
         Button exitGameButton = new Button("Exit Game");
         exitGameButton.setOnAction(event -> MainMenuFun(event));
 
-        // Now, add your components to the VBox without duplication
-
+// Style the dice roll button if needed
+        diceRollButton.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
 
         diceImageContainer.setPrefHeight(150);
         diceImageContainer.setPrefWidth(150);
-        // Add elements to the VBox
-        // Add elements to the VBox, including the spacer before the exit button
+        // Style the Level label
+        levelLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #2e8b57; -fx-font-size: 16px;"); // Increase font size
 
+        // Style the Time label and make it bigger
+        timeLabel.setStyle("-fx-font-weight: normal; -fx-text-fill: #00008b; -fx-font-size: 14px;"); // Increase font size
+
+        // Style the Player Turn label and make it bigger
+        currentPlayerLabel.setStyle("-fx-font-weight: normal; -fx-text-fill: #8b0000; -fx-font-size: 14px;"); // Increase font size
+// Ensure currentPlayerLabel is initialized correctly somewhere in your class, e.g., in the initialize method
+        currentPlayerLabel.setWrapText(true); // Allows text to wrap if it's too long
+        currentPlayerLabel.setMaxWidth(200); // Set a max width to ensure text wrapping; adjust as needed
+       // currentPlayerLabel.setTextAlignment(TextAlignment.CENTER); // Center align the text
 
         // Add the VBox to the root pane
         contentPane.getChildren().add(gameDataVBox);
@@ -319,7 +324,7 @@ public class GameBoardController {
 
 // Now add components to gameDataVBox in a way that centers the dice components vertically
         gameDataVBox.getChildren().clear(); // Clear to ensure it's empty before adding components
-        gameDataVBox.getChildren().addAll(timeLabel, levelLabel, spacerTop, diceContainer, spacerBottom, currentPlayerLabel, exitGameButton);
+        gameDataVBox.getChildren().addAll(timeLabel, levelLabel,currentPlayerLabel,spacerTop, diceContainer, spacerBottom, exitGameButton);
 
 
 
@@ -1335,10 +1340,15 @@ public class GameBoardController {
         String gameDurationStr = SysData.getInstance().calculateGameDuration(startTime);
         long gameDurationMillis = convertDurationToMillis(gameDurationStr);
         // Difficulty of the match
-        String gameDifficulty = difficulty.toString(); // Assuming 'difficulty' is an enum or string variable in your class
+        String gameDifficulty = difficulty.toString();
         // Add the game data to history.json
         SysData.getInstance().addGameHistory(currentPlayer.getName(), gameDurationMillis, gameDifficulty);
+
         Platform.runLater(() -> {
+            // Capture the current full screen state
+            Stage stage = (Stage) contentPane.getScene().getWindow();
+            boolean wasFullScreen = stage.isFullScreen();
+
             Alert winAlert = new Alert(Alert.AlertType.INFORMATION);
             winAlert.setTitle("Congratulations!");
             winAlert.setHeaderText(null);
@@ -1348,26 +1358,20 @@ public class GameBoardController {
             ButtonType homeScreenButton = new ButtonType("End Game", ButtonBar.ButtonData.OK_DONE);
             winAlert.getButtonTypes().setAll(homeScreenButton);
 
-            // Wait for user response
-            Optional<ButtonType> result = winAlert.showAndWait();
-
-            if (result.isPresent() && result.get() == homeScreenButton) {
-                // Load the home screen
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/snakesandladdersviper/hello-view.fxml"));
-                    Parent root = loader.load();
-                    Scene scene = new Scene(root);
-
-                    // Get the current stage and set the new scene
-                    Stage currentStage = (Stage) contentPane.getScene().getWindow();
-                    currentStage.setScene(scene);
-                } catch (IOException e) {
-                    e.printStackTrace();
+            // Temporarily exit full screen to show the alert, then restore the state
+            stage.setFullScreen(false);
+            winAlert.showAndWait().ifPresent(response -> {
+                if (response == homeScreenButton) {
+                    // Navigate to the home screen
+                    SceneUtils.changeScene(stage, "/com/example/snakesandladdersviper/hello-view.fxml", wasFullScreen);
                 }
-            }
-        });
+            });
 
+            // Restore the full-screen mode after the alert is dismissed
+            stage.setFullScreen(wasFullScreen);
+        });
     }
+
 
     private long convertDurationToMillis(String gameDuration) {
         String[] parts = gameDuration.split(":");
@@ -1438,7 +1442,7 @@ public class GameBoardController {
 
         // Update the currentPlayerLabel with the current player's name
         if (currentPlayer != null) {
-            currentPlayerLabel.setText("Player " + currentPlayer.getPlayerColor() + "'s Turn " + "player in position: " + currentPlayer.getPosition());
+            currentPlayerLabel.setText("Player " + currentPlayer.getPlayerColor() + "'s Turn ");
         } else {
             System.out.println("Current player is null.");
         }
