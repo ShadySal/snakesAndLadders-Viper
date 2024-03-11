@@ -124,25 +124,31 @@ public class GameBoardController {
 //        gamepane.getChildren().add(rootContainer); // Assuming gamepane is the parent container
 //    }
 private void loadPlayerImages() {
+    double scale = difficulty == Difficulty.HARD ? 0.5 : 1.0;
     for (Player player : players) {
         String color = player.getPlayerColor();
         if (color != null) {
+            // Adjust size based on the scale
+            double baseRadius = 25 * scale;
+            double topHeight = 60 * scale;
+            double topWidth = 50 * scale;
+
             // Create a circle for the base of the pawn
-            Circle base = new Circle(25); // Radius of 25 for the base
+            Circle base = new Circle(baseRadius);
             base.setFill(getColorFromString(color));
 
             // Create a path for the pointed top of the pawn
             Path top = new Path();
-            top.getElements().add(new MoveTo(0, -25));
-            top.getElements().add(new LineTo(25, -60)); // Adjust the height of the point
-            top.getElements().add(new LineTo(50, -25));
+            top.getElements().add(new MoveTo(0, -baseRadius));
+            top.getElements().add(new LineTo(topWidth / 2, -topHeight));
+            top.getElements().add(new LineTo(topWidth, -baseRadius));
             top.setFill(getColorFromString(color));
 
             // Combine base and top in a Group
             Group pawn = new Group(base, top);
 
             // Positioning top relative to the base
-            top.setLayoutX(base.getLayoutX() - 25); // Adjust for the width of the base
+            top.setLayoutX(base.getLayoutX() - topWidth / 2);
             top.setLayoutY(base.getLayoutY());
 
             // Store the pawn in the playerImages map
@@ -977,9 +983,14 @@ private void loadPlayerImages() {
 
             if (startingTile != null && playerPawn != null) {
                 // Set position of player pawn
-                playerPawn.setLayoutX(startingTile.getX() + startingTile.getWidth() / 2 - 25); // 25 is half the width of the pawn base
-                playerPawn.setLayoutY(startingTile.getY() + startingTile.getHeight() / 2 - 25); // 25 is half the height of the pawn base
-
+                if(this.difficulty ==Difficulty.HARD ){
+                    playerPawn.setLayoutX(startingTile.getX() + startingTile.getWidth() / 2 - 25); // 25 is half the width of the pawn base
+                    playerPawn.setLayoutY(startingTile.getY() + startingTile.getHeight() / 2 - 25);
+                }
+                else {
+                    playerPawn.setLayoutX(startingTile.getX() + startingTile.getWidth() / 2 - 25); // 25 is half the width of the pawn base
+                    playerPawn.setLayoutY(startingTile.getY() + startingTile.getHeight() / 2 - 25); // 25 is half the height of the pawn base
+                }
                 contentPane.getChildren().add(playerPawn); // Add player pawn to the contentPane
             } else {
                 System.out.println("Starting Tile or Player Pawn is null for player: " + player.getName());
