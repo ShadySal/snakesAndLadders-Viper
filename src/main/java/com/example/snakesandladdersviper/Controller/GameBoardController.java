@@ -71,7 +71,7 @@ public class GameBoardController {
     private int currentPlayerIndex = 0;
     private List<Player> players = new ArrayList<Player>();
     private Map<Player, Circle> playerCircles;
-    private Map<Player, ImageView> playerImages;
+    private Map<Player, Group> playerImages;
     private Set<Integer> occupiedPositions;
     private int bsize;
     private int globalSize;
@@ -123,27 +123,73 @@ public class GameBoardController {
 //        // Set the main game scene or container to include this new layout
 //        gamepane.getChildren().add(rootContainer); // Assuming gamepane is the parent container
 //    }
+private void loadPlayerImages() {
+    for (Player player : players) {
+        String color = player.getPlayerColor();
+        if (color != null) {
+            // Create a circle for the base of the pawn
+            Circle base = new Circle(25); // Radius of 25 for the base
+            base.setFill(getColorFromString(color));
 
-    private void loadPlayerImages() {
-        for (Player player : players) {
-            String color = player.getPlayerColor();
-            if (color != null) {
-                String imageFileName = "/com/example/snakesandladdersviper/Images/" + color + ".png";
-                InputStream is = getClass().getResourceAsStream(imageFileName);
-                if (is != null) {
-                    Image image = new Image(is);
-                    ImageView imageView = new ImageView(image);
-                    imageView.setFitHeight(50); // Set size as needed
-                    imageView.setFitWidth(50);
-                    playerImages.put(player, imageView);
-                } else {
-                    System.out.println("Image file not found: " + imageFileName);
-                }
-            } else {
-                System.out.println("Color is null for player: " + player.getName());
-            }
+            // Create a path for the pointed top of the pawn
+            Path top = new Path();
+            top.getElements().add(new MoveTo(0, -25));
+            top.getElements().add(new LineTo(25, -60)); // Adjust the height of the point
+            top.getElements().add(new LineTo(50, -25));
+            top.setFill(getColorFromString(color));
+
+            // Combine base and top in a Group
+            Group pawn = new Group(base, top);
+
+            // Positioning top relative to the base
+            top.setLayoutX(base.getLayoutX() - 25); // Adjust for the width of the base
+            top.setLayoutY(base.getLayoutY());
+
+            // Store the pawn in the playerImages map
+            playerImages.put(player, pawn);
+        } else {
+            System.out.println("Color is null for player: " + player.getName());
         }
     }
+}
+    private Color getColorFromString(String colorName) {
+        switch (colorName.toLowerCase()) {
+            case "red":
+                return Color.RED;
+            case "blue":
+                return Color.BLUE;
+            case "pink":
+                return Color.PINK;
+            case "yellow":
+                return Color.YELLOW;
+            case "orange":
+                return Color.ORANGE;
+            case "green":
+                return Color.GREEN;
+            default:
+                return Color.BLACK; // Default color or throw an exception
+        }
+    }
+//    private void loadPlayerImages() {
+//        for (Player player : players) {
+//            String color = player.getPlayerColor();
+//            if (color != null) {
+//                String imageFileName = "/com/example/snakesandladdersviper/Images/" + color + ".png";
+//                InputStream is = getClass().getResourceAsStream(imageFileName);
+//                if (is != null) {
+//                    Image image = new Image(is);
+//                    ImageView imageView = new ImageView(image);
+//                    imageView.setFitHeight(50); // Set size as needed
+//                    imageView.setFitWidth(50);
+//                    playerImages.put(player, imageView);
+//                } else {
+//                    System.out.println("Image file not found: " + imageFileName);
+//                }
+//            } else {
+//                System.out.println("Color is null for player: " + player.getName());
+//            }
+//        }
+//    }
 
     //dice animation
     private void setupDiceRollAnimation() {
@@ -924,23 +970,22 @@ public class GameBoardController {
 
     //display players on Gameboard
 
-        public void displayPlayers(List<Player> players) {
-            for (Player player : players) {
-                ImageView playerImage = playerImages.get(player);
-                Tile startingTile = getTileByNumber(1); // Assuming player starts at tile 1
+    public void displayPlayers(List<Player> players) {
+        for (Player player : players) {
+            Group playerPawn = playerImages.get(player); // Using Group instead of ImageView
+            Tile startingTile = getTileByNumber(1); // Assuming player starts at tile 1
 
-                if (startingTile != null && playerImage != null) {
-                    playerImage.setFitHeight(60); // Set player image size
-                    playerImage.setFitWidth(60);
-                    playerImage.setX(startingTile.getX() + startingTile.getWidth() / 2 - playerImage.getFitWidth() / 2);
-                    playerImage.setY(startingTile.getY() + startingTile.getHeight() / 2 - playerImage.getFitHeight() / 2);
+            if (startingTile != null && playerPawn != null) {
+                // Set position of player pawn
+                playerPawn.setLayoutX(startingTile.getX() + startingTile.getWidth() / 2 - 25); // 25 is half the width of the pawn base
+                playerPawn.setLayoutY(startingTile.getY() + startingTile.getHeight() / 2 - 25); // 25 is half the height of the pawn base
 
-                    contentPane.getChildren().add(playerImage); // Add player image to the contentPane
-                } else {
-                    System.out.println("Starting Tile or Player Image is null for player: " + player.getName());
-                }
+                contentPane.getChildren().add(playerPawn); // Add player pawn to the contentPane
+            } else {
+                System.out.println("Starting Tile or Player Pawn is null for player: " + player.getName());
             }
         }
+    }
 //    public void displayPlayers(List<Player> players) {
 //        for (Player player : players) {
 //            // Define colors and gradients
@@ -1556,22 +1601,15 @@ public class GameBoardController {
         Tile newTile = getTileByNumber(newPosition);
 
         if (newTile != null) {
-            ImageView playerImage = playerImages.get(player);
-            double newX = newTile.getX() + newTile.getWidth() / 2 - playerImage.getFitWidth() / 2;
-            double newY = newTile.getY() + newTile.getHeight() / 2 - playerImage.getFitHeight() / 2;
+            Group playerPawn = playerImages.get(player);
+            double newX = newTile.getX() + newTile.getWidth() / 2 - 25; // 25 is half the width of the pawn base
+            double newY = newTile.getY() + newTile.getHeight() / 2 - 25; // 25 is half the height of the pawn base
 
-            // If playerImage is not already in the scene, add it first to avoid null reference during animation
-            if (!contentPane.getChildren().contains(playerImage)) {
-                playerImage.setX(newX); // Set initial position to new position to prevent it from popping elsewhere
-                playerImage.setY(newY);
-                contentPane.getChildren().add(playerImage);
-            } else {
-                // Create and play the animation
-                TranslateTransition transition = new TranslateTransition(Duration.seconds(1), playerImage);
-                transition.setToX(newX - playerImage.getX());
-                transition.setToY(newY - playerImage.getY());
-                transition.play();
-            }
+            // Create and play the animation
+            TranslateTransition transition = new TranslateTransition(Duration.seconds(1), playerPawn);
+            transition.setToX(newX - playerPawn.getLayoutX());
+            transition.setToY(newY - playerPawn.getLayoutY());
+            transition.play();
         }
     }
 
