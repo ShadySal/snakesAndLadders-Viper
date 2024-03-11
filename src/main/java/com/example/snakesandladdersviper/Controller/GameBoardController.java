@@ -405,8 +405,8 @@ private void loadPlayerImages() {
             tile.setNumber(number);
             tile.setWidth(tileSize);
             tile.setHeight(tileSize);
-            tile.setX(col * tileSize); // Position the tile based on column
-            tile.setY(row * tileSize); // Position the tile based on row
+            tile.setX(col * tileSize*0.99); // Position the tile based on column
+            tile.setY(row * tileSize*0.99); // Position the tile based on row
 
             String backgroundColor;
             if (!specialTileColor.isEmpty()) {
